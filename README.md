@@ -18,7 +18,8 @@ Implementations live separately from the runners and UI:
 | `models/registry.json` | Model IDs, implementation paths, supported input schemas and runtimes |
 | `models/implementations/<model>.py` | Each model's training implementation or explicit architecture declaration |
 | `models/implementations/<model>.js` | Each browser model's inference adapter |
-| `models/implementations/_neural.py`, `_temporal.py` | Reusable family primitives; temporal encoders are prototypes |
+| `models/implementations/_neural.py`, `_temporal.py` | Legacy neural primitives and fixed-encoder temporal prototypes |
+| `models/implementations/dygformer.py`, `tami.py`, `dyg_tami.py` | Published DyGFormer backbone, TAMI LTE/TRC, and native fitted model |
 | `models/<model>.json` | Existing trained demo checkpoints, separate from code |
 | `datasets/registry.json` | Dataset loaders and their schemas |
 | `datasets/implementations/` | Separate numeric CSV, payment CSV, payment JSON and synthetic providers |
@@ -31,8 +32,10 @@ Implementations live separately from the runners and UI:
 Both support fitting, saving and reloading on user-supplied numeric CSV data.
 The existing browser `xgboost` remains the custom NumPy tree implementation.
 GRU/statistics entries use custom trained neural components; the four
-DyGFormer/TAMI-inspired entries use fixed random encoders and optional trained
+browser DyGFormer/TAMI-inspired entries use fixed random encoders and optional trained
 logistic heads. Their registry labels explicitly identify them as prototypes.
+The separate `dyg_tami_native` entry trains the published DyGFormer + TAMI
+architecture end to end in PyTorch.
 
 ### Train and evaluate a real model
 
@@ -72,11 +75,81 @@ changing the loader configuration. Add a model by implementing `fit`, `predict`,
 dataset by implementing `load(config, base_dir)` in its own module and registering
 it. Incompatible model/dataset combinations fail explicitly.
 
-Native models currently run through the Python numeric-table runner. The browser
+Native models run through the Python numeric-table or temporal-graph runner. The browser
 dashboards still use their bundled event-model checkpoints; a native JSON model
 is not a browser checkpoint. Loaders currently operate in memory. Categorical
-preprocessing, automatic causal feature generation and full paper architectures
-remain separate extensions.
+preprocessing and automatic causal feature generation remain separate extensions.
+
+### Train DyGFormer + TAMI
+
+The authors' [TAMI repository](https://github.com/Alleinx/TAMI_temporal_graph)
+already combines DyGFormer with logarithmic time encoding and directed-pair
+historical memory. This implementation uses that complete backbone and decoder,
+including learned co-occurrence encoding, four feature channels, patching and
+transformer attention. Inspect [source provenance and adaptations](models/implementations/UPSTREAM.md)
+and the [integration plan](docs/plans/dygformer-tami.md).
+
+The following example runs on the existing synthetic takeover fixture:
+
+```sh
+python -m pip install -r requirements-temporal.txt
+python experiment.py train --config examples/dyg-tami-experiment.json --output artifacts/dyg-tami
+python experiment.py evaluate --config examples/datasets/dyg-tami-payments.config.json --artifact artifacts/dyg-tami --partition test --output artifacts/dyg-tami-evaluation.json
+```
+
+Outputs include `model.npz`, the experiment manifest and `test-report.json`.
+The checkpoint stores every learned tensor and a detached pair-memory snapshot,
+without pickle. Evaluation resets state and replays the observed prefix using
+frozen model weights, so rerunning validation after test is safe. The report
+contains final AP, ROC AUC, log loss, accuracy and per-link scores. Validation
+loss selects the epoch; validation F1 selects the cutoff. Test outcomes never
+select either. Device, dimensions, patch size, history length, gamma, epochs and
+optimizer settings are explicit in the experiment JSON. The small CPU defaults
+are not the authors' benchmark-specific best configurations.
+
+**This is dynamic link prediction, not fraud classification.** Observed payments
+are positives, including observed attempts that did not settle. Fraud flags are
+ignored. Deposit and report events are omitted. With the payment bridge, the
+historical edge feature is log-transformed amount, and missing static node
+features are explicit zero vectors. The current payment amount cannot enter its
+own historical features. A high score means the link resembles observed links
+relative to sampled counterexamples; it is not a calibrated fraud probability.
+
+The native runner scores all events at a timestamp before committing their pair
+memories. Neighbor histories contain only strictly earlier events. Negatives
+sample destinations observed by the query time and exclude self-links and all
+same-time positive links for that source. A row without a valid negative still
+updates history but is excluded from paired loss/metrics; reports give the count.
+Repeated pairs at the same timestamp average their proposed memory updates.
+These chronology and sampling choices are documented adaptations of upstream's
+minibatch protocol, so local scores are not paper benchmark reproductions.
+
+For real temporal graph data, replace the experiment's `dataset` block with
+the contents of `examples/datasets/dyglib.config.json`. It supports DyGLib's
+`ml_<dataset>.csv`, `ml_<dataset>.npy` edge attributes and
+`ml_<dataset>_node.npy` static node attributes. CSV node/edge IDs index the source
+feature matrices; internal IDs and zero padding are normalized by the loader.
+For other CSV files, map `id`, `source`, `destination`, and `time`, and list numeric
+`features` explicitly. Features must be available at the relevant historical
+interaction, and static node features must not encode future outcomes.
+No benchmark data is downloaded automatically.
+
+Graph models implement `fit_graph`, `predict_graph`, `save`, and `load_graph`;
+providers return `TemporalGraphDataset`. Registration declares the compatible
+schema. Existing browser IDs resolve to `*_prototype.py` compatibility entries;
+the native PyTorch checkpoint is not silently substituted into browser replay.
+
+To verify the implementation:
+
+```sh
+python tests/temporal/test_dyg_tami.py
+python tests/temporal/test_upstream_parity.py
+```
+
+The second test compares embeddings, logits and gradients to a checked-in
+reference generated by the pinned upstream classes, independent of the local
+model implementation. To regenerate it from an upstream checkout, run
+`python scripts/export_tami_oracle.py --upstream /path/to/TAMI_temporal_graph`.
 
 ### Inspect your own payment events in the browser
 

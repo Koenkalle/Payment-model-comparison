@@ -1,0 +1,8 @@
+{
+  "loader": "temporal_csv",
+  "path": "ml_wikipedia.csv",
+  "columns": {"id": "idx", "source": "u", "destination": "i", "time": "ts"},
+  "time_unit": "seconds",
+  "node_features_path": "ml_wikipedia_node.npy",
+  "edge_features_path": "ml_wikipedia.npy"
+}

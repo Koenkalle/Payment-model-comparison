@@ -28,6 +28,8 @@ def main():
             output=data.document
         else:output=evaluate_artifact(args.artifact,config,base,args.partition)
         args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(output,indent=2,allow_nan=False)+'\n');print(args.output)
+    except ImportError as error:
+        parser.exit(2,str(error)+'; install requirements-temporal.txt for graph models or requirements-models.txt for tabular models.\n')
     except (ValueError,KeyError,RuntimeError,FileNotFoundError) as error:parser.exit(2,str(error)+'\n')
 
 if __name__=='__main__':main()

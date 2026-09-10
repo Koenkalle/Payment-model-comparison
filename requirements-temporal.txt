@@ -1,0 +1,4 @@
+# Optional native DyGFormer + TAMI training; browser tools do not import PyTorch.
+numpy>=1.24,<3
+torch>=2.4,<3
+scikit-learn>=1.3,<2

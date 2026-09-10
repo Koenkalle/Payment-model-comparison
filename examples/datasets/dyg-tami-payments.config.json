@@ -1,0 +1,5 @@
+{
+  "loader": "payment_graph",
+  "dataset": {"loader": "payment_json", "path": "../../datasets/takeover-medium-42.json"},
+  "node_feature_dim": 32
+}

@@ -85,10 +85,11 @@ The official XGBoost plugin uses native DMatrix/Booster training, JSON model
 persistence and native contribution output as documented in the
 [XGBoost Python API](https://xgboost.readthedocs.io/en/stable/python/python_api.html).
 
-Full DyGFormer/TAMI research implementations, graph minibatching, categorical
-feature pipelines, remote storage, distributed training and production data
-validation are follow-on implementations behind these contracts. They will not
-be represented by the existing fixed-encoder prototypes.
+The native DyGFormer + TAMI implementation and temporal-graph contract are now
+implemented in the [follow-on integration](dygformer-tami.md). Categorical feature
+pipelines, remote storage, distributed training and production data validation
+remain further extensions behind these contracts. Existing browser prototypes
+retain explicit prototype labels.
 
 Implementation status: completed for this scope. The two native-library plugins,
 four dataset providers, registry-based browser build, compatibility extraction,

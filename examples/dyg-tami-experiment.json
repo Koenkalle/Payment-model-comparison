@@ -1,0 +1,25 @@
+{
+  "model": "dyg_tami_native",
+  "dataset": {
+    "loader": "payment_graph",
+    "dataset": {"loader": "payment_json", "path": "../datasets/takeover-medium-42.json"},
+    "node_feature_dim": 32
+  },
+  "parameters": {
+    "epochs": 10,
+    "patience": 3,
+    "batch_size": 32,
+    "learning_rate": 0.0001,
+    "gamma": 0.9,
+    "time_feat_dim": 32,
+    "channel_embedding_dim": 32,
+    "patch_size": 2,
+    "max_input_sequence_length": 64,
+    "num_layers": 2,
+    "num_heads": 2,
+    "seed": 42,
+    "device": "cpu"
+  },
+  "split": {"train": 0.6, "validation": 0.2},
+  "evaluation_seed": 10042
+}

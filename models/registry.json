@@ -9,6 +9,20 @@
   ],
   "models": [
     {
+      "id": "dyg_tami_native",
+      "label": "DyGFormer + TAMI (PyTorch)",
+      "status": "upstream-architecture",
+      "python_module": "models.implementations.dyg_tami",
+      "browser": null,
+      "checkpoint": null,
+      "inputs": ["temporal-graph/v1"],
+      "execution": ["python"],
+      "training": {"encoder": "end-to-end DyGFormer with TAMI LTE", "decoder": "trainable TAMI TRC historical decoder"},
+      "capabilities": {"explanations": false, "task": "dynamic-link-prediction"},
+      "dependency": "torch",
+      "implementation_sources": ["models/implementations/dyg_tami.py", "models/implementations/dygformer.py", "models/implementations/tami.py", "models/implementations/temporal_history.py", "framework/temporal_sampling.py"]
+    },
+    {
       "id": "statistics",
       "label": "History statistics",
       "status": "custom-trained-model",
@@ -142,7 +156,7 @@
       "id": "dygformer",
       "label": "Temporal history prototype (DyGFormer-inspired)",
       "status": "fixed-encoder-prototype",
-      "python_module": "models.implementations.dygformer",
+      "python_module": "models.implementations.dygformer_prototype",
       "browser": "models/implementations/dygformer.js",
       "checkpoint": "models/dygformer.json",
       "inputs": [
@@ -168,7 +182,7 @@
       "id": "tami",
       "label": "Pair history prototype (TAMI-inspired)",
       "status": "fixed-encoder-prototype",
-      "python_module": "models.implementations.tami",
+      "python_module": "models.implementations.tami_prototype",
       "browser": "models/implementations/tami.js",
       "checkpoint": "models/tami.json",
       "inputs": [
@@ -194,7 +208,7 @@
       "id": "dyg_tami",
       "label": "Temporal + pair prototype",
       "status": "fixed-encoder-prototype",
-      "python_module": "models.implementations.dyg_tami",
+      "python_module": "models.implementations.dyg_tami_prototype",
       "browser": "models/implementations/dyg_tami.js",
       "checkpoint": "models/dyg_tami.json",
       "inputs": [

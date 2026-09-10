@@ -2,7 +2,7 @@
 import hashlib,json,os,tempfile
 from pathlib import Path
 import numpy as np
-from .contracts import NumericDataset
+from .contracts import NumericDataset,TemporalGraphDataset
 from .registry import ROOT,create_model,load_dataset
 
 
@@ -54,6 +54,9 @@ def report(model,dataset,indices,threshold,explain=False):
 
 def train_experiment(config,output,base_dir=None):
     dataset=load_dataset(config['dataset'],base_dir)
+    if isinstance(dataset,TemporalGraphDataset):
+        from .temporal_experiments import train
+        return train(config,output,dataset)
     model,descriptor=create_model(config['model'],dataset.schema)
     if not isinstance(dataset,NumericDataset):raise ValueError('The experiment runner requires a numeric feature dataset.')
     output=Path(output).resolve()
@@ -82,6 +85,9 @@ def train_experiment(config,output,base_dir=None):
 def evaluate_artifact(artifact,dataset_config,base_dir=None,partition='all'):
     artifact=Path(artifact);metadata=json.loads((artifact/'manifest.json').read_text())
     if metadata.get('version')!=1:raise ValueError('Unsupported model artifact version.')
+    if metadata.get('task')=='dynamic-link-prediction':
+        from .temporal_experiments import evaluate
+        return evaluate(artifact,dataset_config,base_dir,partition)
     if digest(artifact/'model.json')!=metadata['model_sha256']:raise ValueError('Model artifact checksum does not match.')
     dataset=load_dataset(dataset_config,base_dir)
     model,descriptor=create_model(metadata['model_id'],dataset.schema)
