@@ -1,18 +1,18 @@
 {
   "method": "Self-supervised recipient + amount-bin + gap-bin likelihood",
   "fraud_labels_used": 0,
-  "default_warmup_requests": 128,
+  "default_warmup_requests": 256,
   "model_seed": 512,
   "sampling_seed": 7131,
   "generator_seed": 1731,
   "training_data_sha256": "3075d29cca5a7ffb5fa6de69db331613170baebb0df8712e5b67ee24d5098444",
   "training_pool_episodes": 1752,
-  "steps": 140,
+  "steps": 500,
   "batch": 12,
   "events_per_episode": 48,
   "accounts_per_episode": 24,
   "learning_rate": 0.009,
-  "last_20_steps_mean_nll": 4.707488261075156,
-  "heldout_nll_nats_per_request": 4.733036808859483,
+  "last_20_steps_mean_nll": 4.148806125884804,
+  "heldout_nll_nats_per_request": 4.151567427880597,
   "notice": "Synthetic predictive loss; one model initialization; no fraud labels or reports enter training."
 }
