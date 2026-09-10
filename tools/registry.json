@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "ui_scripts": [
+    "shared/vendor/floating-ui.core.min.js",
+    "shared/vendor/floating-ui.dom.min.js"
+  ],
+  "shared_scripts": [
+    "shared/vendor/d3.min.js",
+    "shared/runtime/xgboost.js",
+    "shared/runtime/model-adapters.js",
+    "shared/runtime/policy.js",
+    "shared/runtime/model.js",
+    "shared/runtime/scenarios.js",
+    "shared/runtime/metrics.js"
+  ],
+  "tools": [
+    {
+      "id": "comparison",
+      "label": "Model comparison",
+      "template": "tools/comparison/template.html",
+      "scripts": [
+        "tools/comparison/comparison.js",
+        "tools/comparison/ui.js"
+      ],
+      "model_ids": "all",
+      "model_data_id": "fd-model-data",
+      "output": "index.html",
+      "legacy_fragment": "payment-model-comparison.html"
+    }
+  ]
+}

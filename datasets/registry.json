@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "browser_support": ["shared/runtime/dataset-registry.js"],
+  "datasets": [
+    {"id":"synthetic_payments","label":"Synthetic payment scenarios","schema":"payment-events/v1","python_module":"datasets.implementations.synthetic_payments","browser":"datasets/implementations/synthetic_payments.js","origin":"synthetic"},
+    {"id":"payment_json","label":"Payment event JSON","schema":"payment-events/v1","python_module":"datasets.implementations.payment_json","browser":"datasets/implementations/payment_json.js","origin":"user-supplied"},
+    {"id":"payment_csv","label":"Mapped payment event CSV","schema":"payment-events/v1","python_module":"datasets.implementations.payment_csv","browser":null,"origin":"user-supplied"},
+    {"id":"numeric_csv","label":"Numeric feature CSV","schema":"numeric-table/v1","python_module":"datasets.implementations.numeric_csv","browser":null,"origin":"user-supplied"}
+  ]
+}

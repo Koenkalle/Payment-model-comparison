@@ -1,0 +1,9 @@
+{
+  "loader": "numeric_csv",
+  "path": "transactions.csv",
+  "id_column": "transaction_id",
+  "time_column": "timestamp",
+  "time_unit": "iso8601",
+  "label_column": "is_fraud",
+  "features": ["amount", "prior_sender_count", "prior_recipient_count"]
+}

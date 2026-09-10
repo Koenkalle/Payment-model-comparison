@@ -1,0 +1,14 @@
+{
+  "model": "xgboost_native",
+  "dataset": {
+    "loader": "numeric_csv",
+    "path": "datasets/transactions.csv",
+    "id_column": "transaction_id",
+    "time_column": "timestamp",
+    "time_unit": "iso8601",
+    "label_column": "is_fraud",
+    "features": ["amount", "prior_sender_count", "prior_recipient_count"]
+  },
+  "parameters": {"num_boost_round": 100, "max_depth": 4, "eta": 0.08, "seed": 42, "nthread": 2},
+  "split": {"train": 0.6, "validation": 0.2}
+}

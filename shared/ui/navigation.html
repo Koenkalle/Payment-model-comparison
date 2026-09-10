@@ -1,0 +1,13 @@
+<style>
+  .payment-tool-nav{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px max(24px,calc((100vw - 1320px)/2));border-bottom:1px solid var(--border);background:var(--background);color:var(--foreground);font:14px/1.4 system-ui,sans-serif}
+  .payment-tool-nav .payment-tool-brand{font-weight:750;letter-spacing:-.3px;white-space:nowrap}
+  .payment-tool-nav .payment-tool-links{display:flex;gap:6px;flex-wrap:wrap}
+  .payment-tool-nav a{padding:9px 14px;border-radius:7px;color:var(--muted-foreground);text-decoration:none}
+  .payment-tool-nav a[aria-current=page]{background:light-dark(#e8f2ed,#193d32);color:light-dark(#15553f,#9bdebe);font-weight:650}
+  .payment-tool-nav a:focus-visible{outline:2px solid #238361;outline-offset:3px}
+  @media(max-width:540px){.payment-tool-nav{padding:12px 16px;align-items:flex-start;gap:10px;flex-direction:column}.payment-tool-nav a{padding:8px 11px}}
+</style>
+<nav class="payment-tool-nav" aria-label="Payment tools">
+  <span class="payment-tool-brand">Payment model lab</span>
+  <div class="payment-tool-links"><!-- TOOL_LINKS --></div>
+</nav>

@@ -1,0 +1,15 @@
+{
+  "loader": "payment_csv",
+  "path": "payments.csv",
+  "name": "My payment dataset",
+  "time_unit": "iso8601",
+  "currency": "EUR",
+  "columns": {
+    "id": "transaction_id",
+    "time": "timestamp",
+    "sender": "sender_account",
+    "recipient": "recipient_account",
+    "amount": "amount_eur",
+    "label": "is_fraud"
+  }
+}

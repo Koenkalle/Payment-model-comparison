@@ -1,0 +1,288 @@
+{
+  "version": 1,
+  "browser_support": [
+    "shared/runtime/model-registry.js",
+    "models/implementations/_math.js",
+    "models/implementations/xgboost_numpy_core.js",
+    "models/implementations/_neural.js",
+    "models/implementations/_temporal.js"
+  ],
+  "models": [
+    {
+      "id": "statistics",
+      "label": "History statistics",
+      "status": "custom-trained-model",
+      "python_module": "models.implementations.statistics",
+      "browser": "models/implementations/statistics.js",
+      "checkpoint": "models/statistics.json",
+      "inputs": [
+        "payment-events/v1"
+      ],
+      "execution": [
+        "browser",
+        "python-legacy-training"
+      ],
+      "training": {
+        "encoder": "optimized neural/statistical weights",
+        "supervised_head": "trained logistic classifier"
+      },
+      "capabilities": {
+        "explanations": false,
+        "modes": [
+          "unsupervised",
+          "supervised"
+        ]
+      }
+    },
+    {
+      "id": "gru",
+      "label": "GRU memory",
+      "status": "custom-trained-model",
+      "python_module": "models.implementations.gru",
+      "browser": "models/implementations/gru.js",
+      "checkpoint": "models/gru.json",
+      "inputs": [
+        "payment-events/v1"
+      ],
+      "execution": [
+        "browser",
+        "python-legacy-training"
+      ],
+      "training": {
+        "encoder": "optimized neural/statistical weights",
+        "supervised_head": "trained logistic classifier"
+      },
+      "capabilities": {
+        "explanations": false,
+        "modes": [
+          "unsupervised",
+          "supervised"
+        ]
+      }
+    },
+    {
+      "id": "gru_mean",
+      "label": "GRU + graph mean",
+      "status": "custom-trained-model",
+      "python_module": "models.implementations.gru_mean",
+      "browser": "models/implementations/gru_mean.js",
+      "checkpoint": "models/gru_mean.json",
+      "inputs": [
+        "payment-events/v1"
+      ],
+      "execution": [
+        "browser",
+        "python-legacy-training"
+      ],
+      "training": {
+        "encoder": "optimized neural/statistical weights",
+        "supervised_head": "trained logistic classifier"
+      },
+      "capabilities": {
+        "explanations": false,
+        "modes": [
+          "unsupervised",
+          "supervised"
+        ]
+      }
+    },
+    {
+      "id": "gru_attention",
+      "label": "GRU + graph attention",
+      "status": "custom-trained-model",
+      "python_module": "models.implementations.gru_attention",
+      "browser": "models/implementations/gru_attention.js",
+      "checkpoint": "models/gru_attention.json",
+      "inputs": [
+        "payment-events/v1"
+      ],
+      "execution": [
+        "browser",
+        "python-legacy-training"
+      ],
+      "training": {
+        "encoder": "optimized neural/statistical weights",
+        "supervised_head": "trained logistic classifier"
+      },
+      "capabilities": {
+        "explanations": false,
+        "modes": [
+          "unsupervised",
+          "supervised"
+        ]
+      }
+    },
+    {
+      "id": "xgboost",
+      "label": "Boosted trees \u00b7 NumPy implementation",
+      "status": "custom-trained-model",
+      "python_module": "models.implementations.xgboost_numpy",
+      "browser": "models/implementations/xgboost.js",
+      "checkpoint": "models/xgboost.json",
+      "inputs": [
+        "payment-events/v1"
+      ],
+      "execution": [
+        "browser",
+        "python-legacy-training"
+      ],
+      "training": {
+        "encoder": "gradient-boosted trees",
+        "supervised_head": "tree ensemble"
+      },
+      "capabilities": {
+        "explanations": true,
+        "modes": [
+          "unsupervised",
+          "supervised"
+        ]
+      }
+    },
+    {
+      "id": "dygformer",
+      "label": "Temporal history prototype (DyGFormer-inspired)",
+      "status": "fixed-encoder-prototype",
+      "python_module": "models.implementations.dygformer",
+      "browser": "models/implementations/dygformer.js",
+      "checkpoint": "models/dygformer.json",
+      "inputs": [
+        "payment-events/v1"
+      ],
+      "execution": [
+        "browser",
+        "python-legacy-training"
+      ],
+      "training": {
+        "encoder": "fixed random projections",
+        "supervised_head": "trained logistic classifier"
+      },
+      "capabilities": {
+        "explanations": false,
+        "modes": [
+          "unsupervised",
+          "supervised"
+        ]
+      }
+    },
+    {
+      "id": "tami",
+      "label": "Pair history prototype (TAMI-inspired)",
+      "status": "fixed-encoder-prototype",
+      "python_module": "models.implementations.tami",
+      "browser": "models/implementations/tami.js",
+      "checkpoint": "models/tami.json",
+      "inputs": [
+        "payment-events/v1"
+      ],
+      "execution": [
+        "browser",
+        "python-legacy-training"
+      ],
+      "training": {
+        "encoder": "fixed random projections",
+        "supervised_head": "trained logistic classifier"
+      },
+      "capabilities": {
+        "explanations": false,
+        "modes": [
+          "unsupervised",
+          "supervised"
+        ]
+      }
+    },
+    {
+      "id": "dyg_tami",
+      "label": "Temporal + pair prototype",
+      "status": "fixed-encoder-prototype",
+      "python_module": "models.implementations.dyg_tami",
+      "browser": "models/implementations/dyg_tami.js",
+      "checkpoint": "models/dyg_tami.json",
+      "inputs": [
+        "payment-events/v1"
+      ],
+      "execution": [
+        "browser",
+        "python-legacy-training"
+      ],
+      "training": {
+        "encoder": "fixed random projections",
+        "supervised_head": "trained logistic classifier"
+      },
+      "capabilities": {
+        "explanations": false,
+        "modes": [
+          "unsupervised",
+          "supervised"
+        ]
+      }
+    },
+    {
+      "id": "dyg_tami_gnn",
+      "label": "Temporal + pair + graph prototype",
+      "status": "fixed-encoder-prototype",
+      "python_module": "models.implementations.dyg_tami_gnn",
+      "browser": "models/implementations/dyg_tami_gnn.js",
+      "checkpoint": "models/dyg_tami_gnn.json",
+      "inputs": [
+        "payment-events/v1"
+      ],
+      "execution": [
+        "browser",
+        "python-legacy-training"
+      ],
+      "training": {
+        "encoder": "fixed random projections",
+        "supervised_head": "trained logistic classifier"
+      },
+      "capabilities": {
+        "explanations": false,
+        "modes": [
+          "unsupervised",
+          "supervised"
+        ]
+      }
+    },
+    {
+      "id": "xgboost_native",
+      "label": "XGBoost \u00b7 official library",
+      "status": "library-model",
+      "python_module": "models.implementations.xgboost_native",
+      "browser": null,
+      "checkpoint": null,
+      "inputs": [
+        "numeric-table/v1"
+      ],
+      "execution": [
+        "python"
+      ],
+      "capabilities": {
+        "explanations": true,
+        "modes": [
+          "supervised"
+        ]
+      },
+      "dependency": "xgboost"
+    },
+    {
+      "id": "logistic_regression",
+      "label": "Logistic regression \u00b7 scikit-learn",
+      "status": "library-model",
+      "python_module": "models.implementations.logistic_regression",
+      "browser": null,
+      "checkpoint": null,
+      "inputs": [
+        "numeric-table/v1"
+      ],
+      "execution": [
+        "python"
+      ],
+      "capabilities": {
+        "explanations": false,
+        "modes": [
+          "supervised"
+        ]
+      },
+      "dependency": "scikit-learn"
+    }
+  ]
+}
