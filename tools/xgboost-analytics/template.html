@@ -1,0 +1,166 @@
+<main id="xgboost-analytics" data-busy="false">
+  <style>
+    #xgboost-analytics {--xa-teal:light-dark(#127568,#67d5c2);--xa-red:light-dark(#bb454d,#ff969d);--xa-blue:light-dark(#347bac,#80bdf0);--xa-quiet:light-dark(#69757a,#a5b0b7);--xa-panel:light-dark(#fff,#20272b);--xa-wash:light-dark(#f4f7f6,#182024);--xa-line:light-dark(#dfe7e4,#384246);max-width:1440px;margin:auto;padding:30px 32px 56px;color:var(--foreground);font-size:14px;line-height:1.5}
+    #xgboost-analytics * {box-sizing:border-box}
+    #xgboost-analytics [hidden] {display:none!important}
+    #xgboost-analytics h1 {font-size:32px;letter-spacing:-1.1px;line-height:1.15;font-weight:650;margin:6px 0 10px}
+    #xgboost-analytics h2 {font-size:19px;font-weight:620;letter-spacing:-.3px;margin:0}
+    #xgboost-analytics h3 {font-size:15px;font-weight:600;margin:0 0 6px}
+    #xgboost-analytics p {margin:0}
+    #xgboost-analytics .xa-eyebrow {font-size:11px;letter-spacing:1.7px;font-weight:700;text-transform:uppercase;color:var(--xa-teal)}
+    #xgboost-analytics .xa-muted {color:var(--xa-quiet)}
+    #xgboost-analytics .xa-small {font-size:12px}
+    #xgboost-analytics .xa-mono {font-family:var(--font-mono,monospace);font-size:12px;font-variant-numeric:tabular-nums}
+    #xgboost-analytics .xa-head,#xgboost-analytics .xa-line {display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap}
+    #xgboost-analytics .xa-head {align-items:flex-start;margin-bottom:25px}
+    #xgboost-analytics .xa-head-copy {max-width:770px}
+    #xgboost-analytics .xa-model {border:1px solid var(--xa-line);border-radius:12px;padding:12px 16px;min-width:190px}
+    #xgboost-analytics .xa-model strong {display:block;font-weight:600}
+    #xgboost-analytics .xa-dot {display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--xa-teal);margin-right:7px}
+    #xgboost-analytics .xa-panel {border:1px solid var(--xa-line);border-radius:14px;padding:22px;background:var(--xa-panel);min-width:0}
+    #xgboost-analytics .xa-config {background:var(--xa-wash);margin-bottom:12px;padding:20px}
+    #xgboost-analytics .xa-fields {display:grid;grid-template-columns:1.65fr 1.15fr .6fr 1.1fr;gap:14px;align-items:end;margin:14px 0}
+    #xgboost-analytics .xa-policy-fields {display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
+    #xgboost-analytics .xa-policy-fields label {flex:1 1 145px;max-width:220px}
+    #xgboost-analytics label {display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:550;min-width:0}
+    #xgboost-analytics :is(input,select,button) {font:inherit}
+    #xgboost-analytics :is(input,select) {height:39px;width:100%;border:1px solid var(--xa-line);border-radius:7px;padding:7px 10px;background:var(--xa-panel);color:var(--foreground);font-size:13px;min-width:0}
+    #xgboost-analytics :is(input,select,button,a):focus-visible {outline:2px solid var(--xa-teal);outline-offset:3px}
+    #xgboost-analytics button {border:1px solid var(--xa-line);border-radius:7px;padding:8px 13px;background:var(--xa-panel);color:var(--foreground);cursor:pointer;font-size:13px;font-weight:550;line-height:1.4}
+    #xgboost-analytics button:hover {background:var(--xa-wash)}
+    #xgboost-analytics button:disabled {opacity:.45;cursor:default}
+    #xgboost-analytics .xa-primary {background:var(--xa-teal);border-color:var(--xa-teal);color:light-dark(#fff,#112421)}
+    #xgboost-analytics .xa-primary:hover {filter:brightness(.93);background:var(--xa-teal)}
+    #xgboost-analytics .xa-actions {display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    #xgboost-analytics .xa-status {min-height:28px;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--xa-quiet);margin-bottom:16px}
+    #xgboost-analytics progress {width:160px;height:6px;accent-color:var(--xa-teal)}
+    #xgboost-analytics .xa-alert {border-left:3px solid var(--xa-red);padding:10px 14px;background:var(--xa-wash);margin:12px 0;color:var(--xa-red)}
+    #xgboost-analytics .xa-tabs {display:flex;gap:26px;border-bottom:1px solid var(--xa-line);margin:22px 0}
+    #xgboost-analytics .xa-tabs button {border:0;border-radius:0;border-bottom:2px solid transparent;background:none;padding:0 0 13px;color:var(--xa-quiet);font-size:14px}
+    #xgboost-analytics .xa-tabs button[aria-selected="true"] {border-bottom-color:var(--xa-teal);color:var(--xa-teal)}
+    #xgboost-analytics .xa-filter {padding:15px 18px;margin:20px 0;background:var(--xa-wash)}
+    #xgboost-analytics .xa-filter-fields {display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px;align-items:end;margin-top:10px}
+    #xgboost-analytics .xa-summary {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
+    #xgboost-analytics .xa-stat {padding:16px 18px;border:1px solid var(--xa-line);border-radius:10px;background:var(--xa-panel)}
+    #xgboost-analytics .xa-stat-label {font-size:12px;color:var(--xa-quiet)}
+    #xgboost-analytics .xa-stat-value {font-size:28px;font-weight:620;line-height:1.2;letter-spacing:-.7px;margin:7px 0;font-variant-numeric:tabular-nums}
+    #xgboost-analytics .xa-stat-note {font-size:11px;color:var(--xa-quiet)}
+    #xgboost-analytics .xa-grid {display:grid;grid-template-columns:1.55fr 1fr;gap:18px;margin:18px 0}
+    #xgboost-analytics .xa-equal {grid-template-columns:1fr 1fr}
+    #xgboost-analytics .xa-chart {display:block;width:100%;height:auto;overflow:visible;margin:12px 0 8px}
+    #xgboost-analytics .xa-chart text {fill:var(--xa-quiet);font-family:inherit;font-size:11px}
+    #xgboost-analytics .xa-chart .xa-chart-label {fill:var(--foreground)}
+    #xgboost-analytics .xa-legend {display:flex;flex-wrap:wrap;gap:8px 18px;font-size:11px;color:var(--xa-quiet);margin:9px 0}
+    #xgboost-analytics .xa-key {display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+    #xgboost-analytics .xa-table-wrap {overflow-x:auto;max-width:100%;scrollbar-width:thin}
+    #xgboost-analytics table {border-collapse:collapse;width:100%;font-size:12px;text-align:left;font-variant-numeric:tabular-nums}
+    #xgboost-analytics :is(th,td) {padding:11px 12px;border-bottom:1px solid var(--xa-line);vertical-align:middle}
+    #xgboost-analytics th {font-size:11px;font-weight:600;color:var(--xa-quiet);text-align:left}
+    #xgboost-analytics th:first-child,#xgboost-analytics td:first-child {padding-left:0}
+    #xgboost-analytics th:last-child,#xgboost-analytics td:last-child {padding-right:0}
+    #xgboost-analytics tbody tr:last-child td {border-bottom:0}
+    #xgboost-analytics .xa-right {text-align:right;white-space:nowrap}
+    #xgboost-analytics .xa-link {border:0;padding:0;background:none;color:var(--xa-teal);text-align:left;font-size:12px}
+    #xgboost-analytics .xa-link:hover {text-decoration:underline;background:none}
+    #xgboost-analytics .xa-pill {display:inline-block;border-radius:5px;padding:3px 7px;background:var(--xa-wash);font-size:10px;font-weight:650;white-space:nowrap}
+    #xgboost-analytics .xa-pill-block {color:var(--xa-red);background:color-mix(in srgb,var(--xa-red) 10%,transparent)}
+    #xgboost-analytics .xa-pill-allow {color:var(--xa-teal);background:color-mix(in srgb,var(--xa-teal) 10%,transparent)}
+    #xgboost-analytics .xa-selected {background:color-mix(in srgb,var(--xa-teal) 6%,transparent)}
+    #xgboost-analytics .xa-confusion {table-layout:fixed;margin:20px 0 14px}
+    #xgboost-analytics .xa-confusion td {text-align:center;font-size:26px;font-weight:600;border:5px solid var(--xa-panel);border-radius:10px;background:var(--xa-wash)}
+    #xgboost-analytics .xa-confusion td.xa-error-cell {background:color-mix(in srgb,var(--xa-red) 8%,var(--xa-panel))}
+    #xgboost-analytics .xa-confusion small {display:block;font-size:10px;font-weight:450;color:var(--xa-quiet)}
+    #xgboost-analytics .xa-empty {padding:44px 18px;text-align:center;color:var(--xa-quiet);border:1px dashed var(--xa-line);border-radius:12px;margin:20px 0}
+    #xgboost-analytics .xa-feature-controls {display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:14px 0}
+    #xgboost-analytics .xa-feature-name {display:block;white-space:nowrap}
+    #xgboost-analytics .xa-feature-id {display:block;font-size:10px;color:var(--xa-quiet)}
+    #xgboost-analytics .xa-importance {display:flex;align-items:center;gap:8px;min-width:125px}
+    #xgboost-analytics .xa-bar {height:6px;flex:1;min-width:45px;background:var(--xa-wash);border-radius:2px;overflow:hidden}
+    #xgboost-analytics .xa-bar span {display:block;height:100%;background:var(--xa-teal)}
+    #xgboost-analytics .xa-beeswarm {width:220px;height:34px;display:block}
+    #xgboost-analytics .xa-definition {padding:15px;background:var(--xa-wash);border-radius:9px;margin-top:12px}
+    #xgboost-analytics .xa-definition dl {display:grid;grid-template-columns:110px 1fr;gap:5px 12px;margin:10px 0 0;font-size:12px}
+    #xgboost-analytics dt {color:var(--xa-quiet)}
+    #xgboost-analytics dd {margin:0;overflow-wrap:anywhere}
+    #xgboost-analytics .xa-pagination {display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap}
+    #xgboost-analytics .xa-inspector {margin-top:22px;border-top:3px solid var(--xa-teal)}
+    #xgboost-analytics .xa-inspector .xa-summary {grid-template-columns:repeat(4,minmax(0,1fr))}
+    #xgboost-analytics .xa-inspector .xa-stat-value {font-size:23px}
+    #xgboost-analytics .xa-waterfall {min-width:570px}
+    #xgboost-analytics .xa-tree {min-width:780px}
+    #xgboost-analytics .xa-tree-path {padding-left:22px;font-size:12px;line-height:1.9}
+    #xgboost-analytics .xa-good {color:var(--xa-teal)}
+    #xgboost-analytics .xa-high {color:var(--xa-red)}
+    #xgboost-analytics details {margin-top:16px}
+    #xgboost-analytics summary {cursor:pointer;font-size:13px;font-weight:550}
+    #xgboost-analytics .xa-foot {border-top:1px solid var(--xa-line);margin-top:30px;padding-top:16px;font-size:11px;color:var(--xa-quiet)}
+    @media(max-width:1000px){#xgboost-analytics{padding:24px 20px 40px}#xgboost-analytics .xa-grid{grid-template-columns:1fr}#xgboost-analytics .xa-summary{grid-template-columns:repeat(4,minmax(0,1fr))}#xgboost-analytics .xa-fields{grid-template-columns:1.5fr 1fr}#xgboost-analytics .xa-filter-fields{grid-template-columns:1.5fr 1fr 1fr}#xgboost-analytics .xa-filter-fields button{justify-self:start}}
+    @media(max-width:600px){#xgboost-analytics{padding:20px 12px 32px}#xgboost-analytics h1{font-size:28px}#xgboost-analytics .xa-head{gap:15px}#xgboost-analytics .xa-model{width:100%}#xgboost-analytics .xa-panel{padding:16px}#xgboost-analytics .xa-summary,#xgboost-analytics .xa-inspector .xa-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#xgboost-analytics .xa-stat{padding:12px}#xgboost-analytics .xa-stat-value{font-size:25px}#xgboost-analytics .xa-fields,#xgboost-analytics .xa-filter-fields,#xgboost-analytics .xa-feature-controls{grid-template-columns:1fr 1fr}#xgboost-analytics .xa-filter-fields label:first-child{grid-column:1/-1}#xgboost-analytics .xa-tabs{gap:22px}#xgboost-analytics .xa-tabs button{font-size:13px}#xgboost-analytics .xa-definition dl{grid-template-columns:80px 1fr}#xgboost-analytics .xa-chart text{font-size:12px}}
+  </style>
+  <header class="xa-head">
+    <div class="xa-head-copy"><div class="xa-eyebrow">Model observatory / 02</div><h1>XGBoost analytics</h1><p class="xa-muted">Understand the completed run. Explore which features shape the model’s output, then inspect the evidence behind any payment decision.</p></div>
+    <div class="xa-model"><strong><span class="xa-dot"></span>XGBoost trees</strong><span id="xa-checkpoint" class="xa-small xa-muted">32 trees · 27 features</span></div>
+  </header>
+  <div class="xa-panel xa-config">
+    <label for="xa-dataset-file">Load payment JSON<input type="file" accept=".json,application/json" id="xa-dataset-file"></label>
+    <button type="button" id="xa-dataset-reset">Use synthetic scenarios</button>
+    <p id="xa-dataset-status" class="xa-small xa-muted" role="status">Synthetic dataset. This browser checkpoint was trained on synthetic history.</p>
+  </div>
+  <form id="xa-config-form" class="xa-panel xa-config">
+    <div class="xa-line"><h2>Run configuration</h2><span class="xa-small xa-muted">Tree scoring · observed history</span></div>
+    <div class="xa-fields">
+      <label for="xa-scenario">Scenario<select id="xa-scenario"><option value="relay">Collection and long relay</option><option value="split">Split, merge, and cycle</option><option value="benign">Busy merchants and payroll</option><option value="takeover">Account takeover and new recipients</option><option value="mixed" selected>Mixed week with a traffic surge</option></select></label>
+      <label for="xa-size">Network size<select id="xa-size"><option value="small">32 accounts · 450+ events</option><option value="medium" selected>64 accounts · 1,000+ events</option><option value="large">112 accounts · 2,100+ events</option></select></label>
+      <label for="xa-seed">Dataset seed<input type="number" id="xa-seed" value="42" min="1" max="99999" step="1" required></label>
+      <label for="xa-policy">Decision policy<select id="xa-policy"><option value="shared">Unlabeled budget</option><option value="manual">Fixed threshold</option><option value="tuned">Historical cost tuning</option><option value="auto">Historical objective</option></select></label>
+    </div>
+    <div class="xa-policy-fields">
+      <label for="xa-alpha" data-xa-policy="shared">Target block rate<input id="xa-alpha" type="number" min="0.1" max="50" step="0.1" value="2"><span class="xa-muted xa-small">Percent of assessed payments</span></label>
+      <label for="xa-warmup" data-xa-policy="shared">Warm-up payments<input id="xa-warmup" type="number" min="1" max="10000" step="1" value="128"><span class="xa-muted xa-small">Allowed before the first threshold</span></label>
+      <label for="xa-tau" data-xa-policy="manual" hidden>Fixed threshold (bits)<input id="xa-tau" type="number" min="0" max="100000" step="any" value="1"></label>
+      <label for="xa-false-cost" data-xa-policy="tuned" hidden>False-block cost<input id="xa-false-cost" type="number" min="0.01" max="10000" step="any" value="1"></label>
+      <label for="xa-missed-cost" data-xa-policy="tuned" hidden>Missed-fraud cost<input id="xa-missed-cost" type="number" min="0.01" max="10000" step="any" value="20"></label>
+      <label for="xa-objective" data-xa-policy="auto" hidden>Historical objective<select id="xa-objective"><option value="f1">F1 · balanced precision / recall</option><option value="f2">F2 · favor recall</option><option value="balanced_accuracy">Balanced accuracy</option></select></label>
+    </div>
+    <div class="xa-line" style="margin-top:18px"><p id="xa-policy-note" class="xa-small xa-muted"></p><div class="xa-actions"><button id="xa-cancel" type="button" hidden>Cancel</button><button id="xa-run" class="xa-primary" type="submit">Analyze scenario <span aria-hidden="true">↗</span></button></div></div>
+  </form>
+  <div class="xa-status" role="status" aria-live="polite"><progress id="xa-progress" max="1" value="0" hidden aria-label="Analysis progress"></progress><span id="xa-status">Preparing the completed-run report…</span></div>
+  <div id="xa-error" class="xa-alert" role="alert" hidden></div>
+  <div id="xa-start-empty" class="xa-empty" hidden>No completed report yet. Choose a scenario and select Analyze scenario.</div>
+  <div id="xa-results" hidden>
+    <div class="xa-line"><div><div class="xa-eyebrow">Completed scenario</div><h2 id="xa-report-title" style="margin-top:5px"></h2><p id="xa-run-meta" class="xa-small xa-muted" style="margin-top:6px"></p></div><div class="xa-actions"><button id="xa-export-csv" type="button">Export CSV</button><button id="xa-export-json" type="button">Export JSON</button></div></div>
+    <div class="xa-panel xa-filter">
+      <div class="xa-line"><strong class="xa-small">Analysis population</strong><span id="xa-population" class="xa-small xa-muted" aria-live="polite"></span></div>
+      <div class="xa-filter-fields"><label for="xa-search">Find payments<input id="xa-search" type="search" placeholder="Payment ID or account name"></label><label for="xa-decision">Original decision<select id="xa-decision"><option value="all">All decisions</option><option value="BLOCK">Blocked</option><option value="ALLOW">Allowed</option><option value="LEARNING">Warm-up</option></select></label><label for="xa-outcome">Known outcome<select id="xa-outcome"><option value="all">All outcomes</option><option value="tp">Fraud caught</option><option value="fp">False positives</option><option value="fn">False negatives</option><option value="tn">Benign allowed</option><option value="known">Known labels</option><option value="unknown">Unknown labels</option></select></label><button id="xa-reset-filters" type="button">Clear filters</button></div>
+      <p class="xa-small xa-muted" style="margin-top:10px">Filters apply to statistics, feature contributions, the payment table, and exports.</p>
+    </div>
+    <div class="xa-tabs" role="tablist" aria-label="Analytics views"><button id="xa-tab-overview" role="tab" aria-selected="true" aria-controls="xa-overview" tabindex="0" type="button">Overview</button><button id="xa-tab-features" role="tab" aria-selected="false" aria-controls="xa-features" tabindex="-1" type="button">Features</button><button id="xa-tab-decisions" role="tab" aria-selected="false" aria-controls="xa-decisions" tabindex="-1" type="button">Decisions</button></div>
+    <section id="xa-overview" role="tabpanel" aria-labelledby="xa-tab-overview">
+      <div id="xa-overview-stats" class="xa-summary"></div>
+      <p id="xa-metric-note" class="xa-small xa-muted"></p>
+      <div class="xa-grid">
+        <div class="xa-panel"><h2>Score distribution</h2><p class="xa-small xa-muted" style="margin-top:6px">Cohorts reflect each payment’s original decision.</p><svg id="xa-score-chart" class="xa-chart" viewBox="0 0 620 260" role="img" aria-label="Payment score distribution by original decision"></svg><div class="xa-legend"><span><i class="xa-key" style="background:var(--xa-teal)"></i>Allowed</span><span><i class="xa-key" style="background:var(--xa-red)"></i>Blocked</span><span><i class="xa-key" style="background:var(--xa-quiet)"></i>Warm-up</span></div><p id="xa-cutoff-note" class="xa-small xa-muted"></p><details><summary>Distribution counts</summary><div class="xa-table-wrap"><table id="xa-score-table"><thead><tr><th>Score range, bits</th><th>Allowed</th><th>Blocked</th><th>Warm-up</th></tr></thead><tbody></tbody></table></div></details></div>
+        <div class="xa-panel"><h2>Confusion matrix</h2><p class="xa-small xa-muted" style="margin-top:6px">Known labels · assessed payments only</p><table class="xa-confusion" aria-label="Confusion matrix"><thead><tr><th scope="col">Model decision</th><th scope="col">Actual fraud</th><th scope="col">Actual benign</th></tr></thead><tbody><tr><th scope="row">Blocked</th><td id="xa-tp"></td><td id="xa-fp" class="xa-error-cell"></td></tr><tr><th scope="row">Allowed</th><td id="xa-fn" class="xa-error-cell"></td><td id="xa-tn"></td></tr></tbody></table><p id="xa-confusion-note" class="xa-small xa-muted"></p><details><summary>How to read this report</summary><p class="xa-small xa-muted" style="margin-top:12px">The scenario is processed once, in chronological order. Each payment is scored before its history update. All transfers continue in observed-history mode, including decisions marked blocked. Outcome labels are joined after scoring and do not tune the model or its threshold.</p><p class="xa-small xa-muted" style="margin-top:10px">Probability is the model’s uncalibrated estimate. The policy uses bits: −log₂(1 − probability). A payment is blocked only when its score is greater than its original threshold. Warm-up payments are allowed and excluded from classification metrics and the block-rate denominator.</p></details></div>
+      </div>
+    </section>
+    <section id="xa-features" role="tabpanel" aria-labelledby="xa-tab-features" hidden>
+      <div class="xa-line"><div><h2>Feature contributions</h2><p id="xa-feature-population" class="xa-small xa-muted" style="margin-top:6px"></p></div><span class="xa-small xa-muted">Raw margin / log-odds</span></div>
+      <div class="xa-feature-controls"><label for="xa-feature-search">Find a feature<input id="xa-feature-search" type="search" placeholder="Name, definition, or history window"></label><label for="xa-feature">Inspect feature<select id="xa-feature"></select></label></div>
+      <div class="xa-panel"><p class="xa-small xa-muted">Ranked by mean absolute SHAP contribution. Positive contributions raise the model output; negative contributions lower it. Every feature is included, including features with zero contribution.</p><div class="xa-legend"><span><i class="xa-key" style="background:var(--xa-blue)"></i>Low feature value</span><span><i class="xa-key" style="background:var(--xa-red)"></i>High feature value</span><span>Each dot represents a payment; chart samples are deterministic.</span></div><div class="xa-table-wrap"><table id="xa-importance-table"><thead><tr><th scope="col">Feature</th><th scope="col">Mean |SHAP|</th><th scope="col">Contribution distribution</th><th scope="col" class="xa-right">Readable median</th></tr></thead><tbody></tbody></table></div><p id="xa-feature-empty" class="xa-empty" hidden>No feature definitions match your search.</p></div>
+      <div class="xa-grid xa-equal"><div class="xa-panel"><h2 id="xa-dependence-title">Feature value and contribution</h2><svg id="xa-dependence-chart" class="xa-chart" viewBox="0 0 560 290" role="img" aria-label="Feature value versus SHAP contribution"></svg><p id="xa-dependence-note" class="xa-small xa-muted"></p></div><div class="xa-panel"><h2 id="xa-definition-title">Feature definition</h2><p id="xa-definition-description" class="xa-small xa-muted" style="margin-top:9px"></p><div id="xa-definition" class="xa-definition"></div><div id="xa-feature-stats" class="xa-table-wrap"></div></div></div>
+      <p class="xa-small xa-muted">Contributions explain this model relative to its historical fitting-row reference. They are additive in raw log-odds and do not establish causal effects. Feature values are captured at the original decision.</p>
+    </section>
+    <section id="xa-decisions" role="tabpanel" aria-labelledby="xa-tab-decisions" hidden>
+      <div class="xa-line"><div><h2>Payment decisions</h2><p class="xa-small xa-muted" style="margin-top:6px">Select any payment to inspect its original features and explanation.</p></div><div class="xa-actions"><label for="xa-sort">Sort by<select id="xa-sort"><option value="time">Payment time</option><option value="score" selected>Model score</option><option value="amount">Amount</option><option value="tau">Original threshold</option><option value="id">Payment ID</option></select></label><label for="xa-direction">Order<select id="xa-direction"><option value="desc" selected>Descending</option><option value="asc">Ascending</option></select></label></div></div>
+      <div class="xa-table-wrap" style="margin-top:16px"><table id="xa-payment-table"><thead><tr><th scope="col">Payment / time</th><th scope="col">Sender → recipient</th><th scope="col" class="xa-right">Amount</th><th scope="col" class="xa-right">Score, bits</th><th scope="col" class="xa-right">Original τ</th><th scope="col">Decision</th><th scope="col">Outcome</th></tr></thead><tbody></tbody></table></div><p id="xa-payment-empty" class="xa-empty" hidden>No payments match these filters. Clear filters to return to the completed run.</p>
+      <div class="xa-pagination"><span id="xa-page-label" class="xa-small xa-muted"></span><div class="xa-actions"><button id="xa-prev-page" type="button">Previous</button><button id="xa-next-page" type="button">Next</button></div></div>
+      <article id="xa-inspector" class="xa-panel xa-inspector" aria-labelledby="xa-inspector-title" hidden><div class="xa-line"><div><div class="xa-eyebrow">Decision inspector</div><h2 id="xa-inspector-title" style="margin-top:6px"></h2><p id="xa-inspector-meta" class="xa-small xa-muted" style="margin-top:6px"></p></div><span id="xa-inspector-decision"></span></div><div id="xa-inspector-stats" class="xa-summary"></div><p id="xa-original-decision" class="xa-small xa-muted"></p>
+        <div style="margin-top:24px"><h3>From the reference to this payment</h3><p class="xa-small xa-muted">SHAP contributions sum from the expected reference margin to the payment’s raw tree margin. The largest contributions appear first; the full feature table preserves all 27.</p><div class="xa-table-wrap"><svg id="xa-waterfall" class="xa-chart xa-waterfall" viewBox="0 0 950 420" role="img" aria-label="Additive feature contribution waterfall"></svg></div><p id="xa-additivity" class="xa-small xa-good"></p></div>
+        <details open><summary>All feature values and contributions</summary><div class="xa-table-wrap"><table id="xa-values-table"><thead><tr><th scope="col">Feature</th><th scope="col" class="xa-right">Readable value</th><th scope="col" class="xa-right">Model input</th><th scope="col" class="xa-right">SHAP, log-odds</th></tr></thead><tbody></tbody></table></div></details>
+        <details open><summary>Inspect a tree’s actual decision path</summary><div class="xa-line" style="margin-top:16px"><label for="xa-tree">Tree<select id="xa-tree"></select></label><p id="xa-tree-summary" class="xa-small xa-muted"></p></div><div class="xa-table-wrap"><svg id="xa-tree-chart" class="xa-chart xa-tree" viewBox="0 0 1020 350" role="img" aria-label="Decision tree with highlighted payment path"></svg></div><ol id="xa-tree-path" class="xa-tree-path"></ol><p class="xa-small xa-muted">Highlighted branches are the path taken by this payment. A tree’s weighted leaf output is one part of the ensemble margin; the SHAP table attributes the complete model output.</p></details>
+      </article>
+    </section>
+    <details><summary>Checkpoint and explanation provenance</summary><div id="xa-provenance" class="xa-definition"></div></details>
+  </div>
+  <footer class="xa-foot">Synthetic payment scenarios · Completed-run analytics · Model outputs and feature contributions are available offline.</footer>
+</main>

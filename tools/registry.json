@@ -1,9 +1,6 @@
 {
   "version": 1,
-  "ui_scripts": [
-    "shared/vendor/floating-ui.core.min.js",
-    "shared/vendor/floating-ui.dom.min.js"
-  ],
+  "ui_scripts": ["shared/vendor/floating-ui.core.min.js", "shared/vendor/floating-ui.dom.min.js"],
   "shared_scripts": [
     "shared/vendor/d3.min.js",
     "shared/runtime/xgboost.js",
@@ -18,14 +15,21 @@
       "id": "comparison",
       "label": "Model comparison",
       "template": "tools/comparison/template.html",
-      "scripts": [
-        "tools/comparison/comparison.js",
-        "tools/comparison/ui.js"
-      ],
+      "scripts": ["tools/comparison/comparison.js", "tools/comparison/ui.js"],
       "model_ids": "all",
       "model_data_id": "fd-model-data",
       "output": "index.html",
       "legacy_fragment": "payment-model-comparison.html"
+    },
+    {
+      "id": "xgboost-analytics",
+      "label": "XGBoost analytics",
+      "template": "tools/xgboost-analytics/template.html",
+      "scripts": ["tools/xgboost-analytics/analytics.js", "tools/xgboost-analytics/ui.js"],
+      "model_ids": ["xgboost"],
+      "model_data_id": "xa-model-data",
+      "explanation": "models/xgboost-explanations.json",
+      "output": "xgboost-analytics.html"
     }
   ]
 }
