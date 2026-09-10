@@ -1,5 +1,5 @@
 {
-  "parity_max_absolute_error": 3.552713678800501e-15,
+  "parity_max_absolute_error": 4.884981308350689e-15,
   "checks": [
     "Python/JavaScript parity for every probability, request score, and recurrent state",
     "Request scoring does not mutate state; its amount and gap cannot leak into their predictive distributions",
@@ -21,12 +21,12 @@
       "accounts": 32,
       "events": 468,
       "requests": 423,
-      "calibration": 128,
-      "tp": 10,
-      "fn": 3,
-      "fp": 10,
-      "tn": 272,
-      "final_tau": 14.618912901166857
+      "calibration": 256,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 167,
+      "final_tau": 20.892545351082955
     },
     {
       "scenario": "relay",
@@ -35,12 +35,12 @@
       "accounts": 32,
       "events": 468,
       "requests": 428,
-      "calibration": 128,
-      "tp": 7,
-      "fn": 6,
-      "fp": 13,
-      "tn": 274,
-      "final_tau": 14.022623912217526
+      "calibration": 256,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 172,
+      "final_tau": 20.79021656633013
     },
     {
       "scenario": "split",
@@ -49,12 +49,12 @@
       "accounts": 32,
       "events": 471,
       "requests": 426,
-      "calibration": 128,
-      "tp": 13,
-      "fn": 3,
-      "fp": 8,
-      "tn": 274,
-      "final_tau": 14.642412901166855
+      "calibration": 256,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 170,
+      "final_tau": 20.383959154484856
     },
     {
       "scenario": "split",
@@ -63,12 +63,12 @@
       "accounts": 32,
       "events": 471,
       "requests": 431,
-      "calibration": 128,
-      "tp": 10,
-      "fn": 6,
-      "fp": 13,
-      "tn": 274,
-      "final_tau": 14.096123912217525
+      "calibration": 256,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 175,
+      "final_tau": 20.062134690921635
     },
     {
       "scenario": "benign",
@@ -77,12 +77,12 @@
       "accounts": 32,
       "events": 480,
       "requests": 439,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 0,
       "fn": 0,
-      "fp": 19,
-      "tn": 292,
-      "final_tau": 14.585912901166846
+      "fp": 1,
+      "tn": 182,
+      "final_tau": 15.25810143023252
     },
     {
       "scenario": "benign",
@@ -91,12 +91,12 @@
       "accounts": 32,
       "events": 480,
       "requests": 444,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 0,
       "fn": 0,
-      "fp": 26,
-      "tn": 290,
-      "final_tau": 14.164623912217518
+      "fp": 0,
+      "tn": 188,
+      "final_tau": 16.693271574854823
     },
     {
       "scenario": "takeover",
@@ -105,12 +105,12 @@
       "accounts": 32,
       "events": 460,
       "requests": 415,
-      "calibration": 128,
-      "tp": 4,
-      "fn": 1,
-      "fp": 10,
-      "tn": 272,
-      "final_tau": 14.47291290116686
+      "calibration": 256,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 159,
+      "final_tau": 15.244219253564873
     },
     {
       "scenario": "takeover",
@@ -119,12 +119,12 @@
       "accounts": 32,
       "events": 460,
       "requests": 420,
-      "calibration": 128,
-      "tp": 4,
-      "fn": 1,
-      "fp": 13,
-      "tn": 274,
-      "final_tau": 13.95162391221753
+      "calibration": 256,
+      "tp": 0,
+      "fn": 0,
+      "fp": 3,
+      "tn": 161,
+      "final_tau": 14.150937081864067
     },
     {
       "scenario": "mixed",
@@ -133,12 +133,12 @@
       "accounts": 32,
       "events": 691,
       "requests": 640,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 15,
       "fn": 6,
-      "fp": 25,
-      "tn": 466,
-      "final_tau": 15.010412901166731
+      "fp": 8,
+      "tn": 355,
+      "final_tau": 15.707601430232405
     },
     {
       "scenario": "mixed",
@@ -147,12 +147,12 @@
       "accounts": 32,
       "events": 691,
       "requests": 645,
-      "calibration": 128,
-      "tp": 16,
-      "fn": 5,
-      "fp": 31,
-      "tn": 465,
-      "final_tau": 14.589123912217403
+      "calibration": 256,
+      "tp": 12,
+      "fn": 9,
+      "fp": 1,
+      "tn": 367,
+      "final_tau": 16.91777157485504
     },
     {
       "scenario": "relay",
@@ -161,12 +161,12 @@
       "accounts": 64,
       "events": 1018,
       "requests": 920,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 8,
       "fn": 5,
-      "fp": 18,
-      "tn": 761,
-      "final_tau": 15.256614352367876
+      "fp": 14,
+      "tn": 637,
+      "final_tau": 13.447856393935105
     },
     {
       "scenario": "relay",
@@ -175,12 +175,12 @@
       "accounts": 64,
       "events": 1018,
       "requests": 929,
-      "calibration": 128,
-      "tp": 11,
-      "fn": 2,
-      "fp": 20,
-      "tn": 768,
-      "final_tau": 15.772146728127403
+      "calibration": 256,
+      "tp": 10,
+      "fn": 3,
+      "fp": 14,
+      "tn": 646,
+      "final_tau": 14.354398763871943
     },
     {
       "scenario": "split",
@@ -189,12 +189,12 @@
       "accounts": 64,
       "events": 1021,
       "requests": 923,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 11,
       "fn": 5,
-      "fp": 18,
-      "tn": 761,
-      "final_tau": 15.330114352367875
+      "fp": 14,
+      "tn": 637,
+      "final_tau": 13.521356393935104
     },
     {
       "scenario": "split",
@@ -203,12 +203,12 @@
       "accounts": 64,
       "events": 1021,
       "requests": 932,
-      "calibration": 128,
-      "tp": 14,
-      "fn": 2,
-      "fp": 20,
-      "tn": 768,
-      "final_tau": 15.845646728127402
+      "calibration": 256,
+      "tp": 13,
+      "fn": 3,
+      "fp": 13,
+      "tn": 647,
+      "final_tau": 14.402898763871942
     },
     {
       "scenario": "benign",
@@ -217,12 +217,12 @@
       "accounts": 64,
       "events": 1030,
       "requests": 936,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 0,
       "fn": 0,
-      "fp": 32,
-      "tn": 776,
-      "final_tau": 15.398614352367868
+      "fp": 28,
+      "tn": 652,
+      "final_tau": 13.589856393935097
     },
     {
       "scenario": "benign",
@@ -231,12 +231,12 @@
       "accounts": 64,
       "events": 1030,
       "requests": 945,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 0,
       "fn": 0,
-      "fp": 35,
-      "tn": 782,
-      "final_tau": 15.864146728127395
+      "fp": 29,
+      "tn": 660,
+      "final_tau": 14.471398763871935
     },
     {
       "scenario": "takeover",
@@ -245,12 +245,12 @@
       "accounts": 64,
       "events": 1010,
       "requests": 912,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 4,
       "fn": 1,
-      "fp": 18,
-      "tn": 761,
-      "final_tau": 15.16061435236788
+      "fp": 13,
+      "tn": 638,
+      "final_tau": 13.326856393935108
     },
     {
       "scenario": "takeover",
@@ -259,12 +259,12 @@
       "accounts": 64,
       "events": 1010,
       "requests": 921,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 4,
       "fn": 1,
-      "fp": 21,
-      "tn": 767,
-      "final_tau": 15.626146728127406
+      "fp": 15,
+      "tn": 645,
+      "final_tau": 14.233398763871946
     },
     {
       "scenario": "mixed",
@@ -273,12 +273,12 @@
       "accounts": 64,
       "events": 1241,
       "requests": 1137,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 13,
       "fn": 8,
-      "fp": 36,
-      "tn": 952,
-      "final_tau": 15.723114352367752
+      "fp": 31,
+      "tn": 829,
+      "final_tau": 13.88935639393498
     },
     {
       "scenario": "mixed",
@@ -287,12 +287,12 @@
       "accounts": 64,
       "events": 1241,
       "requests": 1146,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 13,
       "fn": 8,
-      "fp": 35,
-      "tn": 962,
-      "final_tau": 16.088646728128193
+      "fp": 31,
+      "tn": 838,
+      "final_tau": 14.745898763871818
     },
     {
       "scenario": "relay",
@@ -301,12 +301,12 @@
       "accounts": 112,
       "events": 2118,
       "requests": 1897,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 6,
       "fn": 7,
-      "fp": 43,
-      "tn": 1713,
-      "final_tau": 16.077419217792368
+      "fp": 39,
+      "tn": 1589,
+      "final_tau": 14.361351051278294
     },
     {
       "scenario": "relay",
@@ -315,12 +315,12 @@
       "accounts": 112,
       "events": 2118,
       "requests": 1925,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 8,
       "fn": 5,
-      "fp": 46,
-      "tn": 1738,
-      "final_tau": 16.25994248007443
+      "fp": 37,
+      "tn": 1619,
+      "final_tau": 15.040933841552434
     },
     {
       "scenario": "split",
@@ -329,12 +329,12 @@
       "accounts": 112,
       "events": 2121,
       "requests": 1900,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 9,
       "fn": 7,
-      "fp": 43,
-      "tn": 1713,
-      "final_tau": 16.15091921779237
+      "fp": 39,
+      "tn": 1589,
+      "final_tau": 14.434851051278294
     },
     {
       "scenario": "split",
@@ -343,12 +343,12 @@
       "accounts": 112,
       "events": 2121,
       "requests": 1928,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 11,
       "fn": 5,
-      "fp": 45,
-      "tn": 1739,
-      "final_tau": 16.30844248007443
+      "fp": 37,
+      "tn": 1619,
+      "final_tau": 15.114433841552433
     },
     {
       "scenario": "benign",
@@ -357,12 +357,12 @@
       "accounts": 112,
       "events": 2130,
       "requests": 1913,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 0,
       "fn": 0,
-      "fp": 56,
-      "tn": 1729,
-      "final_tau": 16.244419217792355
+      "fp": 53,
+      "tn": 1604,
+      "final_tau": 14.553351051278288
     },
     {
       "scenario": "benign",
@@ -371,12 +371,12 @@
       "accounts": 112,
       "events": 2130,
       "requests": 1941,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 0,
       "fn": 0,
-      "fp": 57,
-      "tn": 1756,
-      "final_tau": 16.326942480074415
+      "fp": 49,
+      "tn": 1636,
+      "final_tau": 15.132933841552425
     },
     {
       "scenario": "takeover",
@@ -385,12 +385,12 @@
       "accounts": 112,
       "events": 2110,
       "requests": 1889,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 4,
       "fn": 1,
-      "fp": 43,
-      "tn": 1713,
-      "final_tau": 16.03141921779228
+      "fp": 39,
+      "tn": 1589,
+      "final_tau": 14.315351051278299
     },
     {
       "scenario": "takeover",
@@ -399,12 +399,12 @@
       "accounts": 112,
       "events": 2110,
       "requests": 1917,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 4,
       "fn": 1,
-      "fp": 46,
-      "tn": 1738,
-      "final_tau": 16.163942480074425
+      "fp": 35,
+      "tn": 1621,
+      "final_tau": 14.894933841552437
     },
     {
       "scenario": "mixed",
@@ -413,12 +413,12 @@
       "accounts": 112,
       "events": 2341,
       "requests": 2114,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 13,
       "fn": 8,
-      "fp": 60,
-      "tn": 1905,
-      "final_tau": 16.568919217792565
+      "fp": 58,
+      "tn": 1779,
+      "final_tau": 14.902851051278171
     },
     {
       "scenario": "mixed",
@@ -427,12 +427,12 @@
       "accounts": 112,
       "events": 2341,
       "requests": 2142,
-      "calibration": 128,
+      "calibration": 256,
       "tp": 13,
       "fn": 8,
-      "fp": 58,
-      "tn": 1935,
-      "final_tau": 16.57644248007463
+      "fp": 53,
+      "tn": 1812,
+      "final_tau": 15.457433841552309
     }
   ],
   "notice": "Synthetic generated outcomes used only after inference. No tuning was done to maximize these fraud metrics. Block counts exclude calibration."

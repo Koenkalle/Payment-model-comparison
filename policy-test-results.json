@@ -12,30 +12,30 @@
     {
       "model": "statistics",
       "trainingMode": "unsupervised",
-      "tau": 16.63545163456191,
-      "impliedAlpha": 0.04360587002096436,
-      "validationCost": 326
+      "tau": 18.569332518495216,
+      "impliedAlpha": 0.03815513626834382,
+      "validationCost": 268
     },
     {
       "model": "gru",
       "trainingMode": "unsupervised",
-      "tau": 18.004110226158012,
-      "impliedAlpha": 0.027672955974842768,
-      "validationCost": 222
+      "tau": 14.358934132614591,
+      "impliedAlpha": 0.04570230607966457,
+      "validationCost": 155
     },
     {
       "model": "gru_mean",
       "trainingMode": "unsupervised",
-      "tau": 15.951055304676494,
-      "impliedAlpha": 0.031446540880503145,
-      "validationCost": 209
+      "tau": 12.662611839030848,
+      "impliedAlpha": 0.05744234800838575,
+      "validationCost": 206
     },
     {
       "model": "gru_attention",
       "trainingMode": "unsupervised",
-      "tau": 16.68221034103002,
-      "impliedAlpha": 0.02389937106918239,
-      "validationCost": 212
+      "tau": 15.846994964207205,
+      "impliedAlpha": 0.025157232704402517,
+      "validationCost": 194
     },
     {
       "model": "xgboost",
@@ -75,49 +75,49 @@
     {
       "model": "statistics",
       "trainingMode": "supervised",
-      "tau": 1.1570414806683937,
-      "impliedAlpha": 0.025157232704402517,
-      "validationCost": 237
+      "tau": 1.4244897334115687,
+      "impliedAlpha": 0.022222222222222223,
+      "validationCost": 209
     },
     {
       "model": "gru",
       "trainingMode": "supervised",
-      "tau": 1.1204533931582235,
-      "impliedAlpha": 0.024737945492662474,
-      "validationCost": 193
+      "tau": 1.213732838252293,
+      "impliedAlpha": 0.021383647798742137,
+      "validationCost": 97
     },
     {
       "model": "gru_mean",
       "trainingMode": "supervised",
-      "tau": 1.4736302093249765,
-      "impliedAlpha": 0.014255765199161425,
-      "validationCost": 168
+      "tau": 0.627242571962213,
+      "impliedAlpha": 0.03605870020964361,
+      "validationCost": 131
     },
     {
       "model": "gru_attention",
       "trainingMode": "supervised",
-      "tau": 0.6549810083256731,
-      "impliedAlpha": 0.026415094339622643,
-      "validationCost": 110
+      "tau": 0.9087546079409268,
+      "impliedAlpha": 0.025157232704402517,
+      "validationCost": 64
     },
     {
       "model": "xgboost",
       "trainingMode": "supervised",
-      "tau": 0.542273464493757,
+      "tau": 0.5422734644937572,
       "impliedAlpha": 0.021383647798742137,
       "validationCost": 54
     },
     {
       "model": "dygformer",
       "trainingMode": "supervised",
-      "tau": 0.441484264962885,
+      "tau": 0.44148426496288545,
       "impliedAlpha": 0.03815513626834382,
       "validationCost": 95
     },
     {
       "model": "tami",
       "trainingMode": "supervised",
-      "tau": 0.44054170628456685,
+      "tau": 0.440541706284567,
       "impliedAlpha": 0.04025157232704402,
       "validationCost": 100
     },
@@ -131,7 +131,7 @@
     {
       "model": "dyg_tami_gnn",
       "trainingMode": "supervised",
-      "tau": 0.6772774523692296,
+      "tau": 0.6772774523692291,
       "impliedAlpha": 0.028930817610062894,
       "validationCost": 94
     }
