@@ -1,0 +1,165 @@
+{
+  "checks": [
+    "Exact minimum cost agrees with exhaustive thresholds, including ties, unknowns, all-allow and all-block",
+    "Automatic F1, F2 and balanced-accuracy cutoffs agree with exhaustive validation search and deterministic ties",
+    "Calibration matches held-out episodes and source hashes; labels cannot change historical model scores",
+    "All nine models in both modes fit independent thresholds; increasing missed-fraud cost never reduces fitted blocks",
+    "Tuned replay freezes thresholds, skips warm-up, shares observed history and preserves the common ranking budget",
+    "Individual model policies keep fixed, cost-tuned and auto-tuned settings isolated; changing one model cost changes only that model",
+    "Rewind is exact; replay outcomes, future events, warm-up and ranking budget cannot refit tuned τ"
+  ],
+  "fits": [
+    {
+      "model": "statistics",
+      "trainingMode": "unsupervised",
+      "tau": 16.63545163456191,
+      "impliedAlpha": 0.04360587002096436,
+      "validationCost": 326
+    },
+    {
+      "model": "gru",
+      "trainingMode": "unsupervised",
+      "tau": 18.004110226158012,
+      "impliedAlpha": 0.027672955974842768,
+      "validationCost": 222
+    },
+    {
+      "model": "gru_mean",
+      "trainingMode": "unsupervised",
+      "tau": 15.951055304676494,
+      "impliedAlpha": 0.031446540880503145,
+      "validationCost": 209
+    },
+    {
+      "model": "gru_attention",
+      "trainingMode": "unsupervised",
+      "tau": 16.68221034103002,
+      "impliedAlpha": 0.02389937106918239,
+      "validationCost": 212
+    },
+    {
+      "model": "xgboost",
+      "trainingMode": "unsupervised",
+      "tau": 3.462972954912275,
+      "impliedAlpha": 0.021383647798742137,
+      "validationCost": 463
+    },
+    {
+      "model": "dygformer",
+      "trainingMode": "unsupervised",
+      "tau": 11.910252896930569,
+      "impliedAlpha": 0.0939203354297694,
+      "validationCost": 404
+    },
+    {
+      "model": "tami",
+      "trainingMode": "unsupervised",
+      "tau": 12.430948212349437,
+      "impliedAlpha": 0.059958071278826,
+      "validationCost": 410
+    },
+    {
+      "model": "dyg_tami",
+      "trainingMode": "unsupervised",
+      "tau": 12.000265525519943,
+      "impliedAlpha": 0.08511530398322852,
+      "validationCost": 382
+    },
+    {
+      "model": "dyg_tami_gnn",
+      "trainingMode": "unsupervised",
+      "tau": 12.898089574939068,
+      "impliedAlpha": 0.01509433962264151,
+      "validationCost": 451
+    },
+    {
+      "model": "statistics",
+      "trainingMode": "supervised",
+      "tau": 1.1570414806683937,
+      "impliedAlpha": 0.025157232704402517,
+      "validationCost": 237
+    },
+    {
+      "model": "gru",
+      "trainingMode": "supervised",
+      "tau": 1.1204533931582235,
+      "impliedAlpha": 0.024737945492662474,
+      "validationCost": 193
+    },
+    {
+      "model": "gru_mean",
+      "trainingMode": "supervised",
+      "tau": 1.4736302093249765,
+      "impliedAlpha": 0.014255765199161425,
+      "validationCost": 168
+    },
+    {
+      "model": "gru_attention",
+      "trainingMode": "supervised",
+      "tau": 0.6549810083256731,
+      "impliedAlpha": 0.026415094339622643,
+      "validationCost": 110
+    },
+    {
+      "model": "xgboost",
+      "trainingMode": "supervised",
+      "tau": 0.542273464493757,
+      "impliedAlpha": 0.021383647798742137,
+      "validationCost": 54
+    },
+    {
+      "model": "dygformer",
+      "trainingMode": "supervised",
+      "tau": 0.441484264962885,
+      "impliedAlpha": 0.03815513626834382,
+      "validationCost": 95
+    },
+    {
+      "model": "tami",
+      "trainingMode": "supervised",
+      "tau": 0.44054170628456685,
+      "impliedAlpha": 0.04025157232704402,
+      "validationCost": 100
+    },
+    {
+      "model": "dyg_tami",
+      "trainingMode": "supervised",
+      "tau": 0.4470073734151442,
+      "impliedAlpha": 0.0389937106918239,
+      "validationCost": 97
+    },
+    {
+      "model": "dyg_tami_gnn",
+      "trainingMode": "supervised",
+      "tau": 0.6772774523692296,
+      "impliedAlpha": 0.028930817610062894,
+      "validationCost": 94
+    }
+  ],
+  "validation": {
+    "dataset": "xgb-training.json",
+    "seed": 811,
+    "trainingEpisodeIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "validationEpisodeIndices": [
+      12,
+      13,
+      14,
+      15
+    ],
+    "protocol": "Held-out synthetic episodes; chronological score-before-update replay, observed settlements, no policy intervention. Unknown outcomes excluded from cost. Validation rates describe this sample only."
+  },
+  "notice": "Historical fit costs are calibration results, not independent test performance."
+}

@@ -1,0 +1,42 @@
+{
+  "scenario": "mixed",
+  "size": "medium",
+  "seed": 42,
+  "accounts": 64,
+  "events": 1241,
+  "position": 530,
+  "coldReplay": {
+    "milliseconds": 1282.2895560000002,
+    "heartbeatCallbacks": 101,
+    "yields": 135,
+    "maxSliceMs": 10.658496000000014
+  },
+  "policyChanges": {
+    "milliseconds": [
+      1.935512000000017,
+      0.8222110000001521,
+      0.9877950000000055,
+      0.9165209999998751,
+      1.0948429999998552
+    ],
+    "medianMilliseconds": 0.9877950000000055,
+    "additionalInferences": 0
+  },
+  "cachedInspectionMillisecondsPerCall": 0.0292886499999895,
+  "notice": "Local Node.js replay timings, excluding DOM rendering; device and browser timings vary. Slices target 8 ms between yields, with an event or checkpoint as the indivisible unit.",
+  "previousVersion": {
+    "scenario": "mixed",
+    "size": "medium",
+    "seed": 42,
+    "position": 530,
+    "coldMs": 3436.338632,
+    "policyChangeMilliseconds": [
+      3091.115275,
+      3065.09188,
+      3031.3731070000013
+    ],
+    "medianPolicyChangeMs": 3065.09188,
+    "source": "Archived demo version 7, sequential local Node.js replay, excluding DOM rendering"
+  },
+  "medianPolicyChangeSpeedup": 3102.963550129311
+}

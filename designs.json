@@ -1,0 +1,16 @@
+{
+  "default": "gru_attention",
+  "default_warmup": 128,
+  "default_fraud_flags": 96,
+  "designs": [
+    {"id":"statistics","label":"History statistics","hidden":0,"memory":"none","readout":"none","layers":0,"description":"Learned categorical predictors using account and pair statistics; no neural memory or neighborhood aggregation."},
+    {"id":"gru","label":"GRU memory","hidden":8,"memory":"gru","readout":"none","layers":0,"description":"Role-aware account memory with counterparty state messages; no neighborhood readout."},
+    {"id":"gru_mean","label":"GRU + graph mean","hidden":8,"memory":"gru","readout":"mean","layers":2,"description":"GRU account memory plus two layers averaging direction-, amount-, and age-aware neighbor messages."},
+    {"id":"gru_attention","label":"GRU + graph attention","hidden":8,"memory":"gru","readout":"attention","layers":2,"description":"Original design: GRU account memory plus two layers of learned temporal graph attention."},
+    {"id":"xgboost","label":"XGBoost trees","hidden":0,"memory":"none","readout":"none","layers":0,"family":"xgboost","description":"Offline second-order gradient-boosted trees trained on causal account and payment statistics using flagged historical outcomes."},
+    {"id":"dygformer","label":"DyGFormer history","hidden":0,"memory":"none","readout":"temporal_history","layers":0,"family":"temporal_family","variant":"dygformer","description":"Bounded temporal-history encoder with sinusoidal time features over recent account events; no mutable node memory."},
+    {"id":"tami","label":"TAMI pair history","hidden":0,"memory":"pair","readout":"pair_history","layers":0,"family":"temporal_family","variant":"tami","description":"Directed pair-keyed event history with elapsed-time encoding and bounded pair state."},
+    {"id":"dyg_tami","label":"DyGFormer + TAMI","hidden":0,"memory":"pair","readout":"temporal_pair","layers":0,"family":"temporal_family","variant":"dyg_tami","description":"Temporal account histories combined with directed pair histories before prediction."},
+    {"id":"dyg_tami_gnn","label":"DyGFormer + TAMI + GNN","hidden":0,"memory":"pair","readout":"temporal_graph","layers":2,"family":"temporal_family","variant":"dyg_tami_gnn","description":"Temporal histories and directed pair state combined with a two-hop time-respecting graph readout."}
+  ]
+}

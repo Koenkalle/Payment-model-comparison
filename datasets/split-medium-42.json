@@ -1,0 +1,9522 @@
+{
+  "name": "split",
+  "size": "medium",
+  "seed": 42,
+  "accounts": [
+    {
+      "id": 0,
+      "name": "Ben 31",
+      "role": "personal",
+      "logical": 30
+    },
+    {
+      "id": 1,
+      "name": "Ava 18",
+      "role": "personal",
+      "logical": 17
+    },
+    {
+      "id": 2,
+      "name": "Eli 58",
+      "role": "personal",
+      "logical": 57
+    },
+    {
+      "id": 3,
+      "name": "Hana 61",
+      "role": "personal",
+      "logical": 60
+    },
+    {
+      "id": 4,
+      "name": "City shop",
+      "role": "merchant",
+      "logical": 1
+    },
+    {
+      "id": 5,
+      "name": "Cleo 20",
+      "role": "personal",
+      "logical": 19
+    },
+    {
+      "id": 6,
+      "name": "Dani 21",
+      "role": "personal",
+      "logical": 20
+    },
+    {
+      "id": 7,
+      "name": "Cleo 32",
+      "role": "personal",
+      "logical": 31
+    },
+    {
+      "id": 8,
+      "name": "Eli 34",
+      "role": "personal",
+      "logical": 33
+    },
+    {
+      "id": 9,
+      "name": "Gus 12",
+      "role": "personal",
+      "logical": 11
+    },
+    {
+      "id": 10,
+      "name": "Ben 55",
+      "role": "personal",
+      "logical": 54
+    },
+    {
+      "id": 11,
+      "name": "Jules 15",
+      "role": "personal",
+      "logical": 14
+    },
+    {
+      "id": 12,
+      "name": "Faye 23",
+      "role": "personal",
+      "logical": 22
+    },
+    {
+      "id": 13,
+      "name": "Hana 49",
+      "role": "personal",
+      "logical": 48
+    },
+    {
+      "id": 14,
+      "name": "Ava 54",
+      "role": "personal",
+      "logical": 53
+    },
+    {
+      "id": 15,
+      "name": "Lena 41",
+      "role": "personal",
+      "logical": 40
+    },
+    {
+      "id": 16,
+      "name": "Jules 39",
+      "role": "personal",
+      "logical": 38
+    },
+    {
+      "id": 17,
+      "name": "Jules 63",
+      "role": "personal",
+      "logical": 62
+    },
+    {
+      "id": 18,
+      "name": "West supply",
+      "role": "supplier",
+      "logical": 3
+    },
+    {
+      "id": 19,
+      "name": "Dani 33",
+      "role": "personal",
+      "logical": 32
+    },
+    {
+      "id": 20,
+      "name": "Ben 7",
+      "role": "personal",
+      "logical": 6
+    },
+    {
+      "id": 21,
+      "name": "Ben 19",
+      "role": "personal",
+      "logical": 18
+    },
+    {
+      "id": 22,
+      "name": "Ida 50",
+      "role": "personal",
+      "logical": 49
+    },
+    {
+      "id": 23,
+      "name": "Gus 24",
+      "role": "personal",
+      "logical": 23
+    },
+    {
+      "id": 24,
+      "name": "Ava 30",
+      "role": "personal",
+      "logical": 29
+    },
+    {
+      "id": 25,
+      "name": "Kai 40",
+      "role": "personal",
+      "logical": 39
+    },
+    {
+      "id": 26,
+      "name": "Lena 17",
+      "role": "personal",
+      "logical": 16
+    },
+    {
+      "id": 27,
+      "name": "Ida 14",
+      "role": "personal",
+      "logical": 13
+    },
+    {
+      "id": 28,
+      "name": "Jules 27",
+      "role": "personal",
+      "logical": 26
+    },
+    {
+      "id": 29,
+      "name": "Lena 29",
+      "role": "personal",
+      "logical": 28
+    },
+    {
+      "id": 30,
+      "name": "Cleo 8",
+      "role": "personal",
+      "logical": 7
+    },
+    {
+      "id": 31,
+      "name": "Ida 38",
+      "role": "personal",
+      "logical": 37
+    },
+    {
+      "id": 32,
+      "name": "Ida 62",
+      "role": "personal",
+      "logical": 61
+    },
+    {
+      "id": 33,
+      "name": "Kai 16",
+      "role": "personal",
+      "logical": 15
+    },
+    {
+      "id": 34,
+      "name": "Faye 35",
+      "role": "personal",
+      "logical": 34
+    },
+    {
+      "id": 35,
+      "name": "Corner cafe",
+      "role": "merchant",
+      "logical": 4
+    },
+    {
+      "id": 36,
+      "name": "Hana 25",
+      "role": "personal",
+      "logical": 24
+    },
+    {
+      "id": 37,
+      "name": "Dani 9",
+      "role": "personal",
+      "logical": 8
+    },
+    {
+      "id": 38,
+      "name": "Harbor payroll",
+      "role": "employer",
+      "logical": 2
+    },
+    {
+      "id": 39,
+      "name": "Ava 42",
+      "role": "personal",
+      "logical": 41
+    },
+    {
+      "id": 40,
+      "name": "Eli 22",
+      "role": "personal",
+      "logical": 21
+    },
+    {
+      "id": 41,
+      "name": "Hana 37",
+      "role": "personal",
+      "logical": 36
+    },
+    {
+      "id": 42,
+      "name": "Dani 45",
+      "role": "personal",
+      "logical": 44
+    },
+    {
+      "id": 43,
+      "name": "Faye 59",
+      "role": "personal",
+      "logical": 58
+    },
+    {
+      "id": 44,
+      "name": "Hana 13",
+      "role": "personal",
+      "logical": 12
+    },
+    {
+      "id": 45,
+      "name": "Lena 53",
+      "role": "personal",
+      "logical": 52
+    },
+    {
+      "id": 46,
+      "name": "Eli 46",
+      "role": "personal",
+      "logical": 45
+    },
+    {
+      "id": 47,
+      "name": "Faye 11",
+      "role": "personal",
+      "logical": 10
+    },
+    {
+      "id": 48,
+      "name": "Kai 52",
+      "role": "personal",
+      "logical": 51
+    },
+    {
+      "id": 49,
+      "name": "Cleo 56",
+      "role": "personal",
+      "logical": 55
+    },
+    {
+      "id": 50,
+      "name": "Ben 43",
+      "role": "personal",
+      "logical": 42
+    },
+    {
+      "id": 51,
+      "name": "Eli 10",
+      "role": "personal",
+      "logical": 9
+    },
+    {
+      "id": 52,
+      "name": "Ida 26",
+      "role": "personal",
+      "logical": 25
+    },
+    {
+      "id": 53,
+      "name": "Kai 28",
+      "role": "personal",
+      "logical": 27
+    },
+    {
+      "id": 54,
+      "name": "Cleo 44",
+      "role": "personal",
+      "logical": 43
+    },
+    {
+      "id": 55,
+      "name": "Gus 36",
+      "role": "personal",
+      "logical": 35
+    },
+    {
+      "id": 56,
+      "name": "North market",
+      "role": "merchant",
+      "logical": 0
+    },
+    {
+      "id": 57,
+      "name": "Jules 51",
+      "role": "personal",
+      "logical": 50
+    },
+    {
+      "id": 58,
+      "name": "Ava 6",
+      "role": "personal",
+      "logical": 5
+    },
+    {
+      "id": 59,
+      "name": "Dani 57",
+      "role": "personal",
+      "logical": 56
+    },
+    {
+      "id": 60,
+      "name": "Gus 60",
+      "role": "personal",
+      "logical": 59
+    },
+    {
+      "id": 61,
+      "name": "Faye 47",
+      "role": "personal",
+      "logical": 46
+    },
+    {
+      "id": 62,
+      "name": "Gus 48",
+      "role": "personal",
+      "logical": 47
+    },
+    {
+      "id": 63,
+      "name": "Kai 64",
+      "role": "personal",
+      "logical": 63
+    }
+  ],
+  "events": [
+    {
+      "id": "P00001",
+      "t": 6.0591,
+      "u": 57,
+      "v": 56,
+      "amount": 10.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00002",
+      "t": 12.8341,
+      "u": 57,
+      "v": 56,
+      "amount": 90.92,
+      "kind": "payment"
+    },
+    {
+      "id": "P00003",
+      "t": 27.677,
+      "u": 33,
+      "v": 4,
+      "amount": 24.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00004",
+      "t": 30.2787,
+      "u": 22,
+      "v": 4,
+      "amount": 77.66,
+      "kind": "payment"
+    },
+    {
+      "id": "P00005",
+      "t": 43.0109,
+      "u": -1,
+      "v": 11,
+      "amount": 241.2,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00006",
+      "t": 50.6734,
+      "u": 22,
+      "v": 4,
+      "amount": 31.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00007",
+      "t": 65.0149,
+      "u": -1,
+      "v": 30,
+      "amount": 207.16,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00008",
+      "t": 73.0314,
+      "u": 26,
+      "v": 1,
+      "amount": 50.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00009",
+      "t": 89.2958,
+      "u": 33,
+      "v": 4,
+      "amount": 102.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00010",
+      "t": 97.3714,
+      "u": 39,
+      "v": 50,
+      "amount": 67.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00011",
+      "t": 110.3129,
+      "u": 10,
+      "v": 56,
+      "amount": 165.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00012",
+      "t": 114.5133,
+      "u": 31,
+      "v": 35,
+      "amount": 64.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00013",
+      "t": 123.7648,
+      "u": 11,
+      "v": 33,
+      "amount": 75.51,
+      "kind": "payment"
+    },
+    {
+      "id": "P00014",
+      "t": 132.2556,
+      "u": 4,
+      "v": 18,
+      "amount": 409.98,
+      "kind": "payment"
+    },
+    {
+      "id": "P00015",
+      "t": 146.9508,
+      "u": 41,
+      "v": 56,
+      "amount": 32.92,
+      "kind": "payment"
+    },
+    {
+      "id": "P00016",
+      "t": 155.7336,
+      "u": 38,
+      "v": 39,
+      "amount": 1112.51,
+      "kind": "payment"
+    },
+    {
+      "id": "P00017",
+      "t": 165.6335,
+      "u": 6,
+      "v": 56,
+      "amount": 30.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00018",
+      "t": 179.2823,
+      "u": 38,
+      "v": 51,
+      "amount": 1200.59,
+      "kind": "payment"
+    },
+    {
+      "id": "P00019",
+      "t": 182.7502,
+      "u": 56,
+      "v": 18,
+      "amount": 435.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00020",
+      "t": 193.7697,
+      "u": 27,
+      "v": 4,
+      "amount": 50.72,
+      "kind": "payment"
+    },
+    {
+      "id": "P00021",
+      "t": 207.9393,
+      "u": 38,
+      "v": 12,
+      "amount": 1001.54,
+      "kind": "payment"
+    },
+    {
+      "id": "P00022",
+      "t": 213.0044,
+      "u": 38,
+      "v": 36,
+      "amount": 1052.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00023",
+      "t": 228.1635,
+      "u": 38,
+      "v": 14,
+      "amount": 863.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00024",
+      "t": 236.7716,
+      "u": 30,
+      "v": 6,
+      "amount": 21.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00025",
+      "t": 242.2134,
+      "u": 2,
+      "v": 4,
+      "amount": 40.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00026",
+      "t": 253.722,
+      "u": 6,
+      "v": 56,
+      "amount": 17.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00027",
+      "t": 268.9963,
+      "u": 12,
+      "v": 35,
+      "amount": 20.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00028",
+      "t": 277.6673,
+      "u": 1,
+      "v": 4,
+      "amount": 24.12,
+      "kind": "payment"
+    },
+    {
+      "id": "P00029",
+      "t": 288.9865,
+      "u": 27,
+      "v": 4,
+      "amount": 81.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00030",
+      "t": 295.4831,
+      "u": -1,
+      "v": 55,
+      "amount": 107.68,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00031",
+      "t": 306.2297,
+      "u": 14,
+      "v": 10,
+      "amount": 36.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00032",
+      "t": 314.0338,
+      "u": 38,
+      "v": 19,
+      "amount": 1186.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00033",
+      "t": 327.097,
+      "u": 31,
+      "v": 35,
+      "amount": 15.31,
+      "kind": "payment"
+    },
+    {
+      "id": "P00034",
+      "t": 342.5637,
+      "u": 57,
+      "v": 30,
+      "amount": 84.38,
+      "kind": "payment"
+    },
+    {
+      "id": "P00035",
+      "t": 347.8259,
+      "u": 46,
+      "v": 61,
+      "amount": 56.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00036",
+      "t": 359.1667,
+      "u": 38,
+      "v": 57,
+      "amount": 990.25,
+      "kind": "payment"
+    },
+    {
+      "id": "P00037",
+      "t": 367.3848,
+      "u": 38,
+      "v": 39,
+      "amount": 1377.23,
+      "kind": "payment"
+    },
+    {
+      "id": "P00038",
+      "t": 379.2695,
+      "u": 22,
+      "v": 4,
+      "amount": 103.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P00039",
+      "t": 383.9019,
+      "u": 54,
+      "v": 42,
+      "amount": 62.92,
+      "kind": "payment"
+    },
+    {
+      "id": "P00040",
+      "t": 397.8198,
+      "u": 44,
+      "v": 27,
+      "amount": 106.9,
+      "kind": "payment"
+    },
+    {
+      "id": "P00041",
+      "t": 403.6806,
+      "u": 29,
+      "v": 56,
+      "amount": 44.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00042",
+      "t": 421.1907,
+      "u": 15,
+      "v": 56,
+      "amount": 16.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P00043",
+      "t": 427.9873,
+      "u": 12,
+      "v": 56,
+      "amount": 9.79,
+      "kind": "payment"
+    },
+    {
+      "id": "P00044",
+      "t": 436.1354,
+      "u": 34,
+      "v": 56,
+      "amount": 69.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00045",
+      "t": 443.5579,
+      "u": 10,
+      "v": 56,
+      "amount": 27.56,
+      "kind": "payment"
+    },
+    {
+      "id": "P00046",
+      "t": 458.6649,
+      "u": -1,
+      "v": 13,
+      "amount": 117.34,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00047",
+      "t": 465.9955,
+      "u": 34,
+      "v": 55,
+      "amount": 217.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00048",
+      "t": 481.3211,
+      "u": 62,
+      "v": 13,
+      "amount": 69.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00049",
+      "t": 489.1527,
+      "u": 51,
+      "v": 4,
+      "amount": 33.67,
+      "kind": "payment"
+    },
+    {
+      "id": "P00050",
+      "t": 500.6952,
+      "u": 34,
+      "v": 55,
+      "amount": 62.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00051",
+      "t": 507.9994,
+      "u": 6,
+      "v": 33,
+      "amount": 48.25,
+      "kind": "payment"
+    },
+    {
+      "id": "P00052",
+      "t": 516.7638,
+      "u": 57,
+      "v": 55,
+      "amount": 32.38,
+      "kind": "payment"
+    },
+    {
+      "id": "P00053",
+      "t": 529.1398,
+      "u": 34,
+      "v": 55,
+      "amount": 32.12,
+      "kind": "payment"
+    },
+    {
+      "id": "P00054",
+      "t": 539.7438,
+      "u": 4,
+      "v": 18,
+      "amount": 434.32,
+      "kind": "payment"
+    },
+    {
+      "id": "P00055",
+      "t": 550.6861,
+      "u": 57,
+      "v": 48,
+      "amount": 104.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00056",
+      "t": 557.5949,
+      "u": 38,
+      "v": 28,
+      "amount": 858.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00057",
+      "t": 572.9145,
+      "u": 57,
+      "v": 56,
+      "amount": 28.18,
+      "kind": "payment"
+    },
+    {
+      "id": "P00058",
+      "t": 584.2514,
+      "u": 5,
+      "v": 4,
+      "amount": 37.07,
+      "kind": "payment"
+    },
+    {
+      "id": "P00059",
+      "t": 591.8455,
+      "u": 22,
+      "v": 24,
+      "amount": 7.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00060",
+      "t": 603.7236,
+      "u": 53,
+      "v": 29,
+      "amount": 29.39,
+      "kind": "payment"
+    },
+    {
+      "id": "P00061",
+      "t": 612.0301,
+      "u": 30,
+      "v": 4,
+      "amount": 114.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00062",
+      "t": 618.6636,
+      "u": 38,
+      "v": 22,
+      "amount": 1246.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00063",
+      "t": 625.2907,
+      "u": 50,
+      "v": 56,
+      "amount": 29.25,
+      "kind": "payment"
+    },
+    {
+      "id": "P00064",
+      "t": 644.2022,
+      "u": 38,
+      "v": 23,
+      "amount": 850.26,
+      "kind": "payment"
+    },
+    {
+      "id": "P00065",
+      "t": 647.5372,
+      "u": 5,
+      "v": 4,
+      "amount": 21.92,
+      "kind": "payment"
+    },
+    {
+      "id": "P00066",
+      "t": 660.1201,
+      "u": 47,
+      "v": 14,
+      "amount": 148.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00067",
+      "t": 665.6142,
+      "u": 1,
+      "v": 4,
+      "amount": 35.34,
+      "kind": "payment"
+    },
+    {
+      "id": "P00068",
+      "t": 683.8272,
+      "u": 25,
+      "v": 4,
+      "amount": 45.39,
+      "kind": "payment"
+    },
+    {
+      "id": "P00069",
+      "t": 689.2289,
+      "u": 61,
+      "v": 56,
+      "amount": 129.02,
+      "kind": "payment"
+    },
+    {
+      "id": "P00070",
+      "t": 703.3073,
+      "u": 48,
+      "v": 35,
+      "amount": 42.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00071",
+      "t": 707.0666,
+      "u": 15,
+      "v": 56,
+      "amount": 39.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00072",
+      "t": 717.0408,
+      "u": 41,
+      "v": 31,
+      "amount": 66.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00073",
+      "t": 735.0541,
+      "u": 42,
+      "v": 56,
+      "amount": 32.12,
+      "kind": "payment"
+    },
+    {
+      "id": "P00074",
+      "t": 738.7022,
+      "u": -1,
+      "v": 12,
+      "amount": 421.03,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00075",
+      "t": 748.4504,
+      "u": 38,
+      "v": 24,
+      "amount": 901.66,
+      "kind": "payment"
+    },
+    {
+      "id": "P00076",
+      "t": 761.1157,
+      "u": 57,
+      "v": 56,
+      "amount": 155.51,
+      "kind": "payment"
+    },
+    {
+      "id": "P00077",
+      "t": 768.2136,
+      "u": 7,
+      "v": 4,
+      "amount": 26.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00078",
+      "t": 777.7563,
+      "u": 4,
+      "v": 18,
+      "amount": 599.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00079",
+      "t": 791.4625,
+      "u": 29,
+      "v": 24,
+      "amount": 54.02,
+      "kind": "payment"
+    },
+    {
+      "id": "P00080",
+      "t": 801.3533,
+      "u": -1,
+      "v": 57,
+      "amount": 155.45,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00081",
+      "t": 808.9355,
+      "u": 30,
+      "v": 4,
+      "amount": 145.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00082",
+      "t": 824.1729,
+      "u": 62,
+      "v": 13,
+      "amount": 14.23,
+      "kind": "payment"
+    },
+    {
+      "id": "P00083",
+      "t": 832.0932,
+      "u": 19,
+      "v": 56,
+      "amount": 17.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00084",
+      "t": 836.8043,
+      "u": 58,
+      "v": 20,
+      "amount": 68.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00085",
+      "t": 850.4395,
+      "u": 10,
+      "v": 49,
+      "amount": 25.39,
+      "kind": "payment"
+    },
+    {
+      "id": "P00086",
+      "t": 865.8984,
+      "u": 30,
+      "v": 4,
+      "amount": 17.71,
+      "kind": "payment"
+    },
+    {
+      "id": "P00087",
+      "t": 871.6009,
+      "u": 9,
+      "v": 44,
+      "amount": 35.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00088",
+      "t": 886.4915,
+      "u": 38,
+      "v": 0,
+      "amount": 1712.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00089",
+      "t": 887.6674,
+      "u": 0,
+      "v": 56,
+      "amount": 21.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00090",
+      "t": 905.7074,
+      "u": 2,
+      "v": 58,
+      "amount": 62.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00091",
+      "t": 915.3815,
+      "u": 4,
+      "v": 18,
+      "amount": 1073.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00092",
+      "t": 927.289,
+      "u": -1,
+      "v": 7,
+      "amount": 341.27,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00093",
+      "t": 935.183,
+      "u": 22,
+      "v": 4,
+      "amount": 32.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00094",
+      "t": 939.9654,
+      "u": 36,
+      "v": 35,
+      "amount": 42.22,
+      "kind": "payment"
+    },
+    {
+      "id": "P00095",
+      "t": 953.7785,
+      "u": 16,
+      "v": 35,
+      "amount": 37.28,
+      "kind": "payment"
+    },
+    {
+      "id": "P00096",
+      "t": 957.7616,
+      "u": 48,
+      "v": 45,
+      "amount": 22.22,
+      "kind": "payment"
+    },
+    {
+      "id": "P00097",
+      "t": 976.7466,
+      "u": 52,
+      "v": 40,
+      "amount": 16.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00098",
+      "t": 987.7981,
+      "u": 41,
+      "v": 56,
+      "amount": 46.29,
+      "kind": "payment"
+    },
+    {
+      "id": "P00099",
+      "t": 992.2124,
+      "u": 22,
+      "v": 4,
+      "amount": 54.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00100",
+      "t": 1007.7634,
+      "u": 39,
+      "v": 8,
+      "amount": 65.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00101",
+      "t": 1015.7775,
+      "u": -1,
+      "v": 37,
+      "amount": 1587.62,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00102",
+      "t": 1018.0807,
+      "u": -1,
+      "v": 19,
+      "amount": 381.77,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00103",
+      "t": 1034.551,
+      "u": -1,
+      "v": 28,
+      "amount": 310.34,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00104",
+      "t": 1040.2384,
+      "u": 25,
+      "v": 15,
+      "amount": 17.87,
+      "kind": "payment"
+    },
+    {
+      "id": "P00105",
+      "t": 1054.2634,
+      "u": 38,
+      "v": 55,
+      "amount": 905.31,
+      "kind": "payment"
+    },
+    {
+      "id": "P00106",
+      "t": 1062.5451,
+      "u": 33,
+      "v": 4,
+      "amount": 36.11,
+      "kind": "payment"
+    },
+    {
+      "id": "P00107",
+      "t": 1071.3219,
+      "u": 4,
+      "v": 18,
+      "amount": 295.27,
+      "kind": "payment"
+    },
+    {
+      "id": "P00108",
+      "t": 1081.9693,
+      "u": 59,
+      "v": 2,
+      "amount": 48.96,
+      "kind": "payment"
+    },
+    {
+      "id": "P00109",
+      "t": 1092.101,
+      "u": 38,
+      "v": 7,
+      "amount": 1104.77,
+      "kind": "payment"
+    },
+    {
+      "id": "P00110",
+      "t": 1100.2396,
+      "u": 2,
+      "v": 4,
+      "amount": 44.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00111",
+      "t": 1115.3701,
+      "u": 2,
+      "v": 4,
+      "amount": 39.7,
+      "kind": "payment"
+    },
+    {
+      "id": "P00112",
+      "t": 1128.4129,
+      "u": 19,
+      "v": 56,
+      "amount": 28.86,
+      "kind": "payment"
+    },
+    {
+      "id": "P00113",
+      "t": 1138.4784,
+      "u": 40,
+      "v": 4,
+      "amount": 15.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00114",
+      "t": 1140.8165,
+      "u": 45,
+      "v": 56,
+      "amount": 69.67,
+      "kind": "payment"
+    },
+    {
+      "id": "P00115",
+      "t": 1155.0402,
+      "u": 38,
+      "v": 29,
+      "amount": 937.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00116",
+      "t": 1165.1277,
+      "u": 16,
+      "v": 25,
+      "amount": 81.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00117",
+      "t": 1169.3346,
+      "u": 52,
+      "v": 28,
+      "amount": 143.39,
+      "kind": "payment"
+    },
+    {
+      "id": "P00118",
+      "t": 1180.6211,
+      "u": 5,
+      "v": 6,
+      "amount": 11.27,
+      "kind": "payment"
+    },
+    {
+      "id": "P00119",
+      "t": 1196.4932,
+      "u": 50,
+      "v": 56,
+      "amount": 17.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00120",
+      "t": 1202.9493,
+      "u": 31,
+      "v": 4,
+      "amount": 56.56,
+      "kind": "payment"
+    },
+    {
+      "id": "P00121",
+      "t": 1211.61,
+      "u": 48,
+      "v": 24,
+      "amount": 19.26,
+      "kind": "payment"
+    },
+    {
+      "id": "P00122",
+      "t": 1225.8496,
+      "u": 10,
+      "v": 49,
+      "amount": 29.31,
+      "kind": "payment"
+    },
+    {
+      "id": "P00123",
+      "t": 1231.3968,
+      "u": 38,
+      "v": 55,
+      "amount": 1495.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00124",
+      "t": 1248.4831,
+      "u": -1,
+      "v": 8,
+      "amount": 200.93,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00125",
+      "t": 1259.7593,
+      "u": 15,
+      "v": 56,
+      "amount": 48.87,
+      "kind": "payment"
+    },
+    {
+      "id": "P00126",
+      "t": 1260.8868,
+      "u": 14,
+      "v": 4,
+      "amount": 21.71,
+      "kind": "payment"
+    },
+    {
+      "id": "P00127",
+      "t": 1274.5218,
+      "u": 36,
+      "v": 56,
+      "amount": 60.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00128",
+      "t": 1289.0433,
+      "u": 41,
+      "v": 56,
+      "amount": 34.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00129",
+      "t": 1296.0024,
+      "u": 2,
+      "v": 4,
+      "amount": 92.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00130",
+      "t": 1301.878,
+      "u": -1,
+      "v": 9,
+      "amount": 449.79,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00131",
+      "t": 1315.7122,
+      "u": 52,
+      "v": 29,
+      "amount": 38.32,
+      "kind": "payment"
+    },
+    {
+      "id": "P00132",
+      "t": 1323.4185,
+      "u": 21,
+      "v": 56,
+      "amount": 28.7,
+      "kind": "payment"
+    },
+    {
+      "id": "P00133",
+      "t": 1331.749,
+      "u": 56,
+      "v": 18,
+      "amount": 356.9,
+      "kind": "payment"
+    },
+    {
+      "id": "P00134",
+      "t": 1341.2997,
+      "u": 48,
+      "v": 4,
+      "amount": 41.59,
+      "kind": "payment"
+    },
+    {
+      "id": "P00135",
+      "t": 1360.5183,
+      "u": 53,
+      "v": 4,
+      "amount": 94.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00136",
+      "t": 1364.6588,
+      "u": 28,
+      "v": 56,
+      "amount": 39.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00137",
+      "t": 1373.1958,
+      "u": 33,
+      "v": 4,
+      "amount": 61.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00138",
+      "t": 1389.5486,
+      "u": 38,
+      "v": 21,
+      "amount": 951.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00139",
+      "t": 1399.3336,
+      "u": 58,
+      "v": 10,
+      "amount": 85.22,
+      "kind": "payment"
+    },
+    {
+      "id": "P00140",
+      "t": 1401.2284,
+      "u": 4,
+      "v": 18,
+      "amount": 725.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00141",
+      "t": 1417.5995,
+      "u": 62,
+      "v": 13,
+      "amount": 161.52,
+      "kind": "payment"
+    },
+    {
+      "id": "P00142",
+      "t": 1423.5616,
+      "u": 36,
+      "v": 56,
+      "amount": 95.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00143",
+      "t": 1441.3581,
+      "u": 33,
+      "v": 4,
+      "amount": 59.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00144",
+      "t": 1450.7758,
+      "u": 49,
+      "v": 44,
+      "amount": 31.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00145",
+      "t": 1452.2149,
+      "u": 8,
+      "v": 4,
+      "amount": 22.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00146",
+      "t": 1462.2447,
+      "u": 38,
+      "v": 39,
+      "amount": 950.12,
+      "kind": "payment"
+    },
+    {
+      "id": "P00147",
+      "t": 1479.8263,
+      "u": 53,
+      "v": 4,
+      "amount": 41.61,
+      "kind": "payment"
+    },
+    {
+      "id": "P00148",
+      "t": 1484.0876,
+      "u": 31,
+      "v": 4,
+      "amount": 18.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00149",
+      "t": 1495.389,
+      "u": 54,
+      "v": 4,
+      "amount": 25.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00150",
+      "t": 1508.4567,
+      "u": 38,
+      "v": 57,
+      "amount": 1136.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00151",
+      "t": 1513.4803,
+      "u": 25,
+      "v": 4,
+      "amount": 135,
+      "kind": "payment"
+    },
+    {
+      "id": "P00152",
+      "t": 1531.3745,
+      "u": 14,
+      "v": 35,
+      "amount": 66.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00153",
+      "t": 1534.8907,
+      "u": 62,
+      "v": 4,
+      "amount": 27.22,
+      "kind": "payment"
+    },
+    {
+      "id": "P00154",
+      "t": 1551.8891,
+      "u": -1,
+      "v": 49,
+      "amount": 229.84,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00155",
+      "t": 1555.3113,
+      "u": 36,
+      "v": 56,
+      "amount": 130.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00156",
+      "t": 1569.5486,
+      "u": 21,
+      "v": 56,
+      "amount": 57.3,
+      "kind": "payment"
+    },
+    {
+      "id": "P00157",
+      "t": 1579.872,
+      "u": 24,
+      "v": 4,
+      "amount": 22.13,
+      "kind": "payment"
+    },
+    {
+      "id": "P00158",
+      "t": 1585.5919,
+      "u": 48,
+      "v": 45,
+      "amount": 42.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00159",
+      "t": 1597.4931,
+      "u": 41,
+      "v": 35,
+      "amount": 17.43,
+      "kind": "payment"
+    },
+    {
+      "id": "P00160",
+      "t": 1605.6637,
+      "u": 23,
+      "v": 36,
+      "amount": 26.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00161",
+      "t": 1620.771,
+      "u": 2,
+      "v": 41,
+      "amount": 20.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00162",
+      "t": 1631.4991,
+      "u": 37,
+      "v": 56,
+      "amount": 148.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00163",
+      "t": 1640.2876,
+      "u": 1,
+      "v": 4,
+      "amount": 99.62,
+      "kind": "payment"
+    },
+    {
+      "id": "P00164",
+      "t": 1647.8922,
+      "u": 57,
+      "v": 48,
+      "amount": 52.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00165",
+      "t": 1661.4323,
+      "u": 21,
+      "v": 56,
+      "amount": 38.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00166",
+      "t": 1672.1806,
+      "u": 21,
+      "v": 56,
+      "amount": 34.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00167",
+      "t": 1682.2773,
+      "u": 16,
+      "v": 25,
+      "amount": 29.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00168",
+      "t": 1692.5617,
+      "u": 49,
+      "v": 35,
+      "amount": 35.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00169",
+      "t": 1701.8579,
+      "u": 9,
+      "v": 35,
+      "amount": 63.22,
+      "kind": "payment"
+    },
+    {
+      "id": "P00170",
+      "t": 1707.6485,
+      "u": 8,
+      "v": 4,
+      "amount": 113.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00171",
+      "t": 1723.282,
+      "u": 8,
+      "v": 4,
+      "amount": 117.28,
+      "kind": "payment"
+    },
+    {
+      "id": "P00172",
+      "t": 1726.5643,
+      "u": 2,
+      "v": 4,
+      "amount": 25.96,
+      "kind": "payment"
+    },
+    {
+      "id": "P00173",
+      "t": 1735.8515,
+      "u": 45,
+      "v": 52,
+      "amount": 48.83,
+      "kind": "payment"
+    },
+    {
+      "id": "P00174",
+      "t": 1749.6557,
+      "u": 41,
+      "v": 56,
+      "amount": 16.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00175",
+      "t": 1758.8575,
+      "u": 26,
+      "v": 1,
+      "amount": 67.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00176",
+      "t": 1770.23,
+      "u": 12,
+      "v": 56,
+      "amount": 51.67,
+      "kind": "payment"
+    },
+    {
+      "id": "P00177",
+      "t": 1779.4335,
+      "u": 5,
+      "v": 6,
+      "amount": 9.7,
+      "kind": "payment"
+    },
+    {
+      "id": "P00178",
+      "t": 1784.8656,
+      "u": 0,
+      "v": 7,
+      "amount": 24.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00179",
+      "t": 1799.8877,
+      "u": 22,
+      "v": 35,
+      "amount": 118.19,
+      "kind": "payment"
+    },
+    {
+      "id": "P00180",
+      "t": 1812.2639,
+      "u": 51,
+      "v": 4,
+      "amount": 58.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00181",
+      "t": 1819.0636,
+      "u": 6,
+      "v": 56,
+      "amount": 36.31,
+      "kind": "payment"
+    },
+    {
+      "id": "P00182",
+      "t": 1834.198,
+      "u": 57,
+      "v": 48,
+      "amount": 53.86,
+      "kind": "payment"
+    },
+    {
+      "id": "P00183",
+      "t": 1835.1616,
+      "u": 31,
+      "v": 4,
+      "amount": 45.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00184",
+      "t": 1851.9287,
+      "u": 56,
+      "v": 18,
+      "amount": 660.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00185",
+      "t": 1857.7444,
+      "u": 16,
+      "v": 42,
+      "amount": 60.43,
+      "kind": "payment"
+    },
+    {
+      "id": "P00186",
+      "t": 1872.8995,
+      "u": 38,
+      "v": 41,
+      "amount": 1039.38,
+      "kind": "payment"
+    },
+    {
+      "id": "P00187",
+      "t": 1880.4915,
+      "u": -1,
+      "v": 36,
+      "amount": 368.34,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00188",
+      "t": 1887.0754,
+      "u": 26,
+      "v": 1,
+      "amount": 47.7,
+      "kind": "payment"
+    },
+    {
+      "id": "P00189",
+      "t": 1895.2492,
+      "u": 33,
+      "v": 23,
+      "amount": 88.76,
+      "kind": "payment"
+    },
+    {
+      "id": "P00190",
+      "t": 1912.6198,
+      "u": 12,
+      "v": 56,
+      "amount": 69.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00191",
+      "t": 1922.2758,
+      "u": 22,
+      "v": 57,
+      "amount": 49.07,
+      "kind": "payment"
+    },
+    {
+      "id": "P00192",
+      "t": 1927.7514,
+      "u": 28,
+      "v": 56,
+      "amount": 42.95,
+      "kind": "payment"
+    },
+    {
+      "id": "P00193",
+      "t": 1941.0291,
+      "u": 38,
+      "v": 12,
+      "amount": 1176.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00194",
+      "t": 1952.6488,
+      "u": 33,
+      "v": 4,
+      "amount": 29.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00195",
+      "t": 1963.8995,
+      "u": -1,
+      "v": 30,
+      "amount": 230.98,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00196",
+      "t": 1966.9131,
+      "u": 48,
+      "v": 4,
+      "amount": 181.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00197",
+      "t": 1977.6363,
+      "u": 10,
+      "v": 35,
+      "amount": 25.48,
+      "kind": "payment"
+    },
+    {
+      "id": "P00198",
+      "t": 1990.8564,
+      "u": 21,
+      "v": 56,
+      "amount": 16.43,
+      "kind": "payment"
+    },
+    {
+      "id": "P00199",
+      "t": 2005.6592,
+      "u": 37,
+      "v": 25,
+      "amount": 93.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00200",
+      "t": 2011.462,
+      "u": 56,
+      "v": 18,
+      "amount": 576.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00201",
+      "t": 2020.8471,
+      "u": 23,
+      "v": 4,
+      "amount": 85.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00202",
+      "t": 2031.0723,
+      "u": 44,
+      "v": 27,
+      "amount": 38.27,
+      "kind": "payment"
+    },
+    {
+      "id": "P00203",
+      "t": 2038.4331,
+      "u": 14,
+      "v": 53,
+      "amount": 43.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00204",
+      "t": 2055.4839,
+      "u": 39,
+      "v": 31,
+      "amount": 21.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00205",
+      "t": 2062.0749,
+      "u": 0,
+      "v": 56,
+      "amount": 14.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00206",
+      "t": 2067.7654,
+      "u": 12,
+      "v": 56,
+      "amount": 25.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00207",
+      "t": 2078.928,
+      "u": 30,
+      "v": 37,
+      "amount": 79.71,
+      "kind": "payment"
+    },
+    {
+      "id": "P00208",
+      "t": 2093.2329,
+      "u": 51,
+      "v": 4,
+      "amount": 67.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00209",
+      "t": 2104.972,
+      "u": 34,
+      "v": 56,
+      "amount": 24.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00210",
+      "t": 2111.7014,
+      "u": 38,
+      "v": 31,
+      "amount": 1115.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00211",
+      "t": 2123.7322,
+      "u": 4,
+      "v": 18,
+      "amount": 549.9,
+      "kind": "payment"
+    },
+    {
+      "id": "P00212",
+      "t": 2133.3485,
+      "u": 11,
+      "v": 56,
+      "amount": 35.98,
+      "kind": "payment"
+    },
+    {
+      "id": "P00213",
+      "t": 2141.8366,
+      "u": 6,
+      "v": 56,
+      "amount": 33.32,
+      "kind": "payment"
+    },
+    {
+      "id": "P00214",
+      "t": 2151.2345,
+      "u": 4,
+      "v": 18,
+      "amount": 718.11,
+      "kind": "payment"
+    },
+    {
+      "id": "P00215",
+      "t": 2162.436,
+      "u": 56,
+      "v": 18,
+      "amount": 1283.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00216",
+      "t": 2171.495,
+      "u": 22,
+      "v": 30,
+      "amount": 33.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00217",
+      "t": 2183.4231,
+      "u": 0,
+      "v": 57,
+      "amount": 60.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00218",
+      "t": 2188.3916,
+      "u": 26,
+      "v": 41,
+      "amount": 32.12,
+      "kind": "payment"
+    },
+    {
+      "id": "P00219",
+      "t": 2204.8922,
+      "u": 27,
+      "v": 4,
+      "amount": 50.7,
+      "kind": "payment"
+    },
+    {
+      "id": "P00220",
+      "t": 2208.1567,
+      "u": -1,
+      "v": 51,
+      "amount": 123.76,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00221",
+      "t": 2222.1477,
+      "u": -1,
+      "v": 42,
+      "amount": 328.77,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00222",
+      "t": 2232.4358,
+      "u": 51,
+      "v": 47,
+      "amount": 124.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00223",
+      "t": 2238.1097,
+      "u": 54,
+      "v": 35,
+      "amount": 13.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00224",
+      "t": 2255.4468,
+      "u": 27,
+      "v": 4,
+      "amount": 31.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00225",
+      "t": 2258.596,
+      "u": 59,
+      "v": 56,
+      "amount": 37.54,
+      "kind": "payment"
+    },
+    {
+      "id": "P00226",
+      "t": 2272.2415,
+      "u": 47,
+      "v": 11,
+      "amount": 50.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00227",
+      "t": 2284.2052,
+      "u": 5,
+      "v": 4,
+      "amount": 62.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00228",
+      "t": 2294.8511,
+      "u": 56,
+      "v": 18,
+      "amount": 530.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00229",
+      "t": 2307.3687,
+      "u": 28,
+      "v": 56,
+      "amount": 14.23,
+      "kind": "payment"
+    },
+    {
+      "id": "P00230",
+      "t": 2318.1371,
+      "u": 24,
+      "v": 0,
+      "amount": 140.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00231",
+      "t": 2319.3487,
+      "u": 19,
+      "v": 8,
+      "amount": 63.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00232",
+      "t": 2336.0077,
+      "u": 24,
+      "v": 0,
+      "amount": 50.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00233",
+      "t": 2347.4411,
+      "u": 62,
+      "v": 4,
+      "amount": 85.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00234",
+      "t": 2356.5408,
+      "u": 33,
+      "v": 4,
+      "amount": 104.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00235",
+      "t": 2368.3602,
+      "u": 49,
+      "v": 4,
+      "amount": 30.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00236",
+      "t": 2374.4458,
+      "u": -1,
+      "v": 27,
+      "amount": 669.99,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00237",
+      "t": 2388.9121,
+      "u": 4,
+      "v": 18,
+      "amount": 238.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00238",
+      "t": 2393.5167,
+      "u": 5,
+      "v": 4,
+      "amount": 168.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00239",
+      "t": 2400.4055,
+      "u": 37,
+      "v": 56,
+      "amount": 30.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00240",
+      "t": 2414.5319,
+      "u": 10,
+      "v": 49,
+      "amount": 52.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00241",
+      "t": 2424.7335,
+      "u": 30,
+      "v": 4,
+      "amount": 138.02,
+      "kind": "payment"
+    },
+    {
+      "id": "P00242",
+      "t": 2437.132,
+      "u": 7,
+      "v": 19,
+      "amount": 38.01,
+      "kind": "payment"
+    },
+    {
+      "id": "P00243",
+      "t": 2445.1256,
+      "u": 11,
+      "v": 33,
+      "amount": 66.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00244",
+      "t": 2449.9091,
+      "u": 48,
+      "v": 4,
+      "amount": 125.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00245",
+      "t": 2467.6924,
+      "u": 4,
+      "v": 18,
+      "amount": 367.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00246",
+      "t": 2472.8389,
+      "u": 5,
+      "v": 35,
+      "amount": 75.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00247",
+      "t": 2481.5705,
+      "u": 1,
+      "v": 35,
+      "amount": 33.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00248",
+      "t": 2491.8648,
+      "u": 38,
+      "v": 19,
+      "amount": 1209.26,
+      "kind": "payment"
+    },
+    {
+      "id": "P00249",
+      "t": 2508.8267,
+      "u": 27,
+      "v": 37,
+      "amount": 144.02,
+      "kind": "payment"
+    },
+    {
+      "id": "P00250",
+      "t": 2519.9416,
+      "u": 36,
+      "v": 52,
+      "amount": 69.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00251",
+      "t": 2523.1633,
+      "u": 22,
+      "v": 4,
+      "amount": 26.92,
+      "kind": "payment"
+    },
+    {
+      "id": "P00252",
+      "t": 2534.7073,
+      "u": 9,
+      "v": 4,
+      "amount": 32.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00253",
+      "t": 2547.3352,
+      "u": -1,
+      "v": 12,
+      "amount": 292.21,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00254",
+      "t": 2551.1695,
+      "u": 38,
+      "v": 31,
+      "amount": 991.31,
+      "kind": "payment"
+    },
+    {
+      "id": "P00255",
+      "t": 2565.7546,
+      "u": 56,
+      "v": 18,
+      "amount": 406.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00256",
+      "t": 2571.5393,
+      "u": 4,
+      "v": 18,
+      "amount": 856.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00257",
+      "t": 2589.5176,
+      "u": 38,
+      "v": 33,
+      "amount": 1574.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00258",
+      "t": 2594.7335,
+      "u": 15,
+      "v": 56,
+      "amount": 58.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00259",
+      "t": 2609.8918,
+      "u": 38,
+      "v": 20,
+      "amount": 1042.95,
+      "kind": "payment"
+    },
+    {
+      "id": "P00260",
+      "t": 2613.7426,
+      "u": 10,
+      "v": 49,
+      "amount": 107.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00261",
+      "t": 2622.5696,
+      "u": 38,
+      "v": 59,
+      "amount": 1110.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00262",
+      "t": 2639.0612,
+      "u": 38,
+      "v": 7,
+      "amount": 1044.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00263",
+      "t": 2641.921,
+      "u": 38,
+      "v": 59,
+      "amount": 1050.9,
+      "kind": "payment"
+    },
+    {
+      "id": "P00264",
+      "t": 2657.238,
+      "u": 15,
+      "v": 56,
+      "amount": 25.52,
+      "kind": "payment"
+    },
+    {
+      "id": "P00265",
+      "t": 2667.5478,
+      "u": 47,
+      "v": 56,
+      "amount": 66.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00266",
+      "t": 2674.7229,
+      "u": 9,
+      "v": 44,
+      "amount": 100.09,
+      "kind": "payment"
+    },
+    {
+      "id": "P00267",
+      "t": 2682.3975,
+      "u": 56,
+      "v": 18,
+      "amount": 502.95,
+      "kind": "payment"
+    },
+    {
+      "id": "P00268",
+      "t": 2693.888,
+      "u": 34,
+      "v": 56,
+      "amount": 36.48,
+      "kind": "payment"
+    },
+    {
+      "id": "P00269",
+      "t": 2708.3627,
+      "u": 31,
+      "v": 4,
+      "amount": 13.04,
+      "kind": "payment"
+    },
+    {
+      "id": "P00270",
+      "t": 2721.0839,
+      "u": 30,
+      "v": 1,
+      "amount": 7.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00271",
+      "t": 2728.3381,
+      "u": 61,
+      "v": 56,
+      "amount": 26.04,
+      "kind": "payment"
+    },
+    {
+      "id": "P00272",
+      "t": 2733.0567,
+      "u": 4,
+      "v": 18,
+      "amount": 452.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00273",
+      "t": 2748.1144,
+      "u": 20,
+      "v": 56,
+      "amount": 39.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00274",
+      "t": 2758.6926,
+      "u": 15,
+      "v": 39,
+      "amount": 143.51,
+      "kind": "payment"
+    },
+    {
+      "id": "P00275",
+      "t": 2766.9948,
+      "u": 46,
+      "v": 61,
+      "amount": 115.95,
+      "kind": "payment"
+    },
+    {
+      "id": "P00276",
+      "t": 2777.8409,
+      "u": -1,
+      "v": 33,
+      "amount": 716.37,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00277",
+      "t": 2784.7914,
+      "u": 40,
+      "v": 4,
+      "amount": 28.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00278",
+      "t": 2797.5433,
+      "u": -1,
+      "v": 9,
+      "amount": 788.58,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00279",
+      "t": 2803.8369,
+      "u": 42,
+      "v": 56,
+      "amount": 103.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00280",
+      "t": 2818.3893,
+      "u": 54,
+      "v": 42,
+      "amount": 20.62,
+      "kind": "payment"
+    },
+    {
+      "id": "P00281",
+      "t": 2830.5398,
+      "u": 61,
+      "v": 56,
+      "amount": 20.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00282",
+      "t": 2838.5328,
+      "u": 37,
+      "v": 56,
+      "amount": 33.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00283",
+      "t": 2847.3237,
+      "u": 4,
+      "v": 18,
+      "amount": 359.39,
+      "kind": "payment"
+    },
+    {
+      "id": "P00284",
+      "t": 2861.9888,
+      "u": 44,
+      "v": 20,
+      "amount": 94.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P00285",
+      "t": 2867.1399,
+      "u": 24,
+      "v": 4,
+      "amount": 24.79,
+      "kind": "payment"
+    },
+    {
+      "id": "P00286",
+      "t": 2881.8664,
+      "u": 21,
+      "v": 11,
+      "amount": 29.62,
+      "kind": "payment"
+    },
+    {
+      "id": "P00287",
+      "t": 2889.6763,
+      "u": 14,
+      "v": 4,
+      "amount": 16.93,
+      "kind": "payment"
+    },
+    {
+      "id": "P00288",
+      "t": 2896.1724,
+      "u": 62,
+      "v": 13,
+      "amount": 95.24,
+      "kind": "payment"
+    },
+    {
+      "id": "P00289",
+      "t": 2905.6093,
+      "u": -1,
+      "v": 55,
+      "amount": 288.12,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00290",
+      "t": 2919.8134,
+      "u": 38,
+      "v": 25,
+      "amount": 952.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00291",
+      "t": 2927.116,
+      "u": 57,
+      "v": 56,
+      "amount": 33.38,
+      "kind": "payment"
+    },
+    {
+      "id": "P00292",
+      "t": 2933.7801,
+      "u": 15,
+      "v": 39,
+      "amount": 22.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00293",
+      "t": 2944.5194,
+      "u": 12,
+      "v": 21,
+      "amount": 59.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00294",
+      "t": 2962.4427,
+      "u": 25,
+      "v": 15,
+      "amount": 328.87,
+      "kind": "payment"
+    },
+    {
+      "id": "P00295",
+      "t": 2965.303,
+      "u": -1,
+      "v": 11,
+      "amount": 1492.88,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00296",
+      "t": 2982.2107,
+      "u": 30,
+      "v": 4,
+      "amount": 38.25,
+      "kind": "payment"
+    },
+    {
+      "id": "P00297",
+      "t": 2992.5266,
+      "u": 56,
+      "v": 18,
+      "amount": 629.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00298",
+      "t": 3000.522,
+      "u": 61,
+      "v": 56,
+      "amount": 18.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00299",
+      "t": 3006.9235,
+      "u": 21,
+      "v": 56,
+      "amount": 35.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00300",
+      "t": 3022.2211,
+      "u": 39,
+      "v": 50,
+      "amount": 32.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00301",
+      "t": 3029.5969,
+      "u": 47,
+      "v": 56,
+      "amount": 21.46,
+      "kind": "payment"
+    },
+    {
+      "id": "P00302",
+      "t": 3035.8508,
+      "u": 47,
+      "v": 35,
+      "amount": 30.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00303",
+      "t": 3048.8888,
+      "u": 38,
+      "v": 48,
+      "amount": 1525.54,
+      "kind": "payment"
+    },
+    {
+      "id": "P00304",
+      "t": 3063.7762,
+      "u": 38,
+      "v": 33,
+      "amount": 991.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00305",
+      "t": 3069.2735,
+      "u": 19,
+      "v": 8,
+      "amount": 32.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00306",
+      "t": 3078.302,
+      "u": 44,
+      "v": 56,
+      "amount": 11.77,
+      "kind": "payment"
+    },
+    {
+      "id": "P00307",
+      "t": 3085.6695,
+      "u": 56,
+      "v": 18,
+      "amount": 242.13,
+      "kind": "payment"
+    },
+    {
+      "id": "P00308",
+      "t": 3095.0604,
+      "u": 44,
+      "v": 27,
+      "amount": 53.24,
+      "kind": "payment"
+    },
+    {
+      "id": "P00309",
+      "t": 3111.9136,
+      "u": 59,
+      "v": 2,
+      "amount": 30.19,
+      "kind": "payment"
+    },
+    {
+      "id": "P00310",
+      "t": 3119.7115,
+      "u": 13,
+      "v": 56,
+      "amount": 108.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00311",
+      "t": 3127.744,
+      "u": 55,
+      "v": 35,
+      "amount": 20.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00312",
+      "t": 3137.6002,
+      "u": 56,
+      "v": 18,
+      "amount": 713.86,
+      "kind": "payment"
+    },
+    {
+      "id": "P00313",
+      "t": 3147.0171,
+      "u": 6,
+      "v": 40,
+      "amount": 56.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00314",
+      "t": 3159.4778,
+      "u": 38,
+      "v": 39,
+      "amount": 947,
+      "kind": "payment"
+    },
+    {
+      "id": "P00315",
+      "t": 3174.1967,
+      "u": -1,
+      "v": 25,
+      "amount": 307.8,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00316",
+      "t": 3185.1496,
+      "u": 38,
+      "v": 45,
+      "amount": 1466.93,
+      "kind": "payment"
+    },
+    {
+      "id": "P00317",
+      "t": 3188.6941,
+      "u": 1,
+      "v": 4,
+      "amount": 33.54,
+      "kind": "payment"
+    },
+    {
+      "id": "P00318",
+      "t": 3196.7203,
+      "u": 29,
+      "v": 24,
+      "amount": 99.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00319",
+      "t": 3211.5559,
+      "u": 13,
+      "v": 35,
+      "amount": 19.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00320",
+      "t": 3217.092,
+      "u": 24,
+      "v": 4,
+      "amount": 19.92,
+      "kind": "payment"
+    },
+    {
+      "id": "P00321",
+      "t": 3225.8272,
+      "u": 40,
+      "v": 12,
+      "amount": 181.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00322",
+      "t": 3237.06,
+      "u": 9,
+      "v": 4,
+      "amount": 62.98,
+      "kind": "payment"
+    },
+    {
+      "id": "P00323",
+      "t": 3252.2872,
+      "u": 4,
+      "v": 18,
+      "amount": 550.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00324",
+      "t": 3262.0992,
+      "u": 34,
+      "v": 56,
+      "amount": 14.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00325",
+      "t": 3273.4623,
+      "u": 56,
+      "v": 18,
+      "amount": 655.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00326",
+      "t": 3276.9968,
+      "u": 47,
+      "v": 9,
+      "amount": 110.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00327",
+      "t": 3293.1779,
+      "u": 0,
+      "v": 46,
+      "amount": 50.93,
+      "kind": "payment"
+    },
+    {
+      "id": "P00328",
+      "t": 3305.0197,
+      "u": 52,
+      "v": 28,
+      "amount": 31.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00329",
+      "t": 3309.4452,
+      "u": 0,
+      "v": 7,
+      "amount": 35.42,
+      "kind": "payment"
+    },
+    {
+      "id": "P00330",
+      "t": 3316.3742,
+      "u": -1,
+      "v": 20,
+      "amount": 1153.43,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00331",
+      "t": 3331.6932,
+      "u": 38,
+      "v": 52,
+      "amount": 1145.87,
+      "kind": "payment"
+    },
+    {
+      "id": "P00332",
+      "t": 3336.6166,
+      "u": 6,
+      "v": 35,
+      "amount": 10.3,
+      "kind": "payment"
+    },
+    {
+      "id": "P00333",
+      "t": 3351.3347,
+      "u": 44,
+      "v": 39,
+      "amount": 36.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00334",
+      "t": 3364.9899,
+      "u": -1,
+      "v": 42,
+      "amount": 1883.6,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00335",
+      "t": 3369.7332,
+      "u": 46,
+      "v": 4,
+      "amount": 84.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00336",
+      "t": 3386.1791,
+      "u": 61,
+      "v": 56,
+      "amount": 22.87,
+      "kind": "payment"
+    },
+    {
+      "id": "P00337",
+      "t": 3388.5956,
+      "u": 40,
+      "v": 4,
+      "amount": 70.23,
+      "kind": "payment"
+    },
+    {
+      "id": "P00338",
+      "t": 3396.982,
+      "u": 46,
+      "v": 4,
+      "amount": 43.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00339",
+      "t": 3410.8787,
+      "u": 59,
+      "v": 56,
+      "amount": 43.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00340",
+      "t": 3420.4637,
+      "u": 31,
+      "v": 4,
+      "amount": 27.76,
+      "kind": "payment"
+    },
+    {
+      "id": "P00341",
+      "t": 3432.35,
+      "u": 25,
+      "v": 4,
+      "amount": 34.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P00342",
+      "t": 3443.673,
+      "u": 28,
+      "v": 56,
+      "amount": 32.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00343",
+      "t": 3452.8809,
+      "u": 4,
+      "v": 18,
+      "amount": 763.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00344",
+      "t": 3464.7778,
+      "u": 38,
+      "v": 37,
+      "amount": 935.56,
+      "kind": "payment"
+    },
+    {
+      "id": "P00345",
+      "t": 3472.9268,
+      "u": 24,
+      "v": 0,
+      "amount": 38.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00346",
+      "t": 3479.5026,
+      "u": 33,
+      "v": 35,
+      "amount": 29.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00347",
+      "t": 3494.5961,
+      "u": 38,
+      "v": 0,
+      "amount": 1175.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00348",
+      "t": 3498.352,
+      "u": 1,
+      "v": 4,
+      "amount": 28.52,
+      "kind": "payment"
+    },
+    {
+      "id": "P00349",
+      "t": 3511.5601,
+      "u": 27,
+      "v": 4,
+      "amount": 62.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00350",
+      "t": 3519.4537,
+      "u": -1,
+      "v": 47,
+      "amount": 845.22,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00351",
+      "t": 3535.3219,
+      "u": -1,
+      "v": 57,
+      "amount": 818.53,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00352",
+      "t": 3538.9904,
+      "u": -1,
+      "v": 34,
+      "amount": 965.94,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00353",
+      "t": 3550.4832,
+      "u": 38,
+      "v": 45,
+      "amount": 1452.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00354",
+      "t": 3563.0936,
+      "u": 2,
+      "v": 4,
+      "amount": 15.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00355",
+      "t": 3573.7232,
+      "u": 2,
+      "v": 58,
+      "amount": 20.98,
+      "kind": "payment"
+    },
+    {
+      "id": "P00356",
+      "t": 3578.8224,
+      "u": 56,
+      "v": 18,
+      "amount": 549.67,
+      "kind": "payment"
+    },
+    {
+      "id": "P00357",
+      "t": 3594.5482,
+      "u": 4,
+      "v": 18,
+      "amount": 708.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00358",
+      "t": 3604.3548,
+      "u": -1,
+      "v": 27,
+      "amount": 565.77,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00359",
+      "t": 3612.4921,
+      "u": 25,
+      "v": 4,
+      "amount": 73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00360",
+      "t": 3621.8658,
+      "u": 38,
+      "v": 24,
+      "amount": 1120.77,
+      "kind": "payment"
+    },
+    {
+      "id": "P00361",
+      "t": 3637.7747,
+      "u": 16,
+      "v": 56,
+      "amount": 44.47,
+      "kind": "payment"
+    },
+    {
+      "id": "P00362",
+      "t": 3640.7904,
+      "u": 38,
+      "v": 23,
+      "amount": 956.77,
+      "kind": "payment"
+    },
+    {
+      "id": "P00363",
+      "t": 3658.7098,
+      "u": 58,
+      "v": 20,
+      "amount": 64.3,
+      "kind": "payment"
+    },
+    {
+      "id": "P00364",
+      "t": 3664.7534,
+      "u": 29,
+      "v": 24,
+      "amount": 27.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00365",
+      "t": 3671.1341,
+      "u": 56,
+      "v": 18,
+      "amount": 545.46,
+      "kind": "payment"
+    },
+    {
+      "id": "P00366",
+      "t": 3687.1701,
+      "u": 56,
+      "v": 18,
+      "amount": 600.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00367",
+      "t": 3697.3711,
+      "u": 6,
+      "v": 40,
+      "amount": 48.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00368",
+      "t": 3705.5251,
+      "u": 50,
+      "v": 16,
+      "amount": 28.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00369",
+      "t": 3711.4976,
+      "u": 39,
+      "v": 50,
+      "amount": 68.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00370",
+      "t": 3722.5818,
+      "u": 25,
+      "v": 15,
+      "amount": 40.92,
+      "kind": "payment"
+    },
+    {
+      "id": "P00371",
+      "t": 3737.4546,
+      "u": -1,
+      "v": 36,
+      "amount": 386.86,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00372",
+      "t": 3740.8175,
+      "u": 39,
+      "v": 23,
+      "amount": 78.89,
+      "kind": "payment"
+    },
+    {
+      "id": "P00373",
+      "t": 3756.568,
+      "u": 57,
+      "v": 48,
+      "amount": 61.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00374",
+      "t": 3766.6403,
+      "u": 34,
+      "v": 35,
+      "amount": 74.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00375",
+      "t": 3773.6297,
+      "u": 21,
+      "v": 35,
+      "amount": 21.43,
+      "kind": "payment"
+    },
+    {
+      "id": "P00376",
+      "t": 3786.0054,
+      "u": 58,
+      "v": 25,
+      "amount": 29.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00377",
+      "t": 3792.6331,
+      "u": 11,
+      "v": 9,
+      "amount": 34.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00378",
+      "t": 3800.4411,
+      "u": 51,
+      "v": 4,
+      "amount": 134.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00379",
+      "t": 3814.4453,
+      "u": 51,
+      "v": 47,
+      "amount": 64.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00380",
+      "t": 3826.0623,
+      "u": -1,
+      "v": 20,
+      "amount": 802.75,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00381",
+      "t": 3837.925,
+      "u": 12,
+      "v": 56,
+      "amount": 22.95,
+      "kind": "payment"
+    },
+    {
+      "id": "P00382",
+      "t": 3848.9191,
+      "u": 39,
+      "v": 4,
+      "amount": 36.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00383",
+      "t": 3859.6844,
+      "u": 2,
+      "v": 4,
+      "amount": 9.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00384",
+      "t": 3870.3527,
+      "u": -1,
+      "v": 41,
+      "amount": 1675.67,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00385",
+      "t": 3877.6981,
+      "u": 6,
+      "v": 56,
+      "amount": 26.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00386",
+      "t": 3890.324,
+      "u": 28,
+      "v": 56,
+      "amount": 23.92,
+      "kind": "payment"
+    },
+    {
+      "id": "P00387",
+      "t": 3898.4443,
+      "u": 47,
+      "v": 9,
+      "amount": 71.76,
+      "kind": "payment"
+    },
+    {
+      "id": "P00388",
+      "t": 3907.4409,
+      "u": 38,
+      "v": 9,
+      "amount": 926.42,
+      "kind": "payment"
+    },
+    {
+      "id": "P00389",
+      "t": 3917.5508,
+      "u": 0,
+      "v": 56,
+      "amount": 33.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00390",
+      "t": 3928.3502,
+      "u": 58,
+      "v": 26,
+      "amount": 195.1,
+      "kind": "payment"
+    },
+    {
+      "id": "P00391",
+      "t": 3939.8652,
+      "u": 53,
+      "v": 29,
+      "amount": 41.61,
+      "kind": "payment"
+    },
+    {
+      "id": "P00392",
+      "t": 3945.4816,
+      "u": 11,
+      "v": 56,
+      "amount": 102.12,
+      "kind": "payment"
+    },
+    {
+      "id": "P00393",
+      "t": 3953.7489,
+      "u": 11,
+      "v": 56,
+      "amount": 48.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00394",
+      "t": 3965.2512,
+      "u": 40,
+      "v": 35,
+      "amount": 45.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00395",
+      "t": 3976.3517,
+      "u": 5,
+      "v": 4,
+      "amount": 57.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00396",
+      "t": 3987.5376,
+      "u": 38,
+      "v": 37,
+      "amount": 1221.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00397",
+      "t": 3998.8356,
+      "u": 26,
+      "v": 1,
+      "amount": 83.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00398",
+      "t": 4005.8427,
+      "u": 38,
+      "v": 6,
+      "amount": 1008.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00399",
+      "t": 4017.1403,
+      "u": -1,
+      "v": 40,
+      "amount": 459.08,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00400",
+      "t": 4024.1111,
+      "u": 49,
+      "v": 4,
+      "amount": 16.19,
+      "kind": "payment"
+    },
+    {
+      "id": "P00401",
+      "t": 4037.6668,
+      "u": 38,
+      "v": 62,
+      "amount": 1206.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00402",
+      "t": 4042.5658,
+      "u": 42,
+      "v": 46,
+      "amount": 49.7,
+      "kind": "payment"
+    },
+    {
+      "id": "P00403",
+      "t": 4053.7857,
+      "u": 62,
+      "v": 4,
+      "amount": 59.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00404",
+      "t": 4066.1579,
+      "u": 51,
+      "v": 4,
+      "amount": 24.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00405",
+      "t": 4078.9598,
+      "u": -1,
+      "v": 39,
+      "amount": 150.36,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00406",
+      "t": 4083.299,
+      "u": 1,
+      "v": 9,
+      "amount": 30.59,
+      "kind": "payment"
+    },
+    {
+      "id": "P00407",
+      "t": 4096.8687,
+      "u": 30,
+      "v": 37,
+      "amount": 31.32,
+      "kind": "payment"
+    },
+    {
+      "id": "P00408",
+      "t": 4103.1183,
+      "u": 38,
+      "v": 50,
+      "amount": 1131.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00409",
+      "t": 4122.3683,
+      "u": 1,
+      "v": 4,
+      "amount": 17.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00410",
+      "t": 4125.2121,
+      "u": 29,
+      "v": 24,
+      "amount": 76.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00411",
+      "t": 4141.0498,
+      "u": 57,
+      "v": 48,
+      "amount": 56.62,
+      "kind": "payment"
+    },
+    {
+      "id": "P00412",
+      "t": 4144.2533,
+      "u": 8,
+      "v": 4,
+      "amount": 118.11,
+      "kind": "payment"
+    },
+    {
+      "id": "P00413",
+      "t": 4157.5647,
+      "u": 38,
+      "v": 55,
+      "amount": 1111.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00414",
+      "t": 4171.4618,
+      "u": 27,
+      "v": 4,
+      "amount": 29.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00415",
+      "t": 4178.8233,
+      "u": 27,
+      "v": 35,
+      "amount": 113.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00416",
+      "t": 4190.2086,
+      "u": 38,
+      "v": 12,
+      "amount": 1076.28,
+      "kind": "payment"
+    },
+    {
+      "id": "P00417",
+      "t": 4193.8839,
+      "u": 38,
+      "v": 5,
+      "amount": 1347.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00418",
+      "t": 4208.9133,
+      "u": 36,
+      "v": 52,
+      "amount": 50.48,
+      "kind": "payment"
+    },
+    {
+      "id": "P00419",
+      "t": 4219.0003,
+      "u": 38,
+      "v": 50,
+      "amount": 1169.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00420",
+      "t": 4229.358,
+      "u": 38,
+      "v": 45,
+      "amount": 1100.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00421",
+      "t": 4235.9445,
+      "u": 38,
+      "v": 23,
+      "amount": 1379.69,
+      "kind": "payment"
+    },
+    {
+      "id": "P00422",
+      "t": 4253.725,
+      "u": 28,
+      "v": 56,
+      "amount": 30.24,
+      "kind": "payment"
+    },
+    {
+      "id": "P00423",
+      "t": 4260.5328,
+      "u": 40,
+      "v": 12,
+      "amount": 34.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00424",
+      "t": 4272.5638,
+      "u": 42,
+      "v": 46,
+      "amount": 137.47,
+      "kind": "payment"
+    },
+    {
+      "id": "P00425",
+      "t": 4279.0604,
+      "u": 22,
+      "v": 20,
+      "amount": 24.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00426",
+      "t": 4287.5335,
+      "u": 49,
+      "v": 4,
+      "amount": 69,
+      "kind": "payment"
+    },
+    {
+      "id": "P00427",
+      "t": 4298.2339,
+      "u": 19,
+      "v": 56,
+      "amount": 57.32,
+      "kind": "payment"
+    },
+    {
+      "id": "P00428",
+      "t": 4304.995,
+      "u": 22,
+      "v": 4,
+      "amount": 47.1,
+      "kind": "payment"
+    },
+    {
+      "id": "P00429",
+      "t": 4315.0911,
+      "u": 59,
+      "v": 56,
+      "amount": 55.09,
+      "kind": "payment"
+    },
+    {
+      "id": "P00430",
+      "t": 4326.6485,
+      "u": 45,
+      "v": 14,
+      "amount": 37.42,
+      "kind": "payment"
+    },
+    {
+      "id": "P00431",
+      "t": 4342.1618,
+      "u": -1,
+      "v": 47,
+      "amount": 546.97,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00432",
+      "t": 4353.3143,
+      "u": 58,
+      "v": 20,
+      "amount": 25.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00433",
+      "t": 4357.0138,
+      "u": 33,
+      "v": 35,
+      "amount": 100.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00434",
+      "t": 4365.0361,
+      "u": 25,
+      "v": 4,
+      "amount": 52.96,
+      "kind": "payment"
+    },
+    {
+      "id": "P00435",
+      "t": 4382.9585,
+      "u": -1,
+      "v": 37,
+      "amount": 577.31,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00436",
+      "t": 4394.2265,
+      "u": 40,
+      "v": 35,
+      "amount": 84.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00437",
+      "t": 4399.7591,
+      "u": 15,
+      "v": 56,
+      "amount": 50.61,
+      "kind": "payment"
+    },
+    {
+      "id": "P00438",
+      "t": 4408.3344,
+      "u": 4,
+      "v": 18,
+      "amount": 687.18,
+      "kind": "payment"
+    },
+    {
+      "id": "P00439",
+      "t": 4421.7957,
+      "u": 44,
+      "v": 27,
+      "amount": 23.98,
+      "kind": "payment"
+    },
+    {
+      "id": "P00440",
+      "t": 4428.3804,
+      "u": 13,
+      "v": 22,
+      "amount": 32.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00441",
+      "t": 4443.9809,
+      "u": 59,
+      "v": 35,
+      "amount": 38.79,
+      "kind": "payment"
+    },
+    {
+      "id": "P00442",
+      "t": 4447.6213,
+      "u": 33,
+      "v": 4,
+      "amount": 157.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00443",
+      "t": 4465.0926,
+      "u": 23,
+      "v": 14,
+      "amount": 69.46,
+      "kind": "payment"
+    },
+    {
+      "id": "P00444",
+      "t": 4472.0059,
+      "u": 45,
+      "v": 14,
+      "amount": 36.38,
+      "kind": "payment"
+    },
+    {
+      "id": "P00445",
+      "t": 4482.068,
+      "u": -1,
+      "v": 55,
+      "amount": 197.57,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00446",
+      "t": 4492.6783,
+      "u": 27,
+      "v": 35,
+      "amount": 44.79,
+      "kind": "payment"
+    },
+    {
+      "id": "P00447",
+      "t": 4501.7644,
+      "u": -1,
+      "v": 20,
+      "amount": 724.08,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00448",
+      "t": 4508.7982,
+      "u": -1,
+      "v": 2,
+      "amount": 258.72,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00449",
+      "t": 4522.5263,
+      "u": 33,
+      "v": 26,
+      "amount": 65.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00450",
+      "t": 4532.0793,
+      "u": 38,
+      "v": 49,
+      "amount": 1073.51,
+      "kind": "payment"
+    },
+    {
+      "id": "P00451",
+      "t": 4538.1759,
+      "u": 19,
+      "v": 8,
+      "amount": 32.25,
+      "kind": "payment"
+    },
+    {
+      "id": "P00452",
+      "t": 4554.0036,
+      "u": 56,
+      "v": 18,
+      "amount": 247.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00453",
+      "t": 4566.2042,
+      "u": 9,
+      "v": 35,
+      "amount": 61.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00454",
+      "t": 4566.9319,
+      "u": 26,
+      "v": 1,
+      "amount": 20.71,
+      "kind": "payment"
+    },
+    {
+      "id": "P00455",
+      "t": 4583.5601,
+      "u": 54,
+      "v": 4,
+      "amount": 71.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00456",
+      "t": 4590.1512,
+      "u": 34,
+      "v": 55,
+      "amount": 41.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00457",
+      "t": 4602.9004,
+      "u": 48,
+      "v": 4,
+      "amount": 63.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00458",
+      "t": 4611.1452,
+      "u": 61,
+      "v": 35,
+      "amount": 24.1,
+      "kind": "payment"
+    },
+    {
+      "id": "P00459",
+      "t": 4621.7512,
+      "u": 22,
+      "v": 35,
+      "amount": 32.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00460",
+      "t": 4634.1975,
+      "u": 8,
+      "v": 4,
+      "amount": 37.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00461",
+      "t": 4637.2564,
+      "u": 12,
+      "v": 23,
+      "amount": 44.67,
+      "kind": "payment"
+    },
+    {
+      "id": "P00462",
+      "t": 4649.1504,
+      "u": 57,
+      "v": 48,
+      "amount": 58.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00463",
+      "t": 4659.4472,
+      "u": 38,
+      "v": 23,
+      "amount": 1105.83,
+      "kind": "payment"
+    },
+    {
+      "id": "P00464",
+      "t": 4676.907,
+      "u": 56,
+      "v": 18,
+      "amount": 651.59,
+      "kind": "payment"
+    },
+    {
+      "id": "P00465",
+      "t": 4679.1814,
+      "u": 41,
+      "v": 35,
+      "amount": 11.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00466",
+      "t": 4691.4827,
+      "u": 12,
+      "v": 56,
+      "amount": 56.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00467",
+      "t": 4699.3,
+      "u": 0,
+      "v": 35,
+      "amount": 32.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00468",
+      "t": 4709.887,
+      "u": 41,
+      "v": 56,
+      "amount": 60.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00469",
+      "t": 4726.1816,
+      "u": 37,
+      "v": 56,
+      "amount": 38.09,
+      "kind": "payment"
+    },
+    {
+      "id": "P00470",
+      "t": 4735.7656,
+      "u": 53,
+      "v": 14,
+      "amount": 16.31,
+      "kind": "payment"
+    },
+    {
+      "id": "P00471",
+      "t": 4745.8429,
+      "u": 10,
+      "v": 56,
+      "amount": 134.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P00472",
+      "t": 4752.873,
+      "u": 36,
+      "v": 52,
+      "amount": 62.43,
+      "kind": "payment"
+    },
+    {
+      "id": "P00473",
+      "t": 4758.0624,
+      "u": 51,
+      "v": 4,
+      "amount": 94.01,
+      "kind": "payment"
+    },
+    {
+      "id": "P00474",
+      "t": 4773.1317,
+      "u": 22,
+      "v": 4,
+      "amount": 21.01,
+      "kind": "payment"
+    },
+    {
+      "id": "P00475",
+      "t": 4787.3952,
+      "u": 62,
+      "v": 13,
+      "amount": 52.76,
+      "kind": "payment"
+    },
+    {
+      "id": "P00476",
+      "t": 4794.7735,
+      "u": 21,
+      "v": 0,
+      "amount": 40.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00477",
+      "t": 4803.7879,
+      "u": 16,
+      "v": 25,
+      "amount": 29.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00478",
+      "t": 4810.8137,
+      "u": 41,
+      "v": 31,
+      "amount": 32.11,
+      "kind": "payment"
+    },
+    {
+      "id": "P00479",
+      "t": 4825.5648,
+      "u": 52,
+      "v": 4,
+      "amount": 12.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00480",
+      "t": 4832.5728,
+      "u": 44,
+      "v": 0,
+      "amount": 69.59,
+      "kind": "payment"
+    },
+    {
+      "id": "P00481",
+      "t": 4846.1817,
+      "u": 57,
+      "v": 56,
+      "amount": 32.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00482",
+      "t": 4857.1797,
+      "u": 21,
+      "v": 5,
+      "amount": 41.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00483",
+      "t": 4861.4885,
+      "u": 0,
+      "v": 30,
+      "amount": 16.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00484",
+      "t": 4876.9496,
+      "u": 58,
+      "v": 20,
+      "amount": 29.39,
+      "kind": "payment"
+    },
+    {
+      "id": "P00485",
+      "t": 4885.6058,
+      "u": 14,
+      "v": 4,
+      "amount": 41.7,
+      "kind": "payment"
+    },
+    {
+      "id": "P00486",
+      "t": 4895.4516,
+      "u": 7,
+      "v": 4,
+      "amount": 28.69,
+      "kind": "payment"
+    },
+    {
+      "id": "P00487",
+      "t": 4906.5675,
+      "u": 40,
+      "v": 35,
+      "amount": 15.54,
+      "kind": "payment"
+    },
+    {
+      "id": "P00488",
+      "t": 4910.932,
+      "u": 28,
+      "v": 56,
+      "amount": 181.24,
+      "kind": "payment"
+    },
+    {
+      "id": "P00489",
+      "t": 4926.4705,
+      "u": 59,
+      "v": 2,
+      "amount": 17.95,
+      "kind": "payment"
+    },
+    {
+      "id": "P00490",
+      "t": 4938.2782,
+      "u": 4,
+      "v": 18,
+      "amount": 548.34,
+      "kind": "payment"
+    },
+    {
+      "id": "P00491",
+      "t": 4947.602,
+      "u": 48,
+      "v": 4,
+      "amount": 78.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00492",
+      "t": 4952.6973,
+      "u": 4,
+      "v": 18,
+      "amount": 379.77,
+      "kind": "payment"
+    },
+    {
+      "id": "P00493",
+      "t": 4965.6476,
+      "u": 4,
+      "v": 18,
+      "amount": 172.92,
+      "kind": "payment"
+    },
+    {
+      "id": "P00494",
+      "t": 4978.7658,
+      "u": 42,
+      "v": 35,
+      "amount": 44.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00495",
+      "t": 4982.2934,
+      "u": 49,
+      "v": 59,
+      "amount": 35.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00496",
+      "t": 4993.5694,
+      "u": 47,
+      "v": 56,
+      "amount": 20.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00497",
+      "t": 5003.3912,
+      "u": 26,
+      "v": 56,
+      "amount": 80.32,
+      "kind": "payment"
+    },
+    {
+      "id": "P00498",
+      "t": 5014.0456,
+      "u": 62,
+      "v": 35,
+      "amount": 13.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00499",
+      "t": 5027.7397,
+      "u": 8,
+      "v": 4,
+      "amount": 22.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00500",
+      "t": 5033.1343,
+      "u": 49,
+      "v": 59,
+      "amount": 62.13,
+      "kind": "payment"
+    },
+    {
+      "id": "P00501",
+      "t": 5044.9337,
+      "u": 31,
+      "v": 4,
+      "amount": 32.61,
+      "kind": "payment"
+    },
+    {
+      "id": "P00502",
+      "t": 5058.3829,
+      "u": 10,
+      "v": 35,
+      "amount": 39.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00503",
+      "t": 5070.0918,
+      "u": 53,
+      "v": 29,
+      "amount": 24.76,
+      "kind": "payment"
+    },
+    {
+      "id": "P00504",
+      "t": 5074.4926,
+      "u": 34,
+      "v": 56,
+      "amount": 31.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00505",
+      "t": 5088.2084,
+      "u": 40,
+      "v": 4,
+      "amount": 122.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00506",
+      "t": 5099.47,
+      "u": 59,
+      "v": 49,
+      "amount": 24.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00507",
+      "t": 5104.5211,
+      "u": -1,
+      "v": 61,
+      "amount": 620.63,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00508",
+      "t": 5110.9696,
+      "u": 0,
+      "v": 56,
+      "amount": 68.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00509",
+      "t": 5127.1222,
+      "u": 16,
+      "v": 56,
+      "amount": 42.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00510",
+      "t": 5135.4557,
+      "u": -1,
+      "v": 30,
+      "amount": 494.44,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00511",
+      "t": 5145.2652,
+      "u": 56,
+      "v": 18,
+      "amount": 605.79,
+      "kind": "payment"
+    },
+    {
+      "id": "P00512",
+      "t": 5151.5982,
+      "u": 2,
+      "v": 58,
+      "amount": 24,
+      "kind": "payment"
+    },
+    {
+      "id": "P00513",
+      "t": 5168.8224,
+      "u": 57,
+      "v": 56,
+      "amount": 14.95,
+      "kind": "payment"
+    },
+    {
+      "id": "P00514",
+      "t": 5177.5049,
+      "u": 62,
+      "v": 4,
+      "amount": 31.71,
+      "kind": "payment"
+    },
+    {
+      "id": "P00515",
+      "t": 5184.9697,
+      "u": 46,
+      "v": 4,
+      "amount": 38.66,
+      "kind": "payment"
+    },
+    {
+      "id": "P00516",
+      "t": 5195.4219,
+      "u": 8,
+      "v": 4,
+      "amount": 74.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00517",
+      "t": 5201.7518,
+      "u": 47,
+      "v": 56,
+      "amount": 47.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00518",
+      "t": 5217.5979,
+      "u": 22,
+      "v": 35,
+      "amount": 37.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00519",
+      "t": 5222.6674,
+      "u": 31,
+      "v": 4,
+      "amount": 63.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00520",
+      "t": 5237.5305,
+      "u": 37,
+      "v": 1,
+      "amount": 24.39,
+      "kind": "payment"
+    },
+    {
+      "id": "P00521",
+      "t": 5242.3604,
+      "u": 38,
+      "v": 1,
+      "amount": 999.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00522",
+      "t": 5259.6998,
+      "u": 19,
+      "v": 35,
+      "amount": 16.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00523",
+      "t": 5269.8153,
+      "u": 36,
+      "v": 56,
+      "amount": 27.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00524",
+      "t": 5275.5885,
+      "u": 49,
+      "v": 4,
+      "amount": 82.62,
+      "kind": "payment"
+    },
+    {
+      "id": "P00525",
+      "t": 5289.1577,
+      "u": 20,
+      "v": 26,
+      "amount": 26.32,
+      "kind": "payment"
+    },
+    {
+      "id": "P00526",
+      "t": 5292.6952,
+      "u": -1,
+      "v": 10,
+      "amount": 313.34,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00527",
+      "t": 5311.2854,
+      "u": 37,
+      "v": 56,
+      "amount": 13.98,
+      "kind": "payment"
+    },
+    {
+      "id": "P00528",
+      "t": 5317.5798,
+      "u": 38,
+      "v": 50,
+      "amount": 1387.2,
+      "kind": "payment"
+    },
+    {
+      "id": "P00529",
+      "t": 5331.787,
+      "u": 20,
+      "v": 35,
+      "amount": 18.93,
+      "kind": "payment"
+    },
+    {
+      "id": "P00530",
+      "t": 5340.8514,
+      "u": 10,
+      "v": 16,
+      "amount": 98.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P01001",
+      "t": 5342.4,
+      "u": 58,
+      "v": 10,
+      "amount": 220,
+      "kind": "payment"
+    },
+    {
+      "id": "P01002",
+      "t": 5343.05,
+      "u": 20,
+      "v": 10,
+      "amount": 283,
+      "kind": "payment"
+    },
+    {
+      "id": "P01003",
+      "t": 5343.7,
+      "u": 30,
+      "v": 10,
+      "amount": 346,
+      "kind": "payment"
+    },
+    {
+      "id": "P01004",
+      "t": 5344.35,
+      "u": 37,
+      "v": 10,
+      "amount": 409,
+      "kind": "payment"
+    },
+    {
+      "id": "P01005",
+      "t": 5345,
+      "u": 51,
+      "v": 10,
+      "amount": 472,
+      "kind": "payment"
+    },
+    {
+      "id": "P01006",
+      "t": 5345.65,
+      "u": 47,
+      "v": 10,
+      "amount": 535,
+      "kind": "payment"
+    },
+    {
+      "id": "P01007",
+      "t": 5346.3,
+      "u": 9,
+      "v": 10,
+      "amount": 598,
+      "kind": "payment"
+    },
+    {
+      "id": "P01008",
+      "t": 5347,
+      "u": -1,
+      "v": 10,
+      "amount": 1700,
+      "kind": "deposit"
+    },
+    {
+      "id": "P01009",
+      "t": 5349.4,
+      "u": 10,
+      "v": 49,
+      "amount": 680,
+      "kind": "payment"
+    },
+    {
+      "id": "P01010",
+      "t": 5349.7,
+      "u": 10,
+      "v": 59,
+      "amount": 720,
+      "kind": "payment"
+    },
+    {
+      "id": "P01011",
+      "t": 5350,
+      "u": 10,
+      "v": 2,
+      "amount": 710,
+      "kind": "payment"
+    },
+    {
+      "id": "P00531",
+      "t": 5350.9631,
+      "u": 54,
+      "v": 4,
+      "amount": 36.7,
+      "kind": "payment"
+    },
+    {
+      "id": "P01012",
+      "t": 5351.4,
+      "u": 49,
+      "v": 43,
+      "amount": 630,
+      "kind": "payment"
+    },
+    {
+      "id": "P01013",
+      "t": 5351.8,
+      "u": 59,
+      "v": 43,
+      "amount": 670,
+      "kind": "payment"
+    },
+    {
+      "id": "P01014",
+      "t": 5352.2,
+      "u": 2,
+      "v": 43,
+      "amount": 650,
+      "kind": "payment"
+    },
+    {
+      "id": "P01015",
+      "t": 5353.4,
+      "u": 43,
+      "v": 60,
+      "amount": 1840,
+      "kind": "payment"
+    },
+    {
+      "id": "P00532",
+      "t": 5354.1449,
+      "u": 26,
+      "v": 56,
+      "amount": 26.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P01016",
+      "t": 5355.4,
+      "u": 60,
+      "v": 10,
+      "amount": 210,
+      "kind": "payment"
+    },
+    {
+      "id": "P01017",
+      "t": 5355.9,
+      "u": 60,
+      "v": 3,
+      "amount": 1580,
+      "kind": "payment"
+    },
+    {
+      "id": "P00533",
+      "t": 5363.9045,
+      "u": 4,
+      "v": 18,
+      "amount": 407.88,
+      "kind": "payment"
+    },
+    {
+      "id": "P00534",
+      "t": 5376.7647,
+      "u": 8,
+      "v": 4,
+      "amount": 52.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00535",
+      "t": 5387.5431,
+      "u": 38,
+      "v": 15,
+      "amount": 1084.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00536",
+      "t": 5402.0933,
+      "u": 37,
+      "v": 51,
+      "amount": 26.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00537",
+      "t": 5405.0932,
+      "u": 56,
+      "v": 18,
+      "amount": 801.71,
+      "kind": "payment"
+    },
+    {
+      "id": "P00538",
+      "t": 5416.2743,
+      "u": 25,
+      "v": 4,
+      "amount": 23.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00539",
+      "t": 5432.7695,
+      "u": 47,
+      "v": 56,
+      "amount": 84.07,
+      "kind": "payment"
+    },
+    {
+      "id": "P00540",
+      "t": 5441.1446,
+      "u": 25,
+      "v": 4,
+      "amount": 18.79,
+      "kind": "payment"
+    },
+    {
+      "id": "P00541",
+      "t": 5452.2074,
+      "u": 15,
+      "v": 56,
+      "amount": 23.28,
+      "kind": "payment"
+    },
+    {
+      "id": "P00542",
+      "t": 5456.1701,
+      "u": 25,
+      "v": 4,
+      "amount": 18.89,
+      "kind": "payment"
+    },
+    {
+      "id": "P00543",
+      "t": 5468.958,
+      "u": 59,
+      "v": 56,
+      "amount": 19.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00544",
+      "t": 5483.0132,
+      "u": 4,
+      "v": 18,
+      "amount": 440.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00545",
+      "t": 5489.8689,
+      "u": 7,
+      "v": 35,
+      "amount": 62.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00546",
+      "t": 5499.7297,
+      "u": 29,
+      "v": 24,
+      "amount": 29.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00547",
+      "t": 5508.7405,
+      "u": -1,
+      "v": 7,
+      "amount": 854.73,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00548",
+      "t": 5516.8099,
+      "u": 53,
+      "v": 4,
+      "amount": 26.52,
+      "kind": "payment"
+    },
+    {
+      "id": "P00549",
+      "t": 5528.9388,
+      "u": 51,
+      "v": 47,
+      "amount": 134.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00550",
+      "t": 5543.0097,
+      "u": 49,
+      "v": 35,
+      "amount": 56.25,
+      "kind": "payment"
+    },
+    {
+      "id": "P00551",
+      "t": 5550.3068,
+      "u": 49,
+      "v": 4,
+      "amount": 39.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00552",
+      "t": 5558.2973,
+      "u": 37,
+      "v": 51,
+      "amount": 44.87,
+      "kind": "payment"
+    },
+    {
+      "id": "P00553",
+      "t": 5564.298,
+      "u": 21,
+      "v": 35,
+      "amount": 92.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00554",
+      "t": 5582.042,
+      "u": 38,
+      "v": 48,
+      "amount": 1285.83,
+      "kind": "payment"
+    },
+    {
+      "id": "P00555",
+      "t": 5590.2257,
+      "u": 4,
+      "v": 18,
+      "amount": 376.88,
+      "kind": "payment"
+    },
+    {
+      "id": "P00556",
+      "t": 5600.0655,
+      "u": 20,
+      "v": 35,
+      "amount": 52.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00557",
+      "t": 5614.066,
+      "u": 62,
+      "v": 4,
+      "amount": 16.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00558",
+      "t": 5619.6365,
+      "u": -1,
+      "v": 16,
+      "amount": 976.74,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00559",
+      "t": 5631.3091,
+      "u": -1,
+      "v": 55,
+      "amount": 288.62,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00560",
+      "t": 5644.2962,
+      "u": 1,
+      "v": 4,
+      "amount": 28.67,
+      "kind": "payment"
+    },
+    {
+      "id": "P00561",
+      "t": 5645.5577,
+      "u": 33,
+      "v": 35,
+      "amount": 31.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00562",
+      "t": 5657.905,
+      "u": 11,
+      "v": 56,
+      "amount": 31.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00563",
+      "t": 5667.4099,
+      "u": 45,
+      "v": 35,
+      "amount": 55.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00564",
+      "t": 5679.9084,
+      "u": 19,
+      "v": 56,
+      "amount": 30.11,
+      "kind": "payment"
+    },
+    {
+      "id": "P00565",
+      "t": 5693.3861,
+      "u": 34,
+      "v": 35,
+      "amount": 66.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00566",
+      "t": 5697.6293,
+      "u": 11,
+      "v": 56,
+      "amount": 57.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00567",
+      "t": 5710.3356,
+      "u": 26,
+      "v": 47,
+      "amount": 31.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00568",
+      "t": 5723.3207,
+      "u": 19,
+      "v": 8,
+      "amount": 71.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00569",
+      "t": 5731.1396,
+      "u": 36,
+      "v": 56,
+      "amount": 21.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00570",
+      "t": 5736.0991,
+      "u": 38,
+      "v": 6,
+      "amount": 1462.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00571",
+      "t": 5749.0471,
+      "u": 26,
+      "v": 1,
+      "amount": 72.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00572",
+      "t": 5762.0031,
+      "u": 38,
+      "v": 33,
+      "amount": 1516.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00573",
+      "t": 5772.2848,
+      "u": 4,
+      "v": 18,
+      "amount": 497.71,
+      "kind": "payment"
+    },
+    {
+      "id": "P00574",
+      "t": 5785.023,
+      "u": -1,
+      "v": 40,
+      "amount": 159.08,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00575",
+      "t": 5789.7129,
+      "u": 10,
+      "v": 56,
+      "amount": 54.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00576",
+      "t": 5799.3565,
+      "u": 20,
+      "v": 56,
+      "amount": 79.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00577",
+      "t": 5808.1311,
+      "u": 15,
+      "v": 48,
+      "amount": 30.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00578",
+      "t": 5819.3012,
+      "u": 4,
+      "v": 18,
+      "amount": 299.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00579",
+      "t": 5831.9988,
+      "u": 38,
+      "v": 5,
+      "amount": 1008.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00580",
+      "t": 5844.0769,
+      "u": 56,
+      "v": 18,
+      "amount": 1197.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00581",
+      "t": 5853.609,
+      "u": 34,
+      "v": 35,
+      "amount": 15.2,
+      "kind": "payment"
+    },
+    {
+      "id": "P00582",
+      "t": 5862.5405,
+      "u": 26,
+      "v": 56,
+      "amount": 26.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00583",
+      "t": 5873.4445,
+      "u": 8,
+      "v": 54,
+      "amount": 68.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00584",
+      "t": 5877.2091,
+      "u": 47,
+      "v": 56,
+      "amount": 12.88,
+      "kind": "payment"
+    },
+    {
+      "id": "P00585",
+      "t": 5890.337,
+      "u": 4,
+      "v": 18,
+      "amount": 447.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00586",
+      "t": 5901.6244,
+      "u": 10,
+      "v": 56,
+      "amount": 16.67,
+      "kind": "payment"
+    },
+    {
+      "id": "P00587",
+      "t": 5916.1044,
+      "u": 52,
+      "v": 28,
+      "amount": 24.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00588",
+      "t": 5918.46,
+      "u": 52,
+      "v": 28,
+      "amount": 79.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00589",
+      "t": 5930.9023,
+      "u": 56,
+      "v": 18,
+      "amount": 333.02,
+      "kind": "payment"
+    },
+    {
+      "id": "P00590",
+      "t": 5942.0486,
+      "u": 50,
+      "v": 56,
+      "amount": 30.93,
+      "kind": "payment"
+    },
+    {
+      "id": "P00591",
+      "t": 5950.8966,
+      "u": 38,
+      "v": 49,
+      "amount": 955.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00592",
+      "t": 5958.9999,
+      "u": 6,
+      "v": 35,
+      "amount": 23.48,
+      "kind": "payment"
+    },
+    {
+      "id": "P00593",
+      "t": 5976.8092,
+      "u": 24,
+      "v": 4,
+      "amount": 43.02,
+      "kind": "payment"
+    },
+    {
+      "id": "P00594",
+      "t": 5978.3232,
+      "u": 30,
+      "v": 4,
+      "amount": 44.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00595",
+      "t": 5994.5872,
+      "u": -1,
+      "v": 16,
+      "amount": 233.81,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00596",
+      "t": 6000.9014,
+      "u": 38,
+      "v": 5,
+      "amount": 971.72,
+      "kind": "payment"
+    },
+    {
+      "id": "P00597",
+      "t": 6013.8301,
+      "u": 48,
+      "v": 45,
+      "amount": 40.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00598",
+      "t": 6018.7234,
+      "u": 57,
+      "v": 48,
+      "amount": 60.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00599",
+      "t": 6033.5803,
+      "u": 38,
+      "v": 25,
+      "amount": 1101.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00600",
+      "t": 6041.847,
+      "u": 20,
+      "v": 56,
+      "amount": 33.18,
+      "kind": "payment"
+    },
+    {
+      "id": "P00601",
+      "t": 6048.1842,
+      "u": 46,
+      "v": 4,
+      "amount": 28.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00602",
+      "t": 6059.1567,
+      "u": 34,
+      "v": 56,
+      "amount": 65.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00603",
+      "t": 6077.706,
+      "u": 27,
+      "v": 11,
+      "amount": 20.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00604",
+      "t": 6079.7871,
+      "u": 55,
+      "v": 41,
+      "amount": 41.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00605",
+      "t": 6095.897,
+      "u": 34,
+      "v": 55,
+      "amount": 66.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00606",
+      "t": 6105.2672,
+      "u": 62,
+      "v": 35,
+      "amount": 9.72,
+      "kind": "payment"
+    },
+    {
+      "id": "P00607",
+      "t": 6114.9292,
+      "u": 38,
+      "v": 10,
+      "amount": 1190.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00608",
+      "t": 6121.3927,
+      "u": 8,
+      "v": 4,
+      "amount": 41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00609",
+      "t": 6137.808,
+      "u": 26,
+      "v": 56,
+      "amount": 44.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00610",
+      "t": 6146.9095,
+      "u": 59,
+      "v": 56,
+      "amount": 37.9,
+      "kind": "payment"
+    },
+    {
+      "id": "P00611",
+      "t": 6157.7704,
+      "u": 37,
+      "v": 56,
+      "amount": 30.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00612",
+      "t": 6161.1025,
+      "u": 25,
+      "v": 4,
+      "amount": 42.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00613",
+      "t": 6171.7361,
+      "u": 27,
+      "v": 4,
+      "amount": 22.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00614",
+      "t": 6184.2266,
+      "u": 0,
+      "v": 35,
+      "amount": 14.42,
+      "kind": "payment"
+    },
+    {
+      "id": "P00615",
+      "t": 6195.3134,
+      "u": 4,
+      "v": 18,
+      "amount": 634.93,
+      "kind": "payment"
+    },
+    {
+      "id": "P00616",
+      "t": 6205.9761,
+      "u": 2,
+      "v": 4,
+      "amount": 71.23,
+      "kind": "payment"
+    },
+    {
+      "id": "P00617",
+      "t": 6218.627,
+      "u": 24,
+      "v": 8,
+      "amount": 38.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00618",
+      "t": 6221.4952,
+      "u": 33,
+      "v": 4,
+      "amount": 15.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00619",
+      "t": 6237.7337,
+      "u": 0,
+      "v": 7,
+      "amount": 67.88,
+      "kind": "payment"
+    },
+    {
+      "id": "P00620",
+      "t": 6243.8162,
+      "u": 51,
+      "v": 47,
+      "amount": 85.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00621",
+      "t": 6250.5695,
+      "u": 2,
+      "v": 58,
+      "amount": 54.83,
+      "kind": "payment"
+    },
+    {
+      "id": "P00622",
+      "t": 6266.4875,
+      "u": 8,
+      "v": 4,
+      "amount": 62.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00623",
+      "t": 6275.5962,
+      "u": 0,
+      "v": 35,
+      "amount": 15.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00624",
+      "t": 6285.6647,
+      "u": 11,
+      "v": 56,
+      "amount": 18.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00625",
+      "t": 6293.8401,
+      "u": 4,
+      "v": 18,
+      "amount": 248.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00626",
+      "t": 6302.3212,
+      "u": 15,
+      "v": 45,
+      "amount": 136.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00627",
+      "t": 6315.4836,
+      "u": 24,
+      "v": 4,
+      "amount": 20.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00628",
+      "t": 6321.8467,
+      "u": 38,
+      "v": 33,
+      "amount": 1325.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00629",
+      "t": 6338.9619,
+      "u": 25,
+      "v": 4,
+      "amount": 39.1,
+      "kind": "payment"
+    },
+    {
+      "id": "P00630",
+      "t": 6342.8558,
+      "u": 24,
+      "v": 0,
+      "amount": 97.32,
+      "kind": "payment"
+    },
+    {
+      "id": "P00631",
+      "t": 6356.2247,
+      "u": 9,
+      "v": 2,
+      "amount": 29.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00632",
+      "t": 6370.3398,
+      "u": 57,
+      "v": 56,
+      "amount": 102.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00633",
+      "t": 6372.3684,
+      "u": 47,
+      "v": 56,
+      "amount": 40.25,
+      "kind": "payment"
+    },
+    {
+      "id": "P00634",
+      "t": 6390.5588,
+      "u": 38,
+      "v": 40,
+      "amount": 1074.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00635",
+      "t": 6395.6231,
+      "u": 0,
+      "v": 56,
+      "amount": 25.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00636",
+      "t": 6406.7942,
+      "u": 4,
+      "v": 18,
+      "amount": 275.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00637",
+      "t": 6418.5157,
+      "u": 42,
+      "v": 46,
+      "amount": 38.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00638",
+      "t": 6429.3014,
+      "u": 14,
+      "v": 4,
+      "amount": 26.38,
+      "kind": "payment"
+    },
+    {
+      "id": "P00639",
+      "t": 6432.8722,
+      "u": 29,
+      "v": 24,
+      "amount": 64.29,
+      "kind": "payment"
+    },
+    {
+      "id": "P00640",
+      "t": 6447.4499,
+      "u": 23,
+      "v": 4,
+      "amount": 19.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00641",
+      "t": 6452.434,
+      "u": 4,
+      "v": 18,
+      "amount": 239,
+      "kind": "payment"
+    },
+    {
+      "id": "P00642",
+      "t": 6464.094,
+      "u": 27,
+      "v": 4,
+      "amount": 55.59,
+      "kind": "payment"
+    },
+    {
+      "id": "P00643",
+      "t": 6476.2321,
+      "u": 7,
+      "v": 4,
+      "amount": 43.43,
+      "kind": "payment"
+    },
+    {
+      "id": "P00644",
+      "t": 6484.4708,
+      "u": 28,
+      "v": 56,
+      "amount": 46.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00645",
+      "t": 6497.9265,
+      "u": 52,
+      "v": 35,
+      "amount": 98.11,
+      "kind": "payment"
+    },
+    {
+      "id": "P00646",
+      "t": 6509.4935,
+      "u": 16,
+      "v": 25,
+      "amount": 187.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00647",
+      "t": 6517.3583,
+      "u": 38,
+      "v": 20,
+      "amount": 1270.71,
+      "kind": "payment"
+    },
+    {
+      "id": "P00648",
+      "t": 6527.1201,
+      "u": 53,
+      "v": 4,
+      "amount": 168.86,
+      "kind": "payment"
+    },
+    {
+      "id": "P00649",
+      "t": 6540.3211,
+      "u": -1,
+      "v": 40,
+      "amount": 745.44,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00650",
+      "t": 6546.2521,
+      "u": 48,
+      "v": 4,
+      "amount": 21.48,
+      "kind": "payment"
+    },
+    {
+      "id": "P00651",
+      "t": 6555.7599,
+      "u": 47,
+      "v": 56,
+      "amount": 96.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00652",
+      "t": 6567.983,
+      "u": 34,
+      "v": 55,
+      "amount": 47.31,
+      "kind": "payment"
+    },
+    {
+      "id": "P00653",
+      "t": 6575.5546,
+      "u": 44,
+      "v": 56,
+      "amount": 59.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00654",
+      "t": 6591.6645,
+      "u": 20,
+      "v": 56,
+      "amount": 34.79,
+      "kind": "payment"
+    },
+    {
+      "id": "P00655",
+      "t": 6601.1657,
+      "u": 5,
+      "v": 4,
+      "amount": 20.51,
+      "kind": "payment"
+    },
+    {
+      "id": "P00656",
+      "t": 6610.3713,
+      "u": 40,
+      "v": 9,
+      "amount": 25.38,
+      "kind": "payment"
+    },
+    {
+      "id": "P00657",
+      "t": 6618.5304,
+      "u": 1,
+      "v": 4,
+      "amount": 21.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00658",
+      "t": 6630.3312,
+      "u": 29,
+      "v": 24,
+      "amount": 116.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00659",
+      "t": 6636.112,
+      "u": -1,
+      "v": 19,
+      "amount": 218.96,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00660",
+      "t": 6646.6452,
+      "u": 27,
+      "v": 14,
+      "amount": 29.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00661",
+      "t": 6657.0506,
+      "u": 39,
+      "v": 4,
+      "amount": 196.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00662",
+      "t": 6672.2011,
+      "u": 20,
+      "v": 35,
+      "amount": 35.02,
+      "kind": "payment"
+    },
+    {
+      "id": "P00663",
+      "t": 6675.2612,
+      "u": -1,
+      "v": 33,
+      "amount": 325.13,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00664",
+      "t": 6691.9768,
+      "u": 4,
+      "v": 18,
+      "amount": 512.77,
+      "kind": "payment"
+    },
+    {
+      "id": "P00665",
+      "t": 6696.231,
+      "u": 0,
+      "v": 56,
+      "amount": 28.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00666",
+      "t": 6705.0654,
+      "u": 15,
+      "v": 56,
+      "amount": 23.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00667",
+      "t": 6713.456,
+      "u": -1,
+      "v": 53,
+      "amount": 439.46,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00668",
+      "t": 6731.6876,
+      "u": 26,
+      "v": 56,
+      "amount": 28.42,
+      "kind": "payment"
+    },
+    {
+      "id": "P00669",
+      "t": 6741.7218,
+      "u": 49,
+      "v": 4,
+      "amount": 41.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00670",
+      "t": 6749.4251,
+      "u": 26,
+      "v": 44,
+      "amount": 15.34,
+      "kind": "payment"
+    },
+    {
+      "id": "P00671",
+      "t": 6758.7294,
+      "u": 21,
+      "v": 56,
+      "amount": 120.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00672",
+      "t": 6764.7858,
+      "u": 21,
+      "v": 55,
+      "amount": 19.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00673",
+      "t": 6776.7623,
+      "u": 52,
+      "v": 4,
+      "amount": 40.82,
+      "kind": "payment"
+    },
+    {
+      "id": "RP01001",
+      "t": 6782.400000000001,
+      "u": -1,
+      "v": 10,
+      "amount": 0,
+      "kind": "report",
+      "reference": "P01001"
+    },
+    {
+      "id": "RP01002",
+      "t": 6782.400000000001,
+      "u": -1,
+      "v": 10,
+      "amount": 0,
+      "kind": "report",
+      "reference": "P01002"
+    },
+    {
+      "id": "RP01003",
+      "t": 6782.400000000001,
+      "u": -1,
+      "v": 10,
+      "amount": 0,
+      "kind": "report",
+      "reference": "P01003"
+    },
+    {
+      "id": "RP01004",
+      "t": 6782.400000000001,
+      "u": -1,
+      "v": 10,
+      "amount": 0,
+      "kind": "report",
+      "reference": "P01004"
+    },
+    {
+      "id": "P00674",
+      "t": 6788.9801,
+      "u": 20,
+      "v": 56,
+      "amount": 101.2,
+      "kind": "payment"
+    },
+    {
+      "id": "P00675",
+      "t": 6797.0821,
+      "u": 50,
+      "v": 54,
+      "amount": 170.98,
+      "kind": "payment"
+    },
+    {
+      "id": "P00676",
+      "t": 6811.4887,
+      "u": 53,
+      "v": 4,
+      "amount": 9.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00677",
+      "t": 6822.473,
+      "u": 29,
+      "v": 35,
+      "amount": 71.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00678",
+      "t": 6831.6406,
+      "u": 50,
+      "v": 54,
+      "amount": 80.04,
+      "kind": "payment"
+    },
+    {
+      "id": "P00679",
+      "t": 6838.0528,
+      "u": 48,
+      "v": 4,
+      "amount": 25.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00680",
+      "t": 6848.8528,
+      "u": -1,
+      "v": 2,
+      "amount": 715.1,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00681",
+      "t": 6860.2507,
+      "u": 38,
+      "v": 59,
+      "amount": 1056.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00682",
+      "t": 6874.2756,
+      "u": 25,
+      "v": 2,
+      "amount": 28.54,
+      "kind": "payment"
+    },
+    {
+      "id": "P00683",
+      "t": 6883.1413,
+      "u": 7,
+      "v": 44,
+      "amount": 41.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00684",
+      "t": 6892.2222,
+      "u": 47,
+      "v": 56,
+      "amount": 26.09,
+      "kind": "payment"
+    },
+    {
+      "id": "P00685",
+      "t": 6898.4858,
+      "u": 38,
+      "v": 13,
+      "amount": 1248.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00686",
+      "t": 6910.2709,
+      "u": 55,
+      "v": 41,
+      "amount": 37.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00687",
+      "t": 6918.4497,
+      "u": 47,
+      "v": 9,
+      "amount": 28.66,
+      "kind": "payment"
+    },
+    {
+      "id": "P00688",
+      "t": 6934.2078,
+      "u": 8,
+      "v": 34,
+      "amount": 83.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00689",
+      "t": 6942.7584,
+      "u": 52,
+      "v": 28,
+      "amount": 52.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00690",
+      "t": 6952.8092,
+      "u": 23,
+      "v": 4,
+      "amount": 8.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00691",
+      "t": 6963.4127,
+      "u": 37,
+      "v": 7,
+      "amount": 41.26,
+      "kind": "payment"
+    },
+    {
+      "id": "P00692",
+      "t": 6974.4449,
+      "u": -1,
+      "v": 58,
+      "amount": 545.87,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00693",
+      "t": 6978.5807,
+      "u": 38,
+      "v": 25,
+      "amount": 1314.34,
+      "kind": "payment"
+    },
+    {
+      "id": "P00694",
+      "t": 6991.7094,
+      "u": 47,
+      "v": 56,
+      "amount": 29.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00695",
+      "t": 6997.1535,
+      "u": 30,
+      "v": 37,
+      "amount": 37.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00696",
+      "t": 7009.7044,
+      "u": 19,
+      "v": 56,
+      "amount": 188.2,
+      "kind": "payment"
+    },
+    {
+      "id": "P00697",
+      "t": 7016.8595,
+      "u": 19,
+      "v": 8,
+      "amount": 61.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00698",
+      "t": 7035.3266,
+      "u": -1,
+      "v": 42,
+      "amount": 153.36,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00699",
+      "t": 7038.5151,
+      "u": -1,
+      "v": 46,
+      "amount": 692.39,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00700",
+      "t": 7050.9936,
+      "u": -1,
+      "v": 31,
+      "amount": 333.64,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00701",
+      "t": 7060.6564,
+      "u": -1,
+      "v": 29,
+      "amount": 504.41,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00702",
+      "t": 7068.9206,
+      "u": 56,
+      "v": 18,
+      "amount": 159.79,
+      "kind": "payment"
+    },
+    {
+      "id": "P00703",
+      "t": 7082.1634,
+      "u": 22,
+      "v": 57,
+      "amount": 89.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00704",
+      "t": 7094.8582,
+      "u": 38,
+      "v": 2,
+      "amount": 1122.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00705",
+      "t": 7102.8294,
+      "u": 4,
+      "v": 18,
+      "amount": 565.29,
+      "kind": "payment"
+    },
+    {
+      "id": "P00706",
+      "t": 7115.797,
+      "u": 9,
+      "v": 47,
+      "amount": 61.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00707",
+      "t": 7118.9827,
+      "u": 44,
+      "v": 56,
+      "amount": 46.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00708",
+      "t": 7135.1744,
+      "u": 41,
+      "v": 31,
+      "amount": 17.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00709",
+      "t": 7144.554,
+      "u": 38,
+      "v": 16,
+      "amount": 987.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00710",
+      "t": 7156.4354,
+      "u": 11,
+      "v": 35,
+      "amount": 103.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00711",
+      "t": 7162.5259,
+      "u": 38,
+      "v": 62,
+      "amount": 1207.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00712",
+      "t": 7167.2802,
+      "u": 39,
+      "v": 35,
+      "amount": 90.3,
+      "kind": "payment"
+    },
+    {
+      "id": "P00713",
+      "t": 7180.0012,
+      "u": 19,
+      "v": 56,
+      "amount": 14.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00714",
+      "t": 7193.7663,
+      "u": 7,
+      "v": 19,
+      "amount": 103.98,
+      "kind": "payment"
+    },
+    {
+      "id": "P00715",
+      "t": 7197.2613,
+      "u": 61,
+      "v": 56,
+      "amount": 39.56,
+      "kind": "payment"
+    },
+    {
+      "id": "P00716",
+      "t": 7215.4726,
+      "u": 31,
+      "v": 4,
+      "amount": 75.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00717",
+      "t": 7227.1058,
+      "u": -1,
+      "v": 51,
+      "amount": 406.02,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00718",
+      "t": 7229.3006,
+      "u": 54,
+      "v": 4,
+      "amount": 44.87,
+      "kind": "payment"
+    },
+    {
+      "id": "P00719",
+      "t": 7245.7585,
+      "u": 4,
+      "v": 18,
+      "amount": 433.06,
+      "kind": "payment"
+    },
+    {
+      "id": "P00720",
+      "t": 7251.637,
+      "u": 4,
+      "v": 18,
+      "amount": 223.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00721",
+      "t": 7264.7371,
+      "u": 38,
+      "v": 24,
+      "amount": 1345.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00722",
+      "t": 7273.0133,
+      "u": 38,
+      "v": 50,
+      "amount": 931.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00723",
+      "t": 7282.2734,
+      "u": 19,
+      "v": 56,
+      "amount": 50.89,
+      "kind": "payment"
+    },
+    {
+      "id": "P00724",
+      "t": 7290.1235,
+      "u": 22,
+      "v": 62,
+      "amount": 17.86,
+      "kind": "payment"
+    },
+    {
+      "id": "P00725",
+      "t": 7299.3422,
+      "u": 55,
+      "v": 4,
+      "amount": 58.25,
+      "kind": "payment"
+    },
+    {
+      "id": "P00726",
+      "t": 7308.5025,
+      "u": 38,
+      "v": 7,
+      "amount": 1188.38,
+      "kind": "payment"
+    },
+    {
+      "id": "P00727",
+      "t": 7327.5063,
+      "u": 16,
+      "v": 25,
+      "amount": 110.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00728",
+      "t": 7332.3701,
+      "u": 29,
+      "v": 56,
+      "amount": 66.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00729",
+      "t": 7338.5363,
+      "u": 4,
+      "v": 18,
+      "amount": 229.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00730",
+      "t": 7353.1277,
+      "u": 48,
+      "v": 47,
+      "amount": 113.13,
+      "kind": "payment"
+    },
+    {
+      "id": "P00731",
+      "t": 7363.0875,
+      "u": 4,
+      "v": 18,
+      "amount": 300.07,
+      "kind": "payment"
+    },
+    {
+      "id": "P00732",
+      "t": 7371.0498,
+      "u": 24,
+      "v": 4,
+      "amount": 131.72,
+      "kind": "payment"
+    },
+    {
+      "id": "P00733",
+      "t": 7386.6038,
+      "u": 49,
+      "v": 35,
+      "amount": 32.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00734",
+      "t": 7397.9085,
+      "u": 21,
+      "v": 35,
+      "amount": 16.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00735",
+      "t": 7400.0363,
+      "u": 19,
+      "v": 56,
+      "amount": 37.88,
+      "kind": "payment"
+    },
+    {
+      "id": "P00736",
+      "t": 7414.3794,
+      "u": 36,
+      "v": 45,
+      "amount": 101.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00737",
+      "t": 7422.3212,
+      "u": 7,
+      "v": 4,
+      "amount": 27.01,
+      "kind": "payment"
+    },
+    {
+      "id": "P00738",
+      "t": 7430.1794,
+      "u": 36,
+      "v": 56,
+      "amount": 52.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00739",
+      "t": 7445.8691,
+      "u": 57,
+      "v": 56,
+      "amount": 27.13,
+      "kind": "payment"
+    },
+    {
+      "id": "P00740",
+      "t": 7452.9631,
+      "u": 50,
+      "v": 56,
+      "amount": 9.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P00741",
+      "t": 7462.7269,
+      "u": 48,
+      "v": 4,
+      "amount": 23.9,
+      "kind": "payment"
+    },
+    {
+      "id": "P00742",
+      "t": 7470.6755,
+      "u": 9,
+      "v": 44,
+      "amount": 33.34,
+      "kind": "payment"
+    },
+    {
+      "id": "P00743",
+      "t": 7481.7492,
+      "u": 6,
+      "v": 56,
+      "amount": 27.18,
+      "kind": "payment"
+    },
+    {
+      "id": "P00744",
+      "t": 7490.0638,
+      "u": 31,
+      "v": 16,
+      "amount": 74.11,
+      "kind": "payment"
+    },
+    {
+      "id": "P00745",
+      "t": 7499.816,
+      "u": 38,
+      "v": 14,
+      "amount": 1082.96,
+      "kind": "payment"
+    },
+    {
+      "id": "P00746",
+      "t": 7516.3272,
+      "u": 61,
+      "v": 56,
+      "amount": 62.27,
+      "kind": "payment"
+    },
+    {
+      "id": "P00747",
+      "t": 7521.5087,
+      "u": -1,
+      "v": 24,
+      "amount": 275.29,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00748",
+      "t": 7535.7502,
+      "u": -1,
+      "v": 58,
+      "amount": 365.42,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00749",
+      "t": 7548.7679,
+      "u": -1,
+      "v": 1,
+      "amount": 1142.01,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00750",
+      "t": 7550.2413,
+      "u": 38,
+      "v": 24,
+      "amount": 1299.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00751",
+      "t": 7563.26,
+      "u": 57,
+      "v": 56,
+      "amount": 38.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00752",
+      "t": 7577.9787,
+      "u": 58,
+      "v": 4,
+      "amount": 42.61,
+      "kind": "payment"
+    },
+    {
+      "id": "P00753",
+      "t": 7580.2157,
+      "u": 46,
+      "v": 61,
+      "amount": 28.73,
+      "kind": "payment"
+    },
+    {
+      "id": "P00754",
+      "t": 7598.7825,
+      "u": 54,
+      "v": 35,
+      "amount": 66.24,
+      "kind": "payment"
+    },
+    {
+      "id": "P00755",
+      "t": 7609.2258,
+      "u": -1,
+      "v": 40,
+      "amount": 554.75,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00756",
+      "t": 7612.9863,
+      "u": 59,
+      "v": 2,
+      "amount": 25.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00757",
+      "t": 7625.4843,
+      "u": -1,
+      "v": 37,
+      "amount": 861.41,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00758",
+      "t": 7636.8165,
+      "u": 15,
+      "v": 56,
+      "amount": 39.86,
+      "kind": "payment"
+    },
+    {
+      "id": "P00759",
+      "t": 7644.0935,
+      "u": 56,
+      "v": 18,
+      "amount": 1037.28,
+      "kind": "payment"
+    },
+    {
+      "id": "P00760",
+      "t": 7660.4747,
+      "u": -1,
+      "v": 54,
+      "amount": 368.13,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00761",
+      "t": 7670.1167,
+      "u": 6,
+      "v": 48,
+      "amount": 29.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00762",
+      "t": 7672.1295,
+      "u": 37,
+      "v": 51,
+      "amount": 66.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00763",
+      "t": 7689.6559,
+      "u": 52,
+      "v": 28,
+      "amount": 18.29,
+      "kind": "payment"
+    },
+    {
+      "id": "P00764",
+      "t": 7698.0883,
+      "u": 27,
+      "v": 10,
+      "amount": 37.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00765",
+      "t": 7705.8971,
+      "u": 1,
+      "v": 4,
+      "amount": 32.76,
+      "kind": "payment"
+    },
+    {
+      "id": "P00766",
+      "t": 7715.8485,
+      "u": 24,
+      "v": 4,
+      "amount": 66.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00767",
+      "t": 7730.949,
+      "u": 38,
+      "v": 33,
+      "amount": 1106.39,
+      "kind": "payment"
+    },
+    {
+      "id": "P00768",
+      "t": 7734.5227,
+      "u": 52,
+      "v": 35,
+      "amount": 43.1,
+      "kind": "payment"
+    },
+    {
+      "id": "P00769",
+      "t": 7744.0637,
+      "u": 38,
+      "v": 26,
+      "amount": 1251.67,
+      "kind": "payment"
+    },
+    {
+      "id": "P00770",
+      "t": 7753.6512,
+      "u": 38,
+      "v": 58,
+      "amount": 1043.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00771",
+      "t": 7766.2631,
+      "u": 8,
+      "v": 7,
+      "amount": 74.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00772",
+      "t": 7771.798,
+      "u": 48,
+      "v": 45,
+      "amount": 109.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00773",
+      "t": 7783.3413,
+      "u": 38,
+      "v": 19,
+      "amount": 762.54,
+      "kind": "payment"
+    },
+    {
+      "id": "P00774",
+      "t": 7799.9479,
+      "u": 14,
+      "v": 0,
+      "amount": 15.01,
+      "kind": "payment"
+    },
+    {
+      "id": "P00775",
+      "t": 7804.2695,
+      "u": 20,
+      "v": 56,
+      "amount": 106.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00776",
+      "t": 7819.1778,
+      "u": 11,
+      "v": 56,
+      "amount": 48.1,
+      "kind": "payment"
+    },
+    {
+      "id": "P00777",
+      "t": 7831.6635,
+      "u": -1,
+      "v": 48,
+      "amount": 806.21,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00778",
+      "t": 7837.8447,
+      "u": 36,
+      "v": 52,
+      "amount": 94.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00779",
+      "t": 7847.5767,
+      "u": -1,
+      "v": 26,
+      "amount": 495.24,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00780",
+      "t": 7857.6086,
+      "u": 54,
+      "v": 4,
+      "amount": 38.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00781",
+      "t": 7867.7432,
+      "u": 30,
+      "v": 35,
+      "amount": 48.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00782",
+      "t": 7878.7762,
+      "u": 38,
+      "v": 34,
+      "amount": 1031.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00783",
+      "t": 7882.7032,
+      "u": 28,
+      "v": 56,
+      "amount": 281.56,
+      "kind": "payment"
+    },
+    {
+      "id": "P00784",
+      "t": 7902.4666,
+      "u": 29,
+      "v": 24,
+      "amount": 68.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00785",
+      "t": 7909.09,
+      "u": 4,
+      "v": 18,
+      "amount": 300.48,
+      "kind": "payment"
+    },
+    {
+      "id": "P00786",
+      "t": 7917.0722,
+      "u": -1,
+      "v": 53,
+      "amount": 2483,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00787",
+      "t": 7931.4934,
+      "u": 58,
+      "v": 4,
+      "amount": 123.52,
+      "kind": "payment"
+    },
+    {
+      "id": "P00788",
+      "t": 7936.1574,
+      "u": 51,
+      "v": 21,
+      "amount": 23.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00789",
+      "t": 7945.7096,
+      "u": 56,
+      "v": 18,
+      "amount": 1008.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00790",
+      "t": 7958.7015,
+      "u": 56,
+      "v": 18,
+      "amount": 642.59,
+      "kind": "payment"
+    },
+    {
+      "id": "P00791",
+      "t": 7970.4371,
+      "u": 58,
+      "v": 4,
+      "amount": 24.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00792",
+      "t": 7980.1658,
+      "u": 33,
+      "v": 4,
+      "amount": 23.48,
+      "kind": "payment"
+    },
+    {
+      "id": "P00793",
+      "t": 7986.3513,
+      "u": 34,
+      "v": 56,
+      "amount": 26.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00794",
+      "t": 7995.3162,
+      "u": 38,
+      "v": 19,
+      "amount": 1218.87,
+      "kind": "payment"
+    },
+    {
+      "id": "P00795",
+      "t": 8004.4599,
+      "u": 14,
+      "v": 10,
+      "amount": 168.99,
+      "kind": "payment"
+    },
+    {
+      "id": "P00796",
+      "t": 8014.478,
+      "u": 38,
+      "v": 39,
+      "amount": 1211.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00797",
+      "t": 8024.2035,
+      "u": 57,
+      "v": 56,
+      "amount": 64.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00798",
+      "t": 8035.8748,
+      "u": 38,
+      "v": 23,
+      "amount": 1065.42,
+      "kind": "payment"
+    },
+    {
+      "id": "P00799",
+      "t": 8052.4604,
+      "u": 38,
+      "v": 52,
+      "amount": 992.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00800",
+      "t": 8061.0727,
+      "u": 22,
+      "v": 35,
+      "amount": 40.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00801",
+      "t": 8065.538,
+      "u": 51,
+      "v": 4,
+      "amount": 43.12,
+      "kind": "payment"
+    },
+    {
+      "id": "P00802",
+      "t": 8076.3012,
+      "u": 21,
+      "v": 56,
+      "amount": 22.31,
+      "kind": "payment"
+    },
+    {
+      "id": "P00803",
+      "t": 8088.5665,
+      "u": 39,
+      "v": 4,
+      "amount": 29.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00804",
+      "t": 8097.8975,
+      "u": 38,
+      "v": 19,
+      "amount": 1164.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00805",
+      "t": 8106.4586,
+      "u": 56,
+      "v": 18,
+      "amount": 412.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00806",
+      "t": 8122.3836,
+      "u": 38,
+      "v": 9,
+      "amount": 1090.43,
+      "kind": "payment"
+    },
+    {
+      "id": "P00807",
+      "t": 8134.3843,
+      "u": 56,
+      "v": 18,
+      "amount": 1119.97,
+      "kind": "payment"
+    },
+    {
+      "id": "P00808",
+      "t": 8138.176,
+      "u": -1,
+      "v": 49,
+      "amount": 116.71,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00809",
+      "t": 8153.7838,
+      "u": 30,
+      "v": 37,
+      "amount": 37.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00810",
+      "t": 8164.7348,
+      "u": 52,
+      "v": 4,
+      "amount": 15.25,
+      "kind": "payment"
+    },
+    {
+      "id": "P00811",
+      "t": 8168.2261,
+      "u": 38,
+      "v": 50,
+      "amount": 1124.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00812",
+      "t": 8176.6478,
+      "u": 33,
+      "v": 26,
+      "amount": 26.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00813",
+      "t": 8189.2237,
+      "u": 46,
+      "v": 4,
+      "amount": 21.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00814",
+      "t": 8201.8505,
+      "u": 11,
+      "v": 56,
+      "amount": 7.27,
+      "kind": "payment"
+    },
+    {
+      "id": "P00815",
+      "t": 8214.591,
+      "u": 49,
+      "v": 36,
+      "amount": 28.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00816",
+      "t": 8218.3677,
+      "u": 29,
+      "v": 35,
+      "amount": 65.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00817",
+      "t": 8225.5815,
+      "u": 0,
+      "v": 56,
+      "amount": 14.69,
+      "kind": "payment"
+    },
+    {
+      "id": "P00818",
+      "t": 8240.9951,
+      "u": -1,
+      "v": 48,
+      "amount": 335.35,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00819",
+      "t": 8247.8208,
+      "u": 56,
+      "v": 18,
+      "amount": 722.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00820",
+      "t": 8257.2002,
+      "u": 59,
+      "v": 56,
+      "amount": 31.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00821",
+      "t": 8273.1586,
+      "u": 52,
+      "v": 35,
+      "amount": 33.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00822",
+      "t": 8281.0973,
+      "u": 4,
+      "v": 18,
+      "amount": 753.81,
+      "kind": "payment"
+    },
+    {
+      "id": "P00823",
+      "t": 8287.4275,
+      "u": 2,
+      "v": 29,
+      "amount": 38.44,
+      "kind": "payment"
+    },
+    {
+      "id": "P00824",
+      "t": 8299.7558,
+      "u": 4,
+      "v": 18,
+      "amount": 1186.5,
+      "kind": "payment"
+    },
+    {
+      "id": "P00825",
+      "t": 8311.3548,
+      "u": -1,
+      "v": 5,
+      "amount": 75.7,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00826",
+      "t": 8321.8168,
+      "u": 12,
+      "v": 44,
+      "amount": 40.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00827",
+      "t": 8327.3624,
+      "u": 45,
+      "v": 56,
+      "amount": 38.61,
+      "kind": "payment"
+    },
+    {
+      "id": "P00828",
+      "t": 8345.0988,
+      "u": 4,
+      "v": 18,
+      "amount": 513.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00829",
+      "t": 8356.1449,
+      "u": 50,
+      "v": 54,
+      "amount": 52.88,
+      "kind": "payment"
+    },
+    {
+      "id": "P00830",
+      "t": 8362.596,
+      "u": 4,
+      "v": 18,
+      "amount": 935.63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00831",
+      "t": 8368.6835,
+      "u": -1,
+      "v": 57,
+      "amount": 444.61,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00832",
+      "t": 8383.129,
+      "u": 30,
+      "v": 4,
+      "amount": 55.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00833",
+      "t": 8390.2536,
+      "u": 38,
+      "v": 61,
+      "amount": 933.19,
+      "kind": "payment"
+    },
+    {
+      "id": "P00834",
+      "t": 8406.6392,
+      "u": 38,
+      "v": 8,
+      "amount": 1100.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00835",
+      "t": 8416.2131,
+      "u": -1,
+      "v": 39,
+      "amount": 306.23,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00836",
+      "t": 8424.091,
+      "u": -1,
+      "v": 25,
+      "amount": 312.86,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00837",
+      "t": 8433.9456,
+      "u": 62,
+      "v": 8,
+      "amount": 267.19,
+      "kind": "payment"
+    },
+    {
+      "id": "P00838",
+      "t": 8446.5307,
+      "u": 26,
+      "v": 56,
+      "amount": 11.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00839",
+      "t": 8453.2616,
+      "u": -1,
+      "v": 39,
+      "amount": 455.22,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00840",
+      "t": 8462.1854,
+      "u": 47,
+      "v": 56,
+      "amount": 27.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00841",
+      "t": 8473.7347,
+      "u": 56,
+      "v": 18,
+      "amount": 512.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00842",
+      "t": 8483.5311,
+      "u": 55,
+      "v": 4,
+      "amount": 21.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00843",
+      "t": 8496.6545,
+      "u": 38,
+      "v": 2,
+      "amount": 1393.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P00844",
+      "t": 8505.7516,
+      "u": -1,
+      "v": 62,
+      "amount": 723.45,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00845",
+      "t": 8508.561,
+      "u": 61,
+      "v": 56,
+      "amount": 15.3,
+      "kind": "payment"
+    },
+    {
+      "id": "P00846",
+      "t": 8522.1369,
+      "u": 38,
+      "v": 50,
+      "amount": 896.22,
+      "kind": "payment"
+    },
+    {
+      "id": "P00847",
+      "t": 8536.6119,
+      "u": 29,
+      "v": 56,
+      "amount": 80.36,
+      "kind": "payment"
+    },
+    {
+      "id": "P00848",
+      "t": 8537.7726,
+      "u": 37,
+      "v": 25,
+      "amount": 33.28,
+      "kind": "payment"
+    },
+    {
+      "id": "P00849",
+      "t": 8554.8578,
+      "u": 61,
+      "v": 56,
+      "amount": 64.69,
+      "kind": "payment"
+    },
+    {
+      "id": "P00850",
+      "t": 8559.251,
+      "u": 48,
+      "v": 37,
+      "amount": 84.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00851",
+      "t": 8569.2092,
+      "u": 1,
+      "v": 35,
+      "amount": 56.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00852",
+      "t": 8578.952,
+      "u": 6,
+      "v": 35,
+      "amount": 29.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00853",
+      "t": 8593.1005,
+      "u": 33,
+      "v": 8,
+      "amount": 32.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00854",
+      "t": 8607.8031,
+      "u": 54,
+      "v": 4,
+      "amount": 94.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00855",
+      "t": 8616.1231,
+      "u": 20,
+      "v": 35,
+      "amount": 11.28,
+      "kind": "payment"
+    },
+    {
+      "id": "P00856",
+      "t": 8626.1239,
+      "u": 45,
+      "v": 1,
+      "amount": 7,
+      "kind": "payment"
+    },
+    {
+      "id": "P00857",
+      "t": 8635.0541,
+      "u": -1,
+      "v": 12,
+      "amount": 490.38,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00858",
+      "t": 8646.0266,
+      "u": 45,
+      "v": 14,
+      "amount": 35.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P00859",
+      "t": 8650.3917,
+      "u": 56,
+      "v": 18,
+      "amount": 226.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00860",
+      "t": 8660.4718,
+      "u": 50,
+      "v": 56,
+      "amount": 73.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00861",
+      "t": 8675.4333,
+      "u": 34,
+      "v": 35,
+      "amount": 99.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00862",
+      "t": 8688.2189,
+      "u": 9,
+      "v": 44,
+      "amount": 48.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00863",
+      "t": 8693.5884,
+      "u": -1,
+      "v": 10,
+      "amount": 781,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00864",
+      "t": 8704.5967,
+      "u": 39,
+      "v": 4,
+      "amount": 22.08,
+      "kind": "payment"
+    },
+    {
+      "id": "P00865",
+      "t": 8718.9007,
+      "u": 36,
+      "v": 56,
+      "amount": 100.13,
+      "kind": "payment"
+    },
+    {
+      "id": "P00866",
+      "t": 8720.3646,
+      "u": 14,
+      "v": 8,
+      "amount": 90.89,
+      "kind": "payment"
+    },
+    {
+      "id": "P00867",
+      "t": 8738.2438,
+      "u": 22,
+      "v": 57,
+      "amount": 49.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00868",
+      "t": 8741.1892,
+      "u": 27,
+      "v": 4,
+      "amount": 44.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00869",
+      "t": 8754.3126,
+      "u": 16,
+      "v": 56,
+      "amount": 30.93,
+      "kind": "payment"
+    },
+    {
+      "id": "P00870",
+      "t": 8766.9157,
+      "u": 5,
+      "v": 6,
+      "amount": 87.18,
+      "kind": "payment"
+    },
+    {
+      "id": "P00871",
+      "t": 8775.196,
+      "u": 30,
+      "v": 35,
+      "amount": 12.54,
+      "kind": "payment"
+    },
+    {
+      "id": "P00872",
+      "t": 8789.1242,
+      "u": 13,
+      "v": 56,
+      "amount": 249.69,
+      "kind": "payment"
+    },
+    {
+      "id": "P00873",
+      "t": 8798.7609,
+      "u": 14,
+      "v": 4,
+      "amount": 5.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00874",
+      "t": 8802.8604,
+      "u": 1,
+      "v": 21,
+      "amount": 58.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00875",
+      "t": 8819.7537,
+      "u": 14,
+      "v": 4,
+      "amount": 48.82,
+      "kind": "payment"
+    },
+    {
+      "id": "P00876",
+      "t": 8823.4531,
+      "u": -1,
+      "v": 46,
+      "amount": 539.33,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00877",
+      "t": 8835.4758,
+      "u": 4,
+      "v": 18,
+      "amount": 612.19,
+      "kind": "payment"
+    },
+    {
+      "id": "P00878",
+      "t": 8844.0233,
+      "u": 39,
+      "v": 4,
+      "amount": 61.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P00879",
+      "t": 8859.1185,
+      "u": 24,
+      "v": 4,
+      "amount": 16.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00880",
+      "t": 8866.3252,
+      "u": 2,
+      "v": 4,
+      "amount": 25.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00881",
+      "t": 8873.9286,
+      "u": 38,
+      "v": 7,
+      "amount": 860.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00882",
+      "t": 8888.8517,
+      "u": 52,
+      "v": 4,
+      "amount": 119.42,
+      "kind": "payment"
+    },
+    {
+      "id": "P00883",
+      "t": 8898.77,
+      "u": 11,
+      "v": 35,
+      "amount": 42.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00884",
+      "t": 8903.4137,
+      "u": -1,
+      "v": 28,
+      "amount": 477.86,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00885",
+      "t": 8914.8541,
+      "u": 23,
+      "v": 4,
+      "amount": 21.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00886",
+      "t": 8924.054,
+      "u": 38,
+      "v": 33,
+      "amount": 933.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00887",
+      "t": 8937.3902,
+      "u": 45,
+      "v": 14,
+      "amount": 112.87,
+      "kind": "payment"
+    },
+    {
+      "id": "P00888",
+      "t": 8946.8999,
+      "u": 0,
+      "v": 56,
+      "amount": 46.11,
+      "kind": "payment"
+    },
+    {
+      "id": "P00889",
+      "t": 8955.9753,
+      "u": 49,
+      "v": 4,
+      "amount": 56.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00890",
+      "t": 8965.8652,
+      "u": 38,
+      "v": 31,
+      "amount": 1058.61,
+      "kind": "payment"
+    },
+    {
+      "id": "P00891",
+      "t": 8975.156,
+      "u": 15,
+      "v": 39,
+      "amount": 52.19,
+      "kind": "payment"
+    },
+    {
+      "id": "P00892",
+      "t": 8981.3096,
+      "u": 27,
+      "v": 4,
+      "amount": 231.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00893",
+      "t": 9000.434,
+      "u": 22,
+      "v": 57,
+      "amount": 35.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00894",
+      "t": 9006.0144,
+      "u": 42,
+      "v": 56,
+      "amount": 11.52,
+      "kind": "payment"
+    },
+    {
+      "id": "P00895",
+      "t": 9016.61,
+      "u": 23,
+      "v": 4,
+      "amount": 34.22,
+      "kind": "payment"
+    },
+    {
+      "id": "P00896",
+      "t": 9028.6283,
+      "u": 56,
+      "v": 18,
+      "amount": 1268.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00897",
+      "t": 9037.7959,
+      "u": 4,
+      "v": 18,
+      "amount": 420.74,
+      "kind": "payment"
+    },
+    {
+      "id": "P00898",
+      "t": 9043.36,
+      "u": 56,
+      "v": 18,
+      "amount": 520.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00899",
+      "t": 9052.9562,
+      "u": 29,
+      "v": 56,
+      "amount": 30.2,
+      "kind": "payment"
+    },
+    {
+      "id": "P00900",
+      "t": 9064.1011,
+      "u": 38,
+      "v": 11,
+      "amount": 1078.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00901",
+      "t": 9074.1785,
+      "u": 31,
+      "v": 4,
+      "amount": 43.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00902",
+      "t": 9086.1311,
+      "u": 47,
+      "v": 35,
+      "amount": 21.1,
+      "kind": "payment"
+    },
+    {
+      "id": "P00903",
+      "t": 9094.541,
+      "u": 13,
+      "v": 56,
+      "amount": 77.56,
+      "kind": "payment"
+    },
+    {
+      "id": "P00904",
+      "t": 9106.6434,
+      "u": -1,
+      "v": 19,
+      "amount": 296.28,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00905",
+      "t": 9121.431,
+      "u": -1,
+      "v": 34,
+      "amount": 1430.58,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00906",
+      "t": 9129.791,
+      "u": 34,
+      "v": 55,
+      "amount": 256.11,
+      "kind": "payment"
+    },
+    {
+      "id": "P00907",
+      "t": 9136.9516,
+      "u": 56,
+      "v": 18,
+      "amount": 400.23,
+      "kind": "payment"
+    },
+    {
+      "id": "P00908",
+      "t": 9148.7421,
+      "u": 5,
+      "v": 4,
+      "amount": 50.93,
+      "kind": "payment"
+    },
+    {
+      "id": "P00909",
+      "t": 9158.9977,
+      "u": 4,
+      "v": 18,
+      "amount": 1083.95,
+      "kind": "payment"
+    },
+    {
+      "id": "P00910",
+      "t": 9168.4964,
+      "u": 6,
+      "v": 40,
+      "amount": 88.8,
+      "kind": "payment"
+    },
+    {
+      "id": "P00911",
+      "t": 9176.9906,
+      "u": 14,
+      "v": 10,
+      "amount": 37.66,
+      "kind": "payment"
+    },
+    {
+      "id": "P00912",
+      "t": 9186.8554,
+      "u": 20,
+      "v": 56,
+      "amount": 22.67,
+      "kind": "payment"
+    },
+    {
+      "id": "P00913",
+      "t": 9195.6159,
+      "u": 11,
+      "v": 33,
+      "amount": 21.58,
+      "kind": "payment"
+    },
+    {
+      "id": "P00914",
+      "t": 9211.3259,
+      "u": 50,
+      "v": 54,
+      "amount": 57.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00915",
+      "t": 9215.5103,
+      "u": 34,
+      "v": 56,
+      "amount": 20.55,
+      "kind": "payment"
+    },
+    {
+      "id": "P00916",
+      "t": 9228.6822,
+      "u": 34,
+      "v": 56,
+      "amount": 51.76,
+      "kind": "payment"
+    },
+    {
+      "id": "P00917",
+      "t": 9235.7508,
+      "u": -1,
+      "v": 0,
+      "amount": 66.69,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00918",
+      "t": 9245.6965,
+      "u": 0,
+      "v": 35,
+      "amount": 72.47,
+      "kind": "payment"
+    },
+    {
+      "id": "P00919",
+      "t": 9255.6759,
+      "u": 39,
+      "v": 4,
+      "amount": 149.1,
+      "kind": "payment"
+    },
+    {
+      "id": "P00920",
+      "t": 9264.5285,
+      "u": 25,
+      "v": 4,
+      "amount": 18.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00921",
+      "t": 9282.1744,
+      "u": 25,
+      "v": 4,
+      "amount": 22.57,
+      "kind": "payment"
+    },
+    {
+      "id": "P00922",
+      "t": 9291.8511,
+      "u": 42,
+      "v": 35,
+      "amount": 63,
+      "kind": "payment"
+    },
+    {
+      "id": "P00923",
+      "t": 9299.2113,
+      "u": -1,
+      "v": 40,
+      "amount": 207.53,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00924",
+      "t": 9306.5303,
+      "u": 38,
+      "v": 12,
+      "amount": 1283.46,
+      "kind": "payment"
+    },
+    {
+      "id": "P00925",
+      "t": 9321.6125,
+      "u": -1,
+      "v": 31,
+      "amount": 446.88,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00926",
+      "t": 9331.2244,
+      "u": 45,
+      "v": 14,
+      "amount": 56.34,
+      "kind": "payment"
+    },
+    {
+      "id": "P00927",
+      "t": 9337.0168,
+      "u": 49,
+      "v": 59,
+      "amount": 42.56,
+      "kind": "payment"
+    },
+    {
+      "id": "P00928",
+      "t": 9347.9266,
+      "u": 8,
+      "v": 4,
+      "amount": 41.41,
+      "kind": "payment"
+    },
+    {
+      "id": "P00929",
+      "t": 9356.638,
+      "u": 9,
+      "v": 35,
+      "amount": 23,
+      "kind": "payment"
+    },
+    {
+      "id": "P00930",
+      "t": 9370.2048,
+      "u": 13,
+      "v": 22,
+      "amount": 97.45,
+      "kind": "payment"
+    },
+    {
+      "id": "P00931",
+      "t": 9379.3797,
+      "u": -1,
+      "v": 10,
+      "amount": 346.81,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00932",
+      "t": 9393.1053,
+      "u": 53,
+      "v": 29,
+      "amount": 69.85,
+      "kind": "payment"
+    },
+    {
+      "id": "P00933",
+      "t": 9394.6809,
+      "u": 56,
+      "v": 18,
+      "amount": 808.49,
+      "kind": "payment"
+    },
+    {
+      "id": "P00934",
+      "t": 9413.1477,
+      "u": 16,
+      "v": 41,
+      "amount": 71.48,
+      "kind": "payment"
+    },
+    {
+      "id": "P00935",
+      "t": 9423.0852,
+      "u": 62,
+      "v": 39,
+      "amount": 51.98,
+      "kind": "payment"
+    },
+    {
+      "id": "P00936",
+      "t": 9425.1955,
+      "u": 1,
+      "v": 4,
+      "amount": 95.78,
+      "kind": "payment"
+    },
+    {
+      "id": "P00937",
+      "t": 9441.2264,
+      "u": 14,
+      "v": 4,
+      "amount": 52.59,
+      "kind": "payment"
+    },
+    {
+      "id": "P00938",
+      "t": 9453.793,
+      "u": 56,
+      "v": 18,
+      "amount": 406.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00939",
+      "t": 9456.9165,
+      "u": -1,
+      "v": 61,
+      "amount": 518.5,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00940",
+      "t": 9469.9411,
+      "u": 56,
+      "v": 18,
+      "amount": 409.26,
+      "kind": "payment"
+    },
+    {
+      "id": "P00941",
+      "t": 9482.296,
+      "u": 4,
+      "v": 18,
+      "amount": 317.15,
+      "kind": "payment"
+    },
+    {
+      "id": "P00942",
+      "t": 9495.0086,
+      "u": 14,
+      "v": 10,
+      "amount": 16.07,
+      "kind": "payment"
+    },
+    {
+      "id": "P00943",
+      "t": 9504.2835,
+      "u": 15,
+      "v": 56,
+      "amount": 55.75,
+      "kind": "payment"
+    },
+    {
+      "id": "P00944",
+      "t": 9511.206,
+      "u": 56,
+      "v": 18,
+      "amount": 509.07,
+      "kind": "payment"
+    },
+    {
+      "id": "P00945",
+      "t": 9517.6536,
+      "u": 38,
+      "v": 25,
+      "amount": 1425.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00946",
+      "t": 9533.1817,
+      "u": 38,
+      "v": 57,
+      "amount": 1125.83,
+      "kind": "payment"
+    },
+    {
+      "id": "P00947",
+      "t": 9538.8279,
+      "u": 7,
+      "v": 52,
+      "amount": 37.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00948",
+      "t": 9552.5374,
+      "u": 36,
+      "v": 56,
+      "amount": 25.86,
+      "kind": "payment"
+    },
+    {
+      "id": "P00949",
+      "t": 9559.2645,
+      "u": 48,
+      "v": 45,
+      "amount": 10.83,
+      "kind": "payment"
+    },
+    {
+      "id": "P00950",
+      "t": 9575.3972,
+      "u": 16,
+      "v": 56,
+      "amount": 128.35,
+      "kind": "payment"
+    },
+    {
+      "id": "P00951",
+      "t": 9579.8355,
+      "u": 52,
+      "v": 4,
+      "amount": 72.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00952",
+      "t": 9590.6306,
+      "u": 46,
+      "v": 4,
+      "amount": 34.64,
+      "kind": "payment"
+    },
+    {
+      "id": "P00953",
+      "t": 9598.9402,
+      "u": 5,
+      "v": 4,
+      "amount": 32.56,
+      "kind": "payment"
+    },
+    {
+      "id": "P00954",
+      "t": 9607.7146,
+      "u": 58,
+      "v": 37,
+      "amount": 24.76,
+      "kind": "payment"
+    },
+    {
+      "id": "P00955",
+      "t": 9624.8897,
+      "u": 6,
+      "v": 35,
+      "amount": 32.14,
+      "kind": "payment"
+    },
+    {
+      "id": "P00956",
+      "t": 9635.655,
+      "u": 54,
+      "v": 4,
+      "amount": 100.59,
+      "kind": "payment"
+    },
+    {
+      "id": "P00957",
+      "t": 9643.2461,
+      "u": 44,
+      "v": 35,
+      "amount": 72.96,
+      "kind": "payment"
+    },
+    {
+      "id": "P00958",
+      "t": 9647.7811,
+      "u": 27,
+      "v": 11,
+      "amount": 145.93,
+      "kind": "payment"
+    },
+    {
+      "id": "P00959",
+      "t": 9664.0851,
+      "u": 42,
+      "v": 50,
+      "amount": 41.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00960",
+      "t": 9667.4377,
+      "u": 49,
+      "v": 4,
+      "amount": 53.96,
+      "kind": "payment"
+    },
+    {
+      "id": "P00961",
+      "t": 9685.1369,
+      "u": 61,
+      "v": 35,
+      "amount": 27.17,
+      "kind": "payment"
+    },
+    {
+      "id": "P00962",
+      "t": 9694.0166,
+      "u": 41,
+      "v": 56,
+      "amount": 110.7,
+      "kind": "payment"
+    },
+    {
+      "id": "P00963",
+      "t": 9697.7314,
+      "u": 42,
+      "v": 56,
+      "amount": 58.05,
+      "kind": "payment"
+    },
+    {
+      "id": "P00964",
+      "t": 9709.0255,
+      "u": 7,
+      "v": 4,
+      "amount": 29.48,
+      "kind": "payment"
+    },
+    {
+      "id": "P00965",
+      "t": 9725.4298,
+      "u": -1,
+      "v": 34,
+      "amount": 1651.98,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00966",
+      "t": 9734.2561,
+      "u": 52,
+      "v": 4,
+      "amount": 21.04,
+      "kind": "payment"
+    },
+    {
+      "id": "P00967",
+      "t": 9745.9274,
+      "u": 56,
+      "v": 18,
+      "amount": 626.65,
+      "kind": "payment"
+    },
+    {
+      "id": "P00968",
+      "t": 9755.0485,
+      "u": 46,
+      "v": 4,
+      "amount": 55.96,
+      "kind": "payment"
+    },
+    {
+      "id": "P00969",
+      "t": 9761.7402,
+      "u": 50,
+      "v": 56,
+      "amount": 12.16,
+      "kind": "payment"
+    },
+    {
+      "id": "P00970",
+      "t": 9771.7332,
+      "u": 20,
+      "v": 30,
+      "amount": 24.21,
+      "kind": "payment"
+    },
+    {
+      "id": "P00971",
+      "t": 9787.6326,
+      "u": -1,
+      "v": 49,
+      "amount": 72.17,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00972",
+      "t": 9791.5341,
+      "u": 7,
+      "v": 61,
+      "amount": 144.52,
+      "kind": "payment"
+    },
+    {
+      "id": "P00973",
+      "t": 9798.681,
+      "u": 27,
+      "v": 11,
+      "amount": 17.91,
+      "kind": "payment"
+    },
+    {
+      "id": "P00974",
+      "t": 9816.2034,
+      "u": 31,
+      "v": 35,
+      "amount": 157.07,
+      "kind": "payment"
+    },
+    {
+      "id": "P00975",
+      "t": 9827.0871,
+      "u": 52,
+      "v": 4,
+      "amount": 87.37,
+      "kind": "payment"
+    },
+    {
+      "id": "P00976",
+      "t": 9830.3924,
+      "u": 4,
+      "v": 18,
+      "amount": 620.07,
+      "kind": "payment"
+    },
+    {
+      "id": "P00977",
+      "t": 9838.1564,
+      "u": -1,
+      "v": 57,
+      "amount": 309.51,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00978",
+      "t": 9848.739,
+      "u": 38,
+      "v": 42,
+      "amount": 1003.38,
+      "kind": "payment"
+    },
+    {
+      "id": "P00979",
+      "t": 9858.4477,
+      "u": 40,
+      "v": 12,
+      "amount": 80.12,
+      "kind": "payment"
+    },
+    {
+      "id": "P00980",
+      "t": 9873.6398,
+      "u": 49,
+      "v": 4,
+      "amount": 55.26,
+      "kind": "payment"
+    },
+    {
+      "id": "P00981",
+      "t": 9885.2294,
+      "u": 41,
+      "v": 31,
+      "amount": 81.86,
+      "kind": "payment"
+    },
+    {
+      "id": "P00982",
+      "t": 9898.2298,
+      "u": 44,
+      "v": 56,
+      "amount": 27.4,
+      "kind": "payment"
+    },
+    {
+      "id": "P00983",
+      "t": 9904.7394,
+      "u": 5,
+      "v": 6,
+      "amount": 32.68,
+      "kind": "payment"
+    },
+    {
+      "id": "P00984",
+      "t": 9912.9826,
+      "u": 61,
+      "v": 62,
+      "amount": 96.84,
+      "kind": "payment"
+    },
+    {
+      "id": "P00985",
+      "t": 9922.1638,
+      "u": 39,
+      "v": 50,
+      "amount": 26.01,
+      "kind": "payment"
+    },
+    {
+      "id": "P00986",
+      "t": 9933.4529,
+      "u": -1,
+      "v": 47,
+      "amount": 1453.97,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00987",
+      "t": 9945.2443,
+      "u": 49,
+      "v": 59,
+      "amount": 78.26,
+      "kind": "payment"
+    },
+    {
+      "id": "P00988",
+      "t": 9952.1587,
+      "u": 58,
+      "v": 35,
+      "amount": 18.6,
+      "kind": "payment"
+    },
+    {
+      "id": "P00989",
+      "t": 9968.5258,
+      "u": 0,
+      "v": 56,
+      "amount": 67.94,
+      "kind": "payment"
+    },
+    {
+      "id": "P00990",
+      "t": 9971.4415,
+      "u": 8,
+      "v": 4,
+      "amount": 39.02,
+      "kind": "payment"
+    },
+    {
+      "id": "P00991",
+      "t": 9979.9759,
+      "u": 30,
+      "v": 26,
+      "amount": 15.53,
+      "kind": "payment"
+    },
+    {
+      "id": "P00992",
+      "t": 9998.9138,
+      "u": 55,
+      "v": 41,
+      "amount": 43.46,
+      "kind": "payment"
+    },
+    {
+      "id": "P00993",
+      "t": 10000.435,
+      "u": 51,
+      "v": 4,
+      "amount": 8.29,
+      "kind": "payment"
+    },
+    {
+      "id": "P00994",
+      "t": 10019.1718,
+      "u": -1,
+      "v": 24,
+      "amount": 572.58,
+      "kind": "deposit"
+    },
+    {
+      "id": "P00995",
+      "t": 10027.4492,
+      "u": 55,
+      "v": 35,
+      "amount": 99.29,
+      "kind": "payment"
+    },
+    {
+      "id": "P00996",
+      "t": 10036.2084,
+      "u": 41,
+      "v": 56,
+      "amount": 46.04,
+      "kind": "payment"
+    },
+    {
+      "id": "P00997",
+      "t": 10044.2427,
+      "u": 28,
+      "v": 56,
+      "amount": 19.69,
+      "kind": "payment"
+    },
+    {
+      "id": "P00998",
+      "t": 10056.1288,
+      "u": 38,
+      "v": 6,
+      "amount": 1017.33,
+      "kind": "payment"
+    },
+    {
+      "id": "P00999",
+      "t": 10066.5652,
+      "u": 7,
+      "v": 35,
+      "amount": 49.03,
+      "kind": "payment"
+    },
+    {
+      "id": "P01000",
+      "t": 10070.4765,
+      "u": -1,
+      "v": 23,
+      "amount": 225.39,
+      "kind": "deposit"
+    }
+  ],
+  "truth": {
+    "P01001": true,
+    "P01002": true,
+    "P01003": true,
+    "P01004": true,
+    "P01005": true,
+    "P01006": true,
+    "P01007": true,
+    "P01008": false,
+    "P01009": true,
+    "P01010": true,
+    "P01011": true,
+    "P01012": true,
+    "P01013": true,
+    "P01014": true,
+    "P01015": true,
+    "P01016": true,
+    "P01017": true,
+    "P00001": false,
+    "P00002": false,
+    "P00003": false,
+    "P00004": false,
+    "P00006": false,
+    "P00008": false,
+    "P00009": false,
+    "P00010": false,
+    "P00011": false,
+    "P00012": false,
+    "P00013": false,
+    "P00014": false,
+    "P00015": false,
+    "P00016": false,
+    "P00017": false,
+    "P00018": false,
+    "P00019": false,
+    "P00020": false,
+    "P00021": false,
+    "P00022": false,
+    "P00023": false,
+    "P00024": false,
+    "P00025": false,
+    "P00026": false,
+    "P00027": false,
+    "P00028": false,
+    "P00029": false,
+    "P00031": false,
+    "P00032": false,
+    "P00033": false,
+    "P00034": false,
+    "P00035": false,
+    "P00036": false,
+    "P00037": false,
+    "P00038": false,
+    "P00039": false,
+    "P00040": false,
+    "P00041": false,
+    "P00042": false,
+    "P00043": false,
+    "P00044": false,
+    "P00045": false,
+    "P00047": false,
+    "P00048": false,
+    "P00049": false,
+    "P00050": false,
+    "P00051": false,
+    "P00052": false,
+    "P00053": false,
+    "P00054": false,
+    "P00055": false,
+    "P00056": false,
+    "P00057": false,
+    "P00058": false,
+    "P00059": false,
+    "P00060": false,
+    "P00061": false,
+    "P00062": false,
+    "P00063": false,
+    "P00064": false,
+    "P00065": false,
+    "P00066": false,
+    "P00067": false,
+    "P00068": false,
+    "P00069": false,
+    "P00070": false,
+    "P00071": false,
+    "P00072": false,
+    "P00073": false,
+    "P00075": false,
+    "P00076": false,
+    "P00077": false,
+    "P00078": false,
+    "P00079": false,
+    "P00081": false,
+    "P00082": false,
+    "P00083": false,
+    "P00084": false,
+    "P00085": false,
+    "P00086": false,
+    "P00087": false,
+    "P00088": false,
+    "P00089": false,
+    "P00090": false,
+    "P00091": false,
+    "P00093": false,
+    "P00094": false,
+    "P00095": false,
+    "P00096": false,
+    "P00097": false,
+    "P00098": false,
+    "P00099": false,
+    "P00100": false,
+    "P00104": false,
+    "P00105": false,
+    "P00106": false,
+    "P00107": false,
+    "P00108": false,
+    "P00109": false,
+    "P00110": false,
+    "P00111": false,
+    "P00112": false,
+    "P00113": false,
+    "P00114": false,
+    "P00115": false,
+    "P00116": false,
+    "P00117": false,
+    "P00118": false,
+    "P00119": false,
+    "P00120": false,
+    "P00121": false,
+    "P00122": false,
+    "P00123": false,
+    "P00125": false,
+    "P00126": false,
+    "P00127": false,
+    "P00128": false,
+    "P00129": false,
+    "P00131": false,
+    "P00132": false,
+    "P00133": false,
+    "P00134": false,
+    "P00135": false,
+    "P00136": false,
+    "P00137": false,
+    "P00138": false,
+    "P00139": false,
+    "P00140": false,
+    "P00141": false,
+    "P00142": false,
+    "P00143": false,
+    "P00144": false,
+    "P00145": false,
+    "P00146": false,
+    "P00147": false,
+    "P00148": false,
+    "P00149": false,
+    "P00150": false,
+    "P00151": false,
+    "P00152": false,
+    "P00153": false,
+    "P00155": false,
+    "P00156": false,
+    "P00157": false,
+    "P00158": false,
+    "P00159": false,
+    "P00160": false,
+    "P00161": false,
+    "P00162": false,
+    "P00163": false,
+    "P00164": false,
+    "P00165": false,
+    "P00166": false,
+    "P00167": false,
+    "P00168": false,
+    "P00169": false,
+    "P00170": false,
+    "P00171": false,
+    "P00172": false,
+    "P00173": false,
+    "P00174": false,
+    "P00175": false,
+    "P00176": false,
+    "P00177": false,
+    "P00178": false,
+    "P00179": false,
+    "P00180": false,
+    "P00181": false,
+    "P00182": false,
+    "P00183": false,
+    "P00184": false,
+    "P00185": false,
+    "P00186": false,
+    "P00188": false,
+    "P00189": false,
+    "P00190": false,
+    "P00191": false,
+    "P00192": false,
+    "P00193": false,
+    "P00194": false,
+    "P00196": false,
+    "P00197": false,
+    "P00198": false,
+    "P00199": false,
+    "P00200": false,
+    "P00201": false,
+    "P00202": false,
+    "P00203": false,
+    "P00204": false,
+    "P00205": false,
+    "P00206": false,
+    "P00207": false,
+    "P00208": false,
+    "P00209": false,
+    "P00210": false,
+    "P00211": false,
+    "P00212": false,
+    "P00213": false,
+    "P00214": false,
+    "P00215": false,
+    "P00216": false,
+    "P00217": false,
+    "P00218": false,
+    "P00219": false,
+    "P00222": false,
+    "P00223": false,
+    "P00224": false,
+    "P00225": false,
+    "P00226": false,
+    "P00227": false,
+    "P00228": false,
+    "P00229": false,
+    "P00230": false,
+    "P00231": false,
+    "P00232": false,
+    "P00233": false,
+    "P00234": false,
+    "P00235": false,
+    "P00237": false,
+    "P00238": false,
+    "P00239": false,
+    "P00240": false,
+    "P00241": false,
+    "P00242": false,
+    "P00243": false,
+    "P00244": false,
+    "P00245": false,
+    "P00246": false,
+    "P00247": false,
+    "P00248": false,
+    "P00249": false,
+    "P00250": false,
+    "P00251": false,
+    "P00252": false,
+    "P00254": false,
+    "P00255": false,
+    "P00256": false,
+    "P00257": false,
+    "P00258": false,
+    "P00259": false,
+    "P00260": false,
+    "P00261": false,
+    "P00262": false,
+    "P00263": false,
+    "P00264": false,
+    "P00265": false,
+    "P00266": false,
+    "P00267": false,
+    "P00268": false,
+    "P00269": false,
+    "P00270": false,
+    "P00271": false,
+    "P00272": false,
+    "P00273": false,
+    "P00274": false,
+    "P00275": false,
+    "P00277": false,
+    "P00279": false,
+    "P00280": false,
+    "P00281": false,
+    "P00282": false,
+    "P00283": false,
+    "P00284": false,
+    "P00285": false,
+    "P00286": false,
+    "P00287": false,
+    "P00288": false,
+    "P00290": false,
+    "P00291": false,
+    "P00292": false,
+    "P00293": false,
+    "P00294": false,
+    "P00296": false,
+    "P00297": false,
+    "P00298": false,
+    "P00299": false,
+    "P00300": false,
+    "P00301": false,
+    "P00302": false,
+    "P00303": false,
+    "P00304": false,
+    "P00305": false,
+    "P00306": false,
+    "P00307": false,
+    "P00308": false,
+    "P00309": false,
+    "P00310": false,
+    "P00311": false,
+    "P00312": false,
+    "P00313": false,
+    "P00314": false,
+    "P00316": false,
+    "P00317": false,
+    "P00318": false,
+    "P00319": false,
+    "P00320": false,
+    "P00321": false,
+    "P00322": false,
+    "P00323": false,
+    "P00324": false,
+    "P00325": false,
+    "P00326": false,
+    "P00327": false,
+    "P00328": false,
+    "P00329": false,
+    "P00331": false,
+    "P00332": false,
+    "P00333": false,
+    "P00335": false,
+    "P00336": false,
+    "P00337": false,
+    "P00338": false,
+    "P00339": false,
+    "P00340": false,
+    "P00341": false,
+    "P00342": false,
+    "P00343": false,
+    "P00344": false,
+    "P00345": false,
+    "P00346": false,
+    "P00347": false,
+    "P00348": false,
+    "P00349": false,
+    "P00353": false,
+    "P00354": false,
+    "P00355": false,
+    "P00356": false,
+    "P00357": false,
+    "P00359": false,
+    "P00360": false,
+    "P00361": false,
+    "P00362": false,
+    "P00363": false,
+    "P00364": false,
+    "P00365": false,
+    "P00366": false,
+    "P00367": false,
+    "P00368": false,
+    "P00369": false,
+    "P00370": false,
+    "P00372": false,
+    "P00373": false,
+    "P00374": false,
+    "P00375": false,
+    "P00376": false,
+    "P00377": false,
+    "P00378": false,
+    "P00379": false,
+    "P00381": false,
+    "P00382": false,
+    "P00383": false,
+    "P00385": false,
+    "P00386": false,
+    "P00387": false,
+    "P00388": false,
+    "P00389": false,
+    "P00390": false,
+    "P00391": false,
+    "P00392": false,
+    "P00393": false,
+    "P00394": false,
+    "P00395": false,
+    "P00396": false,
+    "P00397": false,
+    "P00398": false,
+    "P00400": false,
+    "P00401": false,
+    "P00402": false,
+    "P00403": false,
+    "P00404": false,
+    "P00406": false,
+    "P00407": false,
+    "P00408": false,
+    "P00409": false,
+    "P00410": false,
+    "P00411": false,
+    "P00412": false,
+    "P00413": false,
+    "P00414": false,
+    "P00415": false,
+    "P00416": false,
+    "P00417": false,
+    "P00418": false,
+    "P00419": false,
+    "P00420": false,
+    "P00421": false,
+    "P00422": false,
+    "P00423": false,
+    "P00424": false,
+    "P00425": false,
+    "P00426": false,
+    "P00427": false,
+    "P00428": false,
+    "P00429": false,
+    "P00430": false,
+    "P00432": false,
+    "P00433": false,
+    "P00434": false,
+    "P00436": false,
+    "P00437": false,
+    "P00438": false,
+    "P00439": false,
+    "P00440": false,
+    "P00441": false,
+    "P00442": false,
+    "P00443": false,
+    "P00444": false,
+    "P00446": false,
+    "P00449": false,
+    "P00450": false,
+    "P00451": false,
+    "P00452": false,
+    "P00453": false,
+    "P00454": false,
+    "P00455": false,
+    "P00456": false,
+    "P00457": false,
+    "P00458": false,
+    "P00459": false,
+    "P00460": false,
+    "P00461": false,
+    "P00462": false,
+    "P00463": false,
+    "P00464": false,
+    "P00465": false,
+    "P00466": false,
+    "P00467": false,
+    "P00468": false,
+    "P00469": false,
+    "P00470": false,
+    "P00471": false,
+    "P00472": false,
+    "P00473": false,
+    "P00474": false,
+    "P00475": false,
+    "P00476": false,
+    "P00477": false,
+    "P00478": false,
+    "P00479": false,
+    "P00480": false,
+    "P00481": false,
+    "P00482": false,
+    "P00483": false,
+    "P00484": false,
+    "P00485": false,
+    "P00486": false,
+    "P00487": false,
+    "P00488": false,
+    "P00489": false,
+    "P00490": false,
+    "P00491": false,
+    "P00492": false,
+    "P00493": false,
+    "P00494": false,
+    "P00495": false,
+    "P00496": false,
+    "P00497": false,
+    "P00498": false,
+    "P00499": false,
+    "P00500": false,
+    "P00501": false,
+    "P00502": false,
+    "P00503": false,
+    "P00504": false,
+    "P00505": false,
+    "P00506": false,
+    "P00508": false,
+    "P00509": false,
+    "P00511": false,
+    "P00512": false,
+    "P00513": false,
+    "P00514": false,
+    "P00515": false,
+    "P00516": false,
+    "P00517": false,
+    "P00518": false,
+    "P00519": false,
+    "P00520": false,
+    "P00521": false,
+    "P00522": false,
+    "P00523": false,
+    "P00524": false,
+    "P00525": false,
+    "P00527": false,
+    "P00528": false,
+    "P00529": false,
+    "P00530": false,
+    "P00531": false,
+    "P00532": false,
+    "P00533": false,
+    "P00534": false,
+    "P00535": false,
+    "P00536": false,
+    "P00537": false,
+    "P00538": false,
+    "P00539": false,
+    "P00540": false,
+    "P00541": false,
+    "P00542": false,
+    "P00543": false,
+    "P00544": false,
+    "P00545": false,
+    "P00546": false,
+    "P00548": false,
+    "P00549": false,
+    "P00550": false,
+    "P00551": false,
+    "P00552": false,
+    "P00553": false,
+    "P00554": false,
+    "P00555": false,
+    "P00556": false,
+    "P00557": false,
+    "P00560": false,
+    "P00561": false,
+    "P00562": false,
+    "P00563": false,
+    "P00564": false,
+    "P00565": false,
+    "P00566": false,
+    "P00567": false,
+    "P00568": false,
+    "P00569": false,
+    "P00570": false,
+    "P00571": false,
+    "P00572": false,
+    "P00573": false,
+    "P00575": false,
+    "P00576": false,
+    "P00577": false,
+    "P00578": false,
+    "P00579": false,
+    "P00580": false,
+    "P00581": false,
+    "P00582": false,
+    "P00583": false,
+    "P00584": false,
+    "P00585": false,
+    "P00586": false,
+    "P00587": false,
+    "P00588": false,
+    "P00589": false,
+    "P00590": false,
+    "P00591": false,
+    "P00592": false,
+    "P00593": false,
+    "P00594": false,
+    "P00596": false,
+    "P00597": false,
+    "P00598": false,
+    "P00599": false,
+    "P00600": false,
+    "P00601": false,
+    "P00602": false,
+    "P00603": false,
+    "P00604": false,
+    "P00605": false,
+    "P00606": false,
+    "P00607": false,
+    "P00608": false,
+    "P00609": false,
+    "P00610": false,
+    "P00611": false,
+    "P00612": false,
+    "P00613": false,
+    "P00614": false,
+    "P00615": false,
+    "P00616": false,
+    "P00617": false,
+    "P00618": false,
+    "P00619": false,
+    "P00620": false,
+    "P00621": false,
+    "P00622": false,
+    "P00623": false,
+    "P00624": false,
+    "P00625": false,
+    "P00626": false,
+    "P00627": false,
+    "P00628": false,
+    "P00629": false,
+    "P00630": false,
+    "P00631": false,
+    "P00632": false,
+    "P00633": false,
+    "P00634": false,
+    "P00635": false,
+    "P00636": false,
+    "P00637": false,
+    "P00638": false,
+    "P00639": false,
+    "P00640": false,
+    "P00641": false,
+    "P00642": false,
+    "P00643": false,
+    "P00644": false,
+    "P00645": false,
+    "P00646": false,
+    "P00647": false,
+    "P00648": false,
+    "P00650": false,
+    "P00651": false,
+    "P00652": false,
+    "P00653": false,
+    "P00654": false,
+    "P00655": false,
+    "P00656": false,
+    "P00657": false,
+    "P00658": false,
+    "P00660": false,
+    "P00661": false,
+    "P00662": false,
+    "P00664": false,
+    "P00665": false,
+    "P00666": false,
+    "P00668": false,
+    "P00669": false,
+    "P00670": false,
+    "P00671": false,
+    "P00672": false,
+    "P00673": false,
+    "P00674": false,
+    "P00675": false,
+    "P00676": false,
+    "P00677": false,
+    "P00678": false,
+    "P00679": false,
+    "P00681": false,
+    "P00682": false,
+    "P00683": false,
+    "P00684": false,
+    "P00685": false,
+    "P00686": false,
+    "P00687": false,
+    "P00688": false,
+    "P00689": false,
+    "P00690": false,
+    "P00691": false,
+    "P00693": false,
+    "P00694": false,
+    "P00695": false,
+    "P00696": false,
+    "P00697": false,
+    "P00702": false,
+    "P00703": false,
+    "P00704": false,
+    "P00705": false,
+    "P00706": false,
+    "P00707": false,
+    "P00708": false,
+    "P00709": false,
+    "P00710": false,
+    "P00711": false,
+    "P00712": false,
+    "P00713": false,
+    "P00714": false,
+    "P00715": false,
+    "P00716": false,
+    "P00718": false,
+    "P00719": false,
+    "P00720": false,
+    "P00721": false,
+    "P00722": false,
+    "P00723": false,
+    "P00724": false,
+    "P00725": false,
+    "P00726": false,
+    "P00727": false,
+    "P00728": false,
+    "P00729": false,
+    "P00730": false,
+    "P00731": false,
+    "P00732": false,
+    "P00733": false,
+    "P00734": false,
+    "P00735": false,
+    "P00736": false,
+    "P00737": false,
+    "P00738": false,
+    "P00739": false,
+    "P00740": false,
+    "P00741": false,
+    "P00742": false,
+    "P00743": false,
+    "P00744": false,
+    "P00745": false,
+    "P00746": false,
+    "P00750": false,
+    "P00751": false,
+    "P00752": false,
+    "P00753": false,
+    "P00754": false,
+    "P00756": false,
+    "P00758": false,
+    "P00759": false,
+    "P00761": false,
+    "P00762": false,
+    "P00763": false,
+    "P00764": false,
+    "P00765": false,
+    "P00766": false,
+    "P00767": false,
+    "P00768": false,
+    "P00769": false,
+    "P00770": false,
+    "P00771": false,
+    "P00772": false,
+    "P00773": false,
+    "P00774": false,
+    "P00775": false,
+    "P00776": false,
+    "P00778": false,
+    "P00780": false,
+    "P00781": false,
+    "P00782": false,
+    "P00783": false,
+    "P00784": false,
+    "P00785": false,
+    "P00787": false,
+    "P00788": false,
+    "P00789": false,
+    "P00790": false,
+    "P00791": false,
+    "P00792": false,
+    "P00793": false,
+    "P00794": false,
+    "P00795": false,
+    "P00796": false,
+    "P00797": false,
+    "P00798": false,
+    "P00799": false,
+    "P00800": false,
+    "P00801": false,
+    "P00802": false,
+    "P00803": false,
+    "P00804": false,
+    "P00805": false,
+    "P00806": false,
+    "P00807": false,
+    "P00809": false,
+    "P00810": false,
+    "P00811": false,
+    "P00812": false,
+    "P00813": false,
+    "P00814": false,
+    "P00815": false,
+    "P00816": false,
+    "P00817": false,
+    "P00819": false,
+    "P00820": false,
+    "P00821": false,
+    "P00822": false,
+    "P00823": false,
+    "P00824": false,
+    "P00826": false,
+    "P00827": false,
+    "P00828": false,
+    "P00829": false,
+    "P00830": false,
+    "P00832": false,
+    "P00833": false,
+    "P00834": false,
+    "P00837": false,
+    "P00838": false,
+    "P00840": false,
+    "P00841": false,
+    "P00842": false,
+    "P00843": false,
+    "P00845": false,
+    "P00846": false,
+    "P00847": false,
+    "P00848": false,
+    "P00849": false,
+    "P00850": false,
+    "P00851": false,
+    "P00852": false,
+    "P00853": false,
+    "P00854": false,
+    "P00855": false,
+    "P00856": false,
+    "P00858": false,
+    "P00859": false,
+    "P00860": false,
+    "P00861": false,
+    "P00862": false,
+    "P00864": false,
+    "P00865": false,
+    "P00866": false,
+    "P00867": false,
+    "P00868": false,
+    "P00869": false,
+    "P00870": false,
+    "P00871": false,
+    "P00872": false,
+    "P00873": false,
+    "P00874": false,
+    "P00875": false,
+    "P00877": false,
+    "P00878": false,
+    "P00879": false,
+    "P00880": false,
+    "P00881": false,
+    "P00882": false,
+    "P00883": false,
+    "P00885": false,
+    "P00886": false,
+    "P00887": false,
+    "P00888": false,
+    "P00889": false,
+    "P00890": false,
+    "P00891": false,
+    "P00892": false,
+    "P00893": false,
+    "P00894": false,
+    "P00895": false,
+    "P00896": false,
+    "P00897": false,
+    "P00898": false,
+    "P00899": false,
+    "P00900": false,
+    "P00901": false,
+    "P00902": false,
+    "P00903": false,
+    "P00906": false,
+    "P00907": false,
+    "P00908": false,
+    "P00909": false,
+    "P00910": false,
+    "P00911": false,
+    "P00912": false,
+    "P00913": false,
+    "P00914": false,
+    "P00915": false,
+    "P00916": false,
+    "P00918": false,
+    "P00919": false,
+    "P00920": false,
+    "P00921": false,
+    "P00922": false,
+    "P00924": false,
+    "P00926": false,
+    "P00927": false,
+    "P00928": false,
+    "P00929": false,
+    "P00930": false,
+    "P00932": false,
+    "P00933": false,
+    "P00934": false,
+    "P00935": false,
+    "P00936": false,
+    "P00937": false,
+    "P00938": false,
+    "P00940": false,
+    "P00941": false,
+    "P00942": false,
+    "P00943": false,
+    "P00944": false,
+    "P00945": false,
+    "P00946": false,
+    "P00947": false,
+    "P00948": false,
+    "P00949": false,
+    "P00950": false,
+    "P00951": false,
+    "P00952": false,
+    "P00953": false,
+    "P00954": false,
+    "P00955": false,
+    "P00956": false,
+    "P00957": false,
+    "P00958": false,
+    "P00959": false,
+    "P00960": false,
+    "P00961": false,
+    "P00962": false,
+    "P00963": false,
+    "P00964": false,
+    "P00966": false,
+    "P00967": false,
+    "P00968": false,
+    "P00969": false,
+    "P00970": false,
+    "P00972": false,
+    "P00973": false,
+    "P00974": false,
+    "P00975": false,
+    "P00976": false,
+    "P00978": false,
+    "P00979": false,
+    "P00980": false,
+    "P00981": false,
+    "P00982": false,
+    "P00983": false,
+    "P00984": false,
+    "P00985": false,
+    "P00987": false,
+    "P00988": false,
+    "P00989": false,
+    "P00990": false,
+    "P00991": false,
+    "P00992": false,
+    "P00993": false,
+    "P00995": false,
+    "P00996": false,
+    "P00997": false,
+    "P00998": false,
+    "P00999": false
+  },
+  "focus": [
+    "P01001",
+    "P01002",
+    "P01003",
+    "P01004",
+    "P01005",
+    "P01006",
+    "P01007",
+    "P01008",
+    "P01009",
+    "P01010",
+    "P01011",
+    "P01012",
+    "P01013",
+    "P01014",
+    "P01015",
+    "P01016",
+    "P01017"
+  ],
+  "bookmarks": [
+    {
+      "label": "Collection begins",
+      "id": "P01001"
+    },
+    {
+      "label": "Merge request",
+      "id": "P01015"
+    }
+  ],
+  "startIndex": 530,
+  "description": "Collections split across intermediaries, merge again, and partly return through a cycle."
+}
