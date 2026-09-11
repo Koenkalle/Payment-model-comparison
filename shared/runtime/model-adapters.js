@@ -3,7 +3,9 @@
   'use strict';
   if(typeof module!=='undefined'){
     const registry=require('./model-registry');
-    for(const entry of require('../../models/registry.json').models)if(entry.browser)require('../../'+entry.browser);
+    const manifest=require('../../models/registry.json');
+    for(const source of manifest.browser_support)require('../../'+source);
+    for(const entry of manifest.models)if(entry.browser)require('../../'+entry.browser);
     module.exports=registry;
   }else if(!global.FraudAdapters)throw Error('Model registry is not loaded.');
 })(globalThis);

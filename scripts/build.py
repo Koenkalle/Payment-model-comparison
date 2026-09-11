@@ -56,6 +56,8 @@ def navigation(registry, active):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--tool', default='all', help='Registered tool ID, or all (default).')
+    parser.add_argument('--legacy-fragment', action='store_true',
+                        help='Also write the comparison embed fragment beside this repository.')
     args = parser.parse_args()
     registry, catalog = read_json('tools/registry.json'), read_json('designs.json')
     registry['shared_scripts'] = browser_scripts() + registry['shared_scripts']
@@ -90,6 +92,8 @@ def main():
             payload['default'] = payload['models'][0]['id']
         if tool.get('explanation'):
             payload['explanation'] = read_json(tool['explanation'])
+        if tool.get('native_models'):
+            payload['native_models'] = [descriptors[identifier] for identifier in tool['native_models']]
         template = source(tool['template'])
         # Explicit marker supports any root element; legacy templates use their closing root div.
         data = json_script(tool['model_data_id'], payload)
@@ -105,12 +109,12 @@ def main():
         page = shell.replace('<!-- FRAUD_DEMO_FRAGMENT -->', navigation(registry, tool['id']) + fragment)
         page = re.sub(r'<title>.*?</title>', lambda _: '<title>' + html.escape(tool['label']) + '</title>', page, count=1)
         (ROOT / tool['output']).write_text(page)
-        if tool.get('legacy_fragment'):
+        if args.legacy_fragment and tool.get('legacy_fragment'):
             (ROOT.parent / tool['legacy_fragment']).write_text(fragment)
         print(ROOT / tool['output'])
     # Track source and deliverable hashes, excluding local caches and browser artifacts.
     paths = [path for path in ROOT.rglob('*') if path.is_file() and '.git' not in path.parts
-             and '__pycache__' not in path.parts and path.name != 'manifest.json'
+             and '__pycache__' not in path.parts and path != ROOT / 'manifest.json'
              and path.suffix != '.pyc' and 'node_modules' not in path.parts
              and 'artifacts' not in path.parts and 'test-artifacts' not in path.parts and '.vscode' not in path.parts]
     manifest = {'version': 12, 'file_sha256': {

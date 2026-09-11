@@ -1,0 +1,4 @@
+{
+  "loader": "synthetic_payments",
+  "options": {"name": "takeover", "size": "large", "seed": 271828}
+}

@@ -58,6 +58,9 @@ class BuildTests(unittest.TestCase):
                 self.assertEqual(positions, sorted(positions))
                 if tool.get('explanation'):
                     self.assertEqual(payload['explanation'], json.loads((ROOT / tool['explanation']).read_text()))
+                if tool.get('native_models'):
+                    self.assertEqual([model['id'] for model in payload['native_models']], tool['native_models'])
+                    self.assertNotIn('native_demo', payload)
 
     def test_duplicate_tools_are_rejected(self):
         registry = json.loads((ROOT / 'tools/registry.json').read_text())

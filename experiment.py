@@ -9,7 +9,7 @@ def main():
     logging.basicConfig(level=logging.INFO,format='%(message)s')
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='command',required=True)
     sub.add_parser('list',help='List model and dataset implementations and capabilities.')
-    for command in ('prepare','train','evaluate'):
+    for command in ('prepare','train','evaluate','export-fraud'):
         child=sub.add_parser(command);child.add_argument('--config',required=True,type=Path)
         child.add_argument('--output',required=True,type=Path)
         if command=='evaluate':child.add_argument('--artifact',required=True,type=Path);child.add_argument('--partition',choices=['all','train','validation','model_validation','policy_validation','test'],default='all')
@@ -23,14 +23,20 @@ def main():
         if args.command=='train':
             _,result=train_experiment(config,args.output,base);print(json.dumps(result['metrics'],indent=2));return
         if args.output.exists():raise ValueError('Output already exists; choose a new file.')
-        if args.command=='prepare':
+        if args.command=='export-fraud':
+            from framework.fraud_export import export_fraud
+            output=export_fraud(config,base)
+        elif args.command=='prepare':
             data=load_dataset(config,base)
             if not isinstance(data,EventDataset):raise ValueError('prepare exports payment-event datasets; numeric CSV feeds the experiment runner directly.')
             output=data.document
         else:output=evaluate_artifact(args.artifact,config,base,args.partition)
-        args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(output,indent=2,allow_nan=False)+'\n');print(args.output)
+        serialized=json.dumps(output,indent=2,allow_nan=False)+'\n'
+        args.output.parent.mkdir(parents=True,exist_ok=True)
+        with args.output.open('x') as stream:stream.write(serialized)
+        print(args.output)
     except ImportError as error:
         parser.exit(2,str(error)+'; install requirements-temporal.txt for graph models or requirements-models.txt for tabular models.\n')
-    except (ValueError,KeyError,RuntimeError,FileNotFoundError) as error:parser.exit(2,str(error)+'\n')
+    except (ValueError,KeyError,RuntimeError,FileNotFoundError,FileExistsError) as error:parser.exit(2,str(error)+'\n')
 
 if __name__=='__main__':main()

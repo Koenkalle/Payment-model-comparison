@@ -1,21 +1,36 @@
 (function(){
   'use strict';
   const root=document.getElementById('fraud-memory-demo'),$=id=>root.querySelector('#'+id),core=globalThis.FraudCore,sc=globalThis.FraudScenarios;
-  const bundle=JSON.parse($('fd-model-data').textContent),models=bundle.models,ns='http://www.w3.org/2000/svg',compare=globalThis.FraudComparison;
+  const bundle=JSON.parse($('fd-model-data').textContent),baseModels=bundle.models,ns='http://www.w3.org/2000/svg',compare=globalThis.FraudComparison;
+  const nativeDefinitions=bundle.native_models||[],definitions=[...baseModels,...nativeDefinitions];
+  const nativeClient=new globalThis.FraudNativeClient.Client();
+  let models=baseModels.slice(),availableNative=[],nativeError=null,rebuildVersion=0,requestController=null,preparingNative=false;
   let model=models.find(m=>m.id===bundle.default)||models[0];
   const currencyFormat=new Intl.NumberFormat('en-IE',{style:'currency',currency:'EUR',maximumFractionDigits:0}),money=x=>currencyFormat.format(x);
   const clock=t=>'D'+(Math.floor(t/1440)+1)+' '+String(Math.floor(t/60)%24).padStart(2,'0')+':'+String(Math.floor(t)%60).padStart(2,'0');
   const percent=x=>x===null?'—':(100*x).toFixed(1)+'%';
-  let importedData=null;
+  const tailPercent=x=>(100*x).toLocaleString('en',{maximumSignificantDigits:4})+'%';
+  let importedData=null,datasetImportVersion=0;const pendingImports=new Set();
   let data,group,entries=[],count=0,selected=0,timer=null,result,pending,prediction,follow=true;
-  const comparisonCache=new compare.ComparisonCache(models,3),datasets=new Map();
+  let comparisonCache=new compare.ComparisonCache(models,3);const datasets=new Map();
   let renderVersion=0,latestTask=Promise.resolve(),busy=false,paintedGroup=null,paintedCount=-1;
   const defaultWarmup=bundle.policy?.warmup||128;
-  const defaultPolicies=Object.fromEntries(models.map(m=>{
-    const candidates=m.policy_validation?.unsupervised?.candidates||[],middle=candidates.length?candidates[Math.floor(candidates.length/2)][0]:10;
-    return [m.id,{strategy:'shared',alpha:.02,warmup:defaultWarmup,manualTau:Number(middle)||10,falseBlockCost:1,missedFraudCost:20,objective:'f1'}];
+  const defaultsForMode=trainingMode=>Object.fromEntries(definitions.map(m=>{
+    const candidates=m.policy_validation?.[trainingMode]?.candidates||[],middle=candidates.length?candidates[Math.floor(candidates.length/2)][0]:10;
+    return [m.id,{strategy:'shared',alpha:.02,warmup:defaultWarmup,manualTau:m.comparison?(trainingMode==='supervised'?1:-Math.log2(.02)):Number(middle)||10,falseBlockCost:1,missedFraudCost:20,objective:'f1',predictionHead:m.comparison?(trainingMode==='supervised'?'fraud_linear':'empirical_tail'):'default'}];
   }));
-  const modelPolicies=JSON.parse(JSON.stringify(defaultPolicies));
+  const policiesByMode={unsupervised:defaultsForMode('unsupervised'),supervised:defaultsForMode('supervised')};
+  let modelPolicies=policiesByMode.unsupervised;
+  const currentTrainingMode=()=>$('fd-training-mode').value==='supervised'?'supervised':'unsupervised';
+  const nativeCapability=(id,mode=currentTrainingMode())=>globalThis.FraudNativeClient.modeCapabilities(nativeClient.models.find(m=>m.id===id),mode);
+  const headLabel=id=>globalThis.FraudPredictionHeads.labels[id]||(id==='fraud_linear'?'Linear fraud classifier':id);
+  function validNativeSettings(trainingMode){
+    for(const definition of nativeDefinitions){
+      const capability=nativeCapability(definition.id,trainingMode),p=modelPolicies[definition.id],heads=capability.prediction_heads||[];
+      if(heads.length&&!heads.includes(p.predictionHead))p.predictionHead=capability.default_head||heads[0];
+      if(capability.available&&!capability.decision_policies?.includes(p.strategy))p.strategy='shared';
+    }
+  }
   const name=n=>data.accounts[n]?.name||'Outside';
   const desc=e=>e.kind==='report'?'Fraud confirmation · '+e.reference:e.kind==='deposit'?'Outside → '+name(e.v)+' · '+money(e.amount):name(e.u)+' → '+name(e.v)+' · '+money(e.amount);
   function node(tag,attrs={},parent,text=''){const e=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);e.textContent=text;if(parent)parent.appendChild(e);return e;}
@@ -23,27 +38,35 @@
   function stop(){if(timer)clearInterval(timer);timer=null;$('fd-play').textContent='Play';}
   function numberValue(id,fallback,min,max){const value=Number($(id).value);return Number.isFinite(value)?Math.max(min,Math.min(max,value)):fallback;}
   function readPolicyConfig(){
-    const p=modelPolicies[model.id]||defaultPolicies[model.id];
+    const p=modelPolicies[model.id];
     p.strategy=$('fd-model-strategy').value;
     p.alpha=numberValue('fd-model-alpha',.02,.001,.5);p.warmup=Math.floor(numberValue('fd-model-warmup',defaultWarmup,1,10000));
     p.manualTau=numberValue('fd-model-tau',p.manualTau??10,0,100000);p.falseBlockCost=numberValue('fd-model-false-cost',1,.01,10000);p.missedFraudCost=numberValue('fd-model-missed-cost',20,.01,10000);p.objective=$('fd-model-objective').value;
     modelPolicies[model.id]=p;return p;
   }
   function syncPolicyControls(){
-    const p=modelPolicies[model.id]||defaultPolicies[model.id],strategy=p.strategy;
+    const p=modelPolicies[model.id],strategy=p.strategy;
     $('fd-model-strategy').value=strategy;$('fd-model-alpha').value=String(p.alpha);$('fd-model-warmup').value=String(p.warmup);$('fd-model-tau').value=String(p.manualTau);$('fd-model-false-cost').value=String(p.falseBlockCost);$('fd-model-missed-cost').value=String(p.missedFraudCost);$('fd-model-objective').value=p.objective;
     $('fd-model-alpha').disabled=strategy!=='shared';$('fd-model-warmup').disabled=strategy!=='shared';$('fd-model-tau').disabled=strategy!=='manual';$('fd-model-false-cost').disabled=strategy!=='tuned';$('fd-model-missed-cost').disabled=strategy!=='tuned';$('fd-model-objective').disabled=strategy!=='auto';
+    $('fd-model-strategy').disabled=false;
+    const descriptor=nativeDefinitions.find(m=>m.id===model.id),capability=descriptor?nativeCapability(model.id):null,heads=capability?.prediction_heads||[];
+    for(const id of ['shared','manual','tuned','auto'])$('fd-model-strategy').querySelector('option[value="'+id+'"]').disabled=capability?!capability.decision_policies?.includes(id):(id==='tuned'||id==='auto')&&!model.policy_validation?.[currentTrainingMode()];
+    $('fd-model-head').replaceChildren();
+    if(heads.length)heads.forEach(id=>option($('fd-model-head'),id,headLabel(id)));
+    else option($('fd-model-head'),'default','Model default');
+    $('fd-model-head').value=p.predictionHead;$('fd-model-head').disabled=!heads.length;
   }
   function modelPolicyOptions(trainingMode){
-    return Object.fromEntries(models.map(m=>{
-      const p=modelPolicies[m.id]||defaultPolicies[m.id],fits=!!m.policy_validation?.[trainingMode],strategy=(p.strategy==='tuned'||p.strategy==='auto')&&!fits?'shared':p.strategy;
-      return [m.id,{decisionPolicy:strategy,alpha:p.alpha,warmup:p.warmup,manualTau:p.manualTau,falseBlockCost:p.falseBlockCost,missedFraudCost:p.missedFraudCost,objective:p.objective}];
+    return Object.fromEntries(definitions.map(m=>{
+      const p=modelPolicies[m.id],fits=m.comparison?nativeCapability(m.id,trainingMode).decision_policies?.includes(p.strategy):!!m.policy_validation?.[trainingMode],strategy=(p.strategy==='tuned'||p.strategy==='auto')&&!fits?'shared':p.strategy;
+      return [m.id,{decisionPolicy:strategy,alpha:p.alpha,warmup:p.warmup,manualTau:p.manualTau,falseBlockCost:p.falseBlockCost,missedFraudCost:p.missedFraudCost,objective:p.objective,...(m.comparison?{predictionHead:p.predictionHead}:{})}];
     }));
   }
   function policyOptions(trainingMode,warmup){
     const scope=$('fd-policy').value,options={alpha:numberValue('fd-alpha',.02,.001,.5),mode:$('fd-mode').value,trainingMode,decisionPolicy:'shared',warmup};
     if(scope==='individual')options.modelPolicies=modelPolicyOptions(trainingMode);
-    if(scope==='auto')options.modelPolicies=Object.fromEntries(models.map(m=>[m.id,{decisionPolicy:'auto',objective:$('fd-objective').value}]));
+    if(scope==='auto')options.modelPolicies=Object.fromEntries(definitions.map(m=>[m.id,{decisionPolicy:'auto',objective:$('fd-objective').value,...(m.comparison?{predictionHead:modelPolicies[m.id].predictionHead}:{})}]));
+    for(const m of nativeDefinitions){options.modelPolicies??={};options.modelPolicies[m.id]={...options.modelPolicies[m.id],predictionHead:modelPolicies[m.id].predictionHead};}
     return options;
   }
   function currentPolicyLabel(state){
@@ -56,7 +79,28 @@
   }
   function cells(id,values){const parent=$(id);parent.replaceChildren();(values||Array(8).fill(0)).forEach((v,i)=>{const e=document.createElement('span');e.className='fd-cell';e.style.opacity=String(.12+Math.abs(v)*.8);e.style.background=v<0?'var(--viz-series-2)':'var(--viz-series-1)';e.setAttribute('aria-label','State '+(i+1)+': '+v.toFixed(3));e.setAttribute('data-tooltip','State '+(i+1)+': '+v.toFixed(3));parent.appendChild(e);});}
   function row(parent,values){const tr=document.createElement('tr');values.forEach(v=>{const td=document.createElement('td');td.textContent=String(v);tr.appendChild(td);});parent.appendChild(tr);}
+  function populateModels(){
+    const selectedId=$('fd-model').value||model.id;
+    model=models.find(m=>m.id===selectedId)||models.find(m=>m.id===bundle.default)||models[0];
+    $('fd-model').replaceChildren();
+    for(const definition of definitions){
+      option($('fd-model'),definition.id,definition.label);
+      const item=$('fd-model').lastElementChild;
+      if(item){item.disabled=!models.some(m=>m.id===definition.id);if(item.disabled)item.title=nativeError||nativeClient.error||nativeCapability(definition.id).error||'Python model is not yet available.';}
+    }
+    $('fd-model').value=model.id;
+  }
+  function activateModels(checkpoints){
+    const next=[...baseModels,...checkpoints];
+    if(JSON.stringify(next.map(m=>m.checkpoint_id||m.id))!==JSON.stringify(models.map(m=>m.checkpoint_id||m.id)))comparisonCache=new compare.ComparisonCache(next,3);
+    models=next;populateModels();
+  }
+  function runtimeStatus(trainingMode){
+    const omitted=availableNative.filter(m=>!nativeCapability(m.id,trainingMode).available);
+    $('fd-runtime-status').textContent=nativeError||nativeClient.error||(omitted.length?omitted.map(m=>m.label+': '+nativeCapability(m.id,trainingMode).error).join(' ')+' Compatible models remain in the comparison.':availableNative.length?'All '+models.length+' models use the selected dataset and settings.':'');
+  }
   function rebuild(keep=false){
+    const revision=++rebuildVersion;requestController?.abort();renderVersion++;preparingNative=false;nativeError=null;
     stop();const seed=Math.max(1,Math.min(99999,Math.floor(Number($('fd-seed').value)||42)));$('fd-seed').value=String(seed);
     group?.cancel();
     const datasetKey=JSON.stringify([$('fd-scenario').value,$('fd-size').value,seed,Number($('fd-delay').value)*60,Number($('fd-forward').value)]);
@@ -65,14 +109,15 @@
     else data=globalThis.FraudDatasets.load('synthetic_payments',{name:$('fd-scenario').value,size:$('fd-size').value,seed,reportDelay:Number($('fd-delay').value)*60,forwardDelay:Number($('fd-forward').value)});
     if(!importedData){datasets.set(datasetKey,data);if(datasets.size>2)datasets.delete(datasets.keys().next().value);}
     const warmup=Math.max(1,Math.floor(Number($('fd-warmup').value)||bundle.policy?.warmup||128));$('fd-warmup').value=String(warmup);
-    const trainingMode=$('fd-training-mode').value==='supervised'?'supervised':'unsupervised';
-    const canTune=models.every(m=>m.policy_validation?.[trainingMode]);$('fd-policy').querySelector('option[value="auto"]').disabled=!canTune;
+    const trainingMode=currentTrainingMode();modelPolicies=policiesByMode[trainingMode];validNativeSettings(trainingMode);
+    const wanted=availableNative.filter(m=>m.available&&nativeCapability(m.id,trainingMode).available);
+    const canTune=baseModels.every(m=>m.policy_validation?.[trainingMode])&&wanted.every(m=>nativeCapability(m.id,trainingMode).decision_policies.includes('auto'));$('fd-policy').querySelector('option[value="auto"]').disabled=!canTune;
     if(!canTune&&$('fd-policy').value==='auto')$('fd-policy').value='shared';
     const scope=$('fd-policy').value;
     $('fd-auto-controls').hidden=scope!=='auto';$('fd-individual-controls').hidden=scope!=='individual';
     $('fd-warmup').disabled=scope!=='shared';$('fd-alpha').disabled=false;
     $('fd-alpha-label').textContent=scope==='shared'?'Shared target α':'Evaluation ranking budget α';
-    group=comparisonCache.acquire(data,policyOptions(trainingMode,warmup));
+    const settings=policyOptions(trainingMode,warmup),requestedData=data;
     count=keep?Math.min(count,data.events.length):data.startIndex;follow=true;selected=data.events[count]?.v??0;
     $('fd-account').replaceChildren();data.accounts.forEach(a=>option($('fd-account'),a.id,'#'+(a.id+1)+' · '+a.name));
     $('fd-jump').replaceChildren();option($('fd-jump'),'','Choose an event…');option($('fd-jump'),0,scope==='shared'?'Start · learn each cutoff':'Start · use configured cutoffs');
@@ -80,7 +125,22 @@
     const report=data.events.findIndex(e=>e.kind==='report');if(report>=0)option($('fd-jump'),report,'First delayed confirmation');option($('fd-jump'),data.events.length,'End of scenario');
     $('fd-forward-value').textContent=$('fd-forward').value+' min';$('fd-delay-value').textContent=$('fd-delay').value+' h';
     $('fd-scope').textContent=data.accounts.length+' accounts · '+data.events.length.toLocaleString()+' events · '+Math.ceil(data.events.at(-1).t/1440)+' days';
-    $('fd-mode-label').textContent=($('fd-mode').value==='enforce'?'Separate histories after blocks':'Identical history for all models')+' · '+(trainingMode==='supervised'?'flagged-history mode':'no-label mode');syncPolicyControls();return render();
+    $('fd-mode-label').textContent=($('fd-mode').value==='enforce'?'Separate histories after blocks':'Identical history for all models')+' · '+(trainingMode==='supervised'?'flagged-history mode':'no-label mode');
+    const finish=checkpoints=>{if(revision!==rebuildVersion)return;preparingNative=false;activateModels(checkpoints);group=comparisonCache.acquire(requestedData,settings);runtimeStatus(trainingMode);syncPolicyControls();return render();};
+    if(!wanted.length)return finish([]);
+    preparingNative=true;setBusy(true,'Scoring the selected dataset with Python models…');requestController=new AbortController();const signal=requestController.signal;
+    latestTask=(async()=>{
+      try{
+        const {modelPolicies:perModel,...shared}=settings;
+        const checkpoints=await Promise.all(wanted.map(m=>nativeClient.predict(m,requestedData,{...shared,...perModel?.[m.id]},signal)));
+        if(revision!==rebuildVersion)return;
+        return finish(checkpoints);
+      }catch(error){
+        if(revision!==rebuildVersion||error.name==='AbortError')return;
+        nativeError='Python model could not update: '+error.message+' Change a setting or recompute to retry.';
+        return finish([]);
+      }
+    })();return latestTask;
   }
   function graph(){
     if(!result)return;const svg=$('fd-graph'),w=Math.max(300,$('fd-graph-container').clientWidth),small=w<520,H=small?340:320;
@@ -134,16 +194,17 @@
   }
   function evaluate(){
     $('fd-evaluation').hidden=!$('fd-truth').checked;if(!$('fd-truth').checked||!result||busy)return;
-    const d=result.state.decisions.filter(r=>r.decision!=='LEARNING'),fraud=d.filter(r=>data.truth[r.event.id]),legit=d.filter(r=>!data.truth[r.event.id]);
+    const population=group.evaluationRecords(model.id).filter(r=>r.decision!=='LEARNING'&&r.decision!=='CONTEXT');
+    const d=population.filter(r=>Object.prototype.hasOwnProperty.call(data.truth,r.event.id)),fraud=d.filter(r=>data.truth[r.event.id]),legit=d.filter(r=>!data.truth[r.event.id]);
     const tp=fraud.filter(r=>r.decision==='BLOCK').length,fp=legit.filter(r=>r.decision==='BLOCK').length;
     const comparisonBody=$('fd-model-metrics').querySelector('tbody');comparisonBody.replaceChildren();
     let budget=0;
-    for(const entry of entries){const state=entry.result.state,m=compare.metrics(state.decisions,data.truth,group.options.alpha,state.errorCosts);budget=m.budget;
+    for(const entry of entries){const state=entry.result.state,m=compare.metrics(group.evaluationRecords(entry.model.id),data.truth,group.options.alpha,state.errorCosts);budget=m.budget;
       row(comparisonBody,[entry.model.label,m.tp+' / '+(m.tp+m.fn),m.fp,percent(m.precision),percent(m.blockRate),state.decisionPolicy==='tuned'?Number(m.errorCost.toFixed(2)):'—',percent(m.recallAtBudget)]);
     }
-    $('fd-evaluation-protocol').textContent=(result.state.mode==='shadow'?'Matched history':'Independent blocking histories')+' · ranking uses a common '+percent(group.options.alpha)+' budget ('+budget+' requests). Error cost is shown only for cost-tuned models and uses that model’s own costs. These replay outcomes do not tune τ.';
+    $('fd-evaluation-protocol').textContent=(result.state.mode==='shadow'?'Matched history':'Independent blocking histories')+' · all models use the same evaluation requests, excluding every model’s warm-up · ranking uses a common '+percent(group.options.alpha)+' budget ('+budget+' requests). Unknown outcomes are excluded from classification. Selected dataset outcomes do not tune the head or cutoff.';
     const body=$('fd-metrics').querySelector('tbody');body.replaceChildren();
-    [['Evaluated requests',d.length],['Fraud blocked / all generated fraud',tp+' / '+fraud.length],['Legitimate requests blocked / all legitimate',fp+' / '+legit.length],['Precision among block decisions',tp+fp?(100*tp/(tp+fp)).toFixed(1)+'%':'—'],['Warm-up requests excluded',result.state.calibration.length],['Historical outcome labels used to fit τ',result.state.policyFit?result.state.policyFit.positives+result.state.policyFit.negatives:0],['Replay outcome labels used to change model or τ','0']].forEach(r=>row(body,r));
+    [['Evaluated requests',population.length],['Known outcomes',d.length],['Unknown outcomes excluded from classification',population.length-d.length],['Fraud blocked / all known fraud',tp+' / '+fraud.length],['Legitimate requests blocked / all known legitimate',fp+' / '+legit.length],['Precision among known block decisions',tp+fp?(100*tp/(tp+fp)).toFixed(1)+'%':'—'],['Context and common warm-up requests excluded',result.state.decisions.length-population.length],['Historical outcome labels used to fit τ',result.state.policyFit?result.state.policyFit.positives+result.state.policyFit.negatives:0],['Replay outcome labels used to change model or τ','0']].forEach(r=>row(body,r));
     const errors=$('fd-errors').querySelector('tbody');errors.replaceChildren();
     d.filter(r=>(r.decision==='BLOCK')!==!!data.truth[r.event.id]).slice(-6).reverse().forEach(r=>row(errors,[r.event.id+' · '+desc(r.event),data.truth[r.event.id]?'Fraud':'Legitimate',r.decision]));
   }
@@ -153,6 +214,7 @@
     $('fd-back').disabled=value||count===0;$('fd-next').disabled=value||count>=data.events.length;$('fd-run').disabled=value||count>=data.events.length;
   }
   function render(viewOnly=false){
+    if(preparingNative)return latestTask;
     if(viewOnly&&!busy&&paintedGroup===group&&paintedCount===count){paint();return Promise.resolve();}
     const version=++renderVersion,requestedGroup=group,target=count;setBusy(true);
     latestTask=(async()=>{
@@ -168,11 +230,11 @@
     })();
     return latestTask;
   }
-  async function whenIdle(){for(;;){const task=latestTask;await task;if(task===latestTask)return;}}
+  async function whenIdle(){for(;;){const task=latestTask;await Promise.all([task,...pendingImports]);if(task===latestTask&&!pendingImports.size)return;}}
   function paint(){
     const active=entries.find(e=>e.model.id===model.id);result=active.result;pending=data.events[count]||null;prediction=active.prediction;
     if(follow&&pending)selected=pending.v;$('fd-account').value=String(selected);
-    const tau=result.state.tau,decision=prediction?(tau===null?'LEARNING':prediction.score>tau?'BLOCK':'ALLOW'):'—';
+    const tau=result.state.tau,decision=prediction?(prediction.evaluationEligible===false?'CONTEXT':tau===null?'LEARNING':prediction.score>tau?'BLOCK':'ALLOW'):'—';
     $('fd-step').max=String(data.events.length);$('fd-step').value=String(count);$('fd-position').textContent=count.toLocaleString()+' / '+data.events.length.toLocaleString()+' events processed';
     $('fd-back').disabled=count===0;$('fd-next').disabled=!pending;$('fd-run').disabled=!pending;
     $('fd-event-label').textContent=!pending?'Replay complete':pending.kind==='payment'?'Proposed request':pending.kind==='report'?'Incoming report':'Outside deposit';
@@ -180,8 +242,8 @@
     const comparisonBody=$('fd-compare').querySelector('tbody');comparisonBody.replaceChildren();
     const scope=$('fd-policy').value,fit=result.state.policyFit;
     $('fd-policy-rate-heading').textContent=scope==='shared'?'Target α':'Validation / configured rate';
-    for(const entry of entries){const state=entry.result.state,rate=state.policyFit?state.policyFit.impliedAlpha:null;row(comparisonBody,[entry.model.label+(entry.model.id===model.id?' · selected':''),currentPolicyLabel(state),entry.decision||'—',entry.prediction?entry.prediction.score.toFixed(2):'—',state.tau===null?'Learning':state.tau.toFixed(2),percent(rate??(state.decisionPolicy==='shared'?state.alpha:null))]);}
-    if(scope==='shared')$('fd-policy-summary').textContent='Each model learns its own τ without outcome labels, targeting the same '+percent(result.state.alpha)+' budget.';
+    for(const entry of entries){const state=entry.result.state,rate=state.policyFit?state.policyFit.impliedAlpha:null;row(comparisonBody,[entry.model.label+(entry.model.id===model.id?' · selected':''),currentPolicyLabel(state),entry.decision||'—',entry.prediction?entry.prediction.score.toFixed(2):'—',state.tau===null?'Learning':state.tau.toFixed(2),percent(rate??(state.decisionPolicy==='shared'||state.predictionHead?state.alpha:null))]);}
+    if(scope==='shared')$('fd-policy-summary').textContent='Each model learns its own τ without outcome labels, targeting the same '+percent(group.options.alpha)+' budget.';
     else if(scope==='auto')$('fd-policy-summary').textContent='Every model is tuned independently for '+String($('fd-objective').value).toUpperCase()+' on held-out history. Each fitted τ and validation blocking rate is shown separately.';
     else {
       const suffix=result.state.decisionPolicy==='tuned'?' with this model’s own error costs. ':result.state.decisionPolicy==='manual'?' with this model’s fixed τ. ':result.state.decisionPolicy==='auto'?' with this model’s selected objective. ':' with this model’s own unlabeled budget. ';
@@ -198,11 +260,38 @@
     $('fd-memory-panels').hidden=!model.hidden;$('fd-no-memory').hidden=!!model.hidden;
     $('fd-settlement').textContent=!prediction?'No payment decision':decision==='BLOCK'?result.state.mode==='enforce'?'Transfer will not execute':'Would block; shadow replay':decision==='LEARNING'?'Allowed during calibration':'Transfer will execute';
     $('fd-calibration').textContent=result.state.decisionPolicy==='shared'?(tau===null?result.state.calibration.length+' / '+result.state.warmup+' calibration requests for this model':percent(result.state.alpha)+' target tail · separate τ per model'):fit?(currentPolicyLabel(result.state)+' fit: '+percent(fit.impliedAlpha)+' blocked · τ frozen'):currentPolicyLabel(result.state)+' = '+tau.toFixed(2)+' · τ frozen';
+    if(model.native_run){
+      const native=model.native_run,reference=native.calibration.count;
+      $('fd-method').textContent='Native DyGFormer + TAMI · '+headLabel(native.head.id)+' · '+currentPolicyLabel(result.state)+'.';
+      if(supervised){
+        const encoder=model.training?.encoder_training||native.provenance.encoder_training||native.provenance.model_parameters?.encoder_training;
+        const learned=encoder==='finetune'?'The temporal encoder and fraud classifier were fine-tuned on historical fraud labels.':encoder==='frozen'?'The fraud classifier was trained on historical fraud labels with the temporal encoder held fixed.':'The native fraud classifier was trained on historical fraud labels.';
+        const counts=model.training?.label_counts?.train,labels=counts?' Training outcomes: '+counts.fraud+' fraud, '+counts.legitimate+' legitimate, '+counts.unknown+' unknown context payments.':'';
+        $('fd-training-source').textContent=learned+labels+' The saved weights and training normalization stay fixed when comparison data changes.';
+        $('fd-validation-source').textContent=validation?'Cost and automatic cutoffs use the reserved policy-validation window, separate from model training and epoch selection. Selected dataset outcomes are used only for evaluation.':'The reserved policy-validation window lacks both known classes, so cost and automatic tuning are unavailable. Shared and fixed cutoffs remain available.';
+        $('fd-score-explanation').textContent='Score = softplus(fraud logit) / ln(2) = −log₂(1 − estimated fraud probability). Fixed τ = 1 blocks probabilities above 50%; shared α is a blocking target. These estimates are not claimed to be calibrated probabilities.';
+        $('fd-graph-method').textContent='Native DyGFormer + TAMI uses strictly earlier '+(result.state.mode==='enforce'?'allowed payments':'observed payment attempts')+', previous directed-pair memory and the proposed amount. The amount is inspected before settlement; deposits, reports and outcome labels are not scoring inputs.';
+        $('fd-no-memory').textContent='Transformer embeddings, pair memory and the trained fraud head are computed by Python. Inspect the fraud logit and estimated probability below.';
+      }else{
+        $('fd-training-source').textContent='Frozen PyTorch weights trained on separate historical payments. '+reference+' historical reference transactions; the selected dataset does not retrain the encoder or head.';
+        $('fd-validation-source').textContent='Cost tuning and automatic objectives use labeled historical transactions after the reference period. Selected dataset outcomes are used only for evaluation.';
+        $('fd-score-explanation').textContent=(native.head.id==='empirical_tail'?'Score = −log₂ historical likelihood rank. The frozen reference ranks this transaction’s link logit.':'Score = −log₂ native link likelihood.')+' The selected policy sets τ in the same way as for the other models. Higher scores indicate unusual transactions, not fraud probabilities.';
+        $('fd-graph-method').textContent='Native DyGFormer + TAMI uses strictly earlier '+(result.state.mode==='enforce'?'allowed payments':'observed payment attempts')+' and directed-pair memory. Deposits/reports and the proposed amount are not inputs to its current score.';
+        $('fd-no-memory').textContent='Transformer embeddings and pair memory are computed by the Python model. Inspect the link likelihood and prediction head below.';
+      }
+      if(decision==='CONTEXT')$('fd-settlement').textContent='Historical context only; excluded from evaluation.';
+      else if(decision==='BLOCK')$('fd-settlement').textContent='Suspected fraud · '+(result.state.mode==='enforce'?'payment blocked; later graph history excludes it':'would block; shadow comparison');
+      if(!supervised)$('fd-calibration').textContent=reference+' historical head references · '+$('fd-calibration').textContent;
+    }else $('fd-no-memory').textContent='This design has no learned account memory; inspect its causal statistics, temporal history, pair state, or tree features instead.';
     $('fd-selected').textContent=name(selected)+' · '+result.state.inCount[selected]+' payment receipts · '+result.state.outCount[selected]+' completed sends';
     $('fd-reports').textContent=result.state.reports.length+' delayed confirmations received';
     cells('fd-sender-memory',prediction?.memory[0]);cells('fd-recipient-memory',prediction?.memory[1]);cells('fd-account-memory',result.state.memory[selected]);
     const parts=$('fd-parts').querySelector('tbody');parts.replaceChildren();
-    if(prediction){
+    if(prediction&&model.native_run){
+      const evidence=prediction.evidence;
+      const rows=evidence.kind==='native-fraud'?[['Native fraud logit',evidence.fraud_logit.toFixed(5),''],['Estimated fraud probability',percent(evidence.fraud_probability),''],['Fraud score','−log₂(1 − estimated fraud probability)',prediction.score.toFixed(3)],['Prediction head',headLabel(evidence.head),'']]:[['Native link logit',evidence.logit.toFixed(5),''],['Native link likelihood',percent(evidence.likelihood_probability),''],['Likelihood / historical rank',percent(evidence.tail_probability),prediction.score.toFixed(3)],['Head reference',evidence.reference_count+' frozen reference transactions','']];
+      rows.push(['Prospective evaluation',prediction.evaluationEligible?(model.native_run.provenance.same_dataset?'Held-out transaction':'Evaluation transaction'):'Context only','']);rows.forEach(r=>row(parts,r));
+    }else if(prediction){
       const rows=supervised?[['Fraud-risk score','1 − estimated legitimate probability',prediction.parts[0].toFixed(2)],['Estimated flagged-fraud probability',(100*prediction.probability).toFixed(1)+'%',''],['Causal feature vector',(prediction.features?.length||0)+' statistics','']]:model.family==='xgboost'?[['No-label rarity score','Causal feature rarity',prediction.parts[0].toFixed(2)],['Flagged-fraud probability','Not used in this mode',''],['Causal feature vector',prediction.features.length+' statistics','']]:[['Recipient',name(pending.v),prediction.parts[0].toFixed(2)],['Amount bin',money(pending.amount)+' · bin '+(prediction.buckets[1]+1),prediction.parts[1].toFixed(2)],['Sender activity gap',prediction.gap===null?'First observed activity':prediction.gap.toFixed(1)+' min',prediction.parts[2].toFixed(2)]];
       rows.forEach(r=>row(parts,r));
     }
@@ -211,15 +300,23 @@
   }
   function setDataset(document){
     const next=document===null?null:globalThis.FraudDatasets.load('payment_json',document);
-    importedData=next;stop();
+    datasetImportVersion++;importedData=next;stop();
     for(const id of ['fd-scenario','fd-size','fd-seed','fd-forward','fd-delay'])$(id).disabled=!!next;
-    $('fd-dataset-status').textContent=next?'Imported '+next.name+' · '+next.events.length+' events. Current checkpoints were trained on synthetic history; import does not retrain them.':'Synthetic dataset. Current demo checkpoints were trained on synthetic history.';
+    $('fd-dataset-status').textContent=next?'Imported '+next.name+' · '+next.events.length+' events. Models use saved checkpoints; importing does not retrain them.':'Synthetic dataset. Models use their saved training histories.';
     return rebuild(false);
   }
-  $('fd-dataset-file').addEventListener('change',async()=>{try{const file=$('fd-dataset-file').files[0];if(file)await setDataset(await file.text());}catch(error){$('fd-dataset-status').textContent='Dataset not loaded: '+error.message;}});
+  $('fd-dataset-file').addEventListener('change',()=>{
+    const file=$('fd-dataset-file').files[0];if(!file)return;
+    const revision=++datasetImportVersion;$('fd-dataset-status').textContent='Reading '+file.name+'…';
+    let activeRevision=revision;
+    const task=(async()=>{try{const document=await file.text();if(revision===datasetImportVersion){const update=setDataset(document);activeRevision=datasetImportVersion;await update;}}catch(error){if(activeRevision===datasetImportVersion)$('fd-dataset-status').textContent='Dataset not loaded: '+error.message;}})();
+    pendingImports.add(task);task.finally(()=>pendingImports.delete(task));return task;
+  });
   $('fd-dataset-reset').addEventListener('click',()=>{ $('fd-dataset-file').value='';return setDataset(null);});
   for(const id of['fd-scenario','fd-size','fd-seed'])$(id).addEventListener('change',()=>rebuild(false));
-  $('fd-model').addEventListener('change',()=>{stop();model=models.find(m=>m.id===$('fd-model').value);syncPolicyControls();return render(true);});
+  $('fd-model').addEventListener('change',()=>{stop();model=models.find(m=>m.id===$('fd-model').value)||model;syncPolicyControls();return render(true);});
+  $('fd-model-head').addEventListener('change',()=>{modelPolicies[model.id].predictionHead=$('fd-model-head').value;return rebuild(true);});
+  $('fd-recompute').addEventListener('click',()=>rebuild(true));
   for(const id of['fd-mode','fd-alpha','fd-warmup','fd-training-mode','fd-policy','fd-objective'])$(id).addEventListener('change',()=>rebuild(true));
   for(const id of['fd-model-strategy','fd-model-alpha','fd-model-warmup','fd-model-tau','fd-model-false-cost','fd-model-missed-cost','fd-model-objective'])$(id).addEventListener('change',()=>{readPolicyConfig();rebuild(true);});
   for(const id of['fd-delay','fd-forward'])$(id).addEventListener('change',()=>rebuild(false));
@@ -232,7 +329,15 @@
   $('fd-truth').addEventListener('change',evaluate);
   $('fd-play').addEventListener('click',()=>{if(timer){stop();return;}if(count===data.events.length)count=0;$('fd-play').textContent='Pause';timer=setInterval(()=>{if(busy)return;count++;follow=true;render();if(count>=data.events.length)stop();},800);});
   new ResizeObserver(()=>{if(!busy){graph();chart();}}).observe($('fd-graph-container'));
-  models.forEach(m=>option($('fd-model'),m.id,m.label));$('fd-model').value=model.id;
-  rebuild();
-  root.demo={setDataset,whenIdle,getPerformance:()=>({busy,comparisons:comparisonCache.entries.size,inferenceCalls:Array.from(group.runners.values()).reduce((sum,r)=>sum+r.inferenceCalls,0),...group.lastTiming}),getSnapshot:()=>({busy,count,selected,model:model.id,policyScope:$('fd-policy').value,modelPolicies:JSON.parse(JSON.stringify(modelPolicies)),mode:result?.state.mode,trainingMode:result?.state.trainingMode,decisionPolicy:result?.state.decisionPolicy,policyFit:result?.state.policyFit,rankingBudget:group.options.alpha,warmup:result?.state.warmup,comparison:entries.map(e=>({id:e.model.id,policy:currentPolicyLabel(e.result.state),score:e.prediction?.score??null,tau:e.result.state.tau,impliedAlpha:e.result.state.policyFit?.impliedAlpha??null,decision:e.decision,payments:e.result.state.payments.map(x=>x.id)})),decision:root.dataset.decision,score:prediction?.score??null,tau:result?.state.tau,accounts:data.accounts.length,events:data.events.length,processed:result?.state.events.map(e=>e.id)||[],decisions:result?.state.decisions.map(r=>({id:r.event.id,score:r.score,tau:r.tauBefore,decision:r.decision,settled:r.settled}))||[]})};
+  populateModels();
+  const initialTask=rebuild();
+  latestTask=(async()=>{await initialTask;if(/^https?:$/.test(globalThis.location?.protocol||''))$('fd-runtime-status').textContent='Preparing Python models and historical reference scores…';availableNative=(await nativeClient.discover()).filter(m=>m.available&&nativeDefinitions.some(d=>d.id===m.id));if(availableNative.length)return rebuild(true);runtimeStatus($('fd-training-mode').value);populateModels();})();
+  function getNativeSnapshot(){
+    const nativeModel=models.find(m=>m.native_run);if(!nativeModel)return null;
+    const runner=group.runners.get(nativeModel.id);
+    return {head:nativeModel.native_run.head.id,alpha:nativeModel.native_run.alpha,options:nativeModel.native_run.options,dataset:data.name,evidence:runner.preview()?.evidence||null,evaluation_ids:nativeModel.native_run.evaluation_ids.slice(),
+      metrics:models.map(m=>({id:m.id,evaluation_ids:group.evaluationRecords(m.id).map(r=>r.event.id),...compare.metrics(group.evaluationRecords(m.id),data.truth,group.options.alpha,group.runners.get(m.id).state.errorCosts)})),
+      decisions:runner.state.decisions.map(r=>({id:r.event.id,evidence:r.evidence,score:r.score,tau:r.tauBefore,decision:r.decision}))};
+  }
+  root.demo={setDataset,getNativeSnapshot,whenIdle,getPerformance:()=>({busy,comparisons:comparisonCache.entries.size,inferenceCalls:Array.from(group.runners.values()).reduce((sum,r)=>sum+r.inferenceCalls,0),...group.lastTiming}),getSnapshot:()=>({busy,count,selected,model:model.id,policyScope:$('fd-policy').value,modelPolicies:JSON.parse(JSON.stringify(modelPolicies)),mode:result?.state.mode,trainingMode:result?.state.trainingMode,decisionPolicy:result?.state.decisionPolicy,policyFit:result?.state.policyFit,rankingBudget:group.options.alpha,warmup:result?.state.warmup,comparison:entries.map(e=>({id:e.model.id,policy:currentPolicyLabel(e.result.state),score:e.prediction?.score??null,tau:e.result.state.tau,impliedAlpha:e.result.state.policyFit?.impliedAlpha??null,decision:e.decision,payments:e.result.state.payments.map(x=>x.id)})),decision:root.dataset.decision,score:prediction?.score??null,tau:result?.state.tau,accounts:data.accounts.length,events:data.events.length,processed:result?.state.events.map(e=>e.id)||[],decisions:result?.state.decisions.map(r=>({id:r.event.id,score:r.score,tau:r.tauBefore,decision:r.decision,settled:r.settled}))||[]})};
 })();

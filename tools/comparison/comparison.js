@@ -4,7 +4,14 @@
   const core=typeof module!=='undefined'?require('../../shared/runtime/model'):global.FraudCore;
   const {metrics}=typeof module!=='undefined'?require('../../shared/runtime/metrics'):global.FraudMetrics;
   const normalized=options=>({...options,modelPolicies:Object.fromEntries(Object.entries(options.modelPolicies||{}).map(([id,value])=>[id,{...value}])),mode:options.mode||'shadow',trainingMode:options.trainingMode||'unsupervised'});
-  function modelOptions(model,options){const {modelPolicies,...rest}=options;return {...rest,...modelPolicies?.[model.id],mode:options.mode,trainingMode:options.trainingMode};}
+  function modelOptions(model,options){
+    const {modelPolicies,...rest}=options;
+    if(model.native_run&&model.native_run.version!==2){
+      if(options.mode!=='shadow'||options.trainingMode!=='unsupervised')throw Error('Native recorded predictions require observed history and their no-label likelihood head.');
+      return {...rest,decisionPolicy:'manual',manualTau:-Math.log2(model.native_run.alpha),alpha:model.native_run.alpha,predictionHead:model.native_run.head.id,mode:'shadow',trainingMode:'unsupervised'};
+    }
+    return {...rest,...modelPolicies?.[model.id],mode:options.mode,trainingMode:options.trainingMode};
+  }
   const policyKey=o=>JSON.stringify(o.decisionPolicy==='tuned'?['tuned',o.falseBlockCost??1,o.missedFraudCost??20]:o.decisionPolicy==='auto'?['auto',o.objective||'f1']:o.decisionPolicy==='manual'?['manual',o.manualTau]:['shared',o.alpha??.02,o.warmup??null,o.eta??.025]);
   const now=()=>global.performance?.now?global.performance.now():Date.now();
   const yieldTask=()=>new Promise(resolve=>setTimeout(resolve,0));
@@ -12,15 +19,18 @@
     constructor(models,data,options={}){
       if(!models.length||new Set(models.map(m=>m.id)).size!==models.length)throw Error('Comparison requires distinct model IDs.');
       const target=m=>JSON.stringify([m.amount_bins,m.gap_bins]);
-      if(models.some(m=>target(m)!==target(models[0])))throw Error('Models must use the same prediction targets and bins.');
+      const categorical=models.filter(m=>m.amount_bins&&m.gap_bins);
+      if(categorical.some(m=>target(m)!==target(categorical[0])))throw Error('Categorical models must use the same prediction targets and bins.');
       this.models=models;this.data=data;this.options=normalized(options);
       this.runners=new Map(models.map(m=>[m.id,new core.Runner(m,data,modelOptions(m,this.options))]));
       this.runnerVariants=new Map(models.map(m=>[m.id,new Map([[policyKey(modelOptions(m,this.options)),this.runners.get(m.id)]])]));this.position=0;this.revision=0;
     }
     cancel(){this.revision++;}
     reconfigure(options){
-      const next=normalized(options);this.cancel();
+      const next=normalized(options);
       if(next.trainingMode!==this.options.trainingMode||next.mode!==this.options.mode)throw Error('A different history requires a separate comparison.');
+      for(const model of this.models)this.runners.get(model.id).validateOptions(modelOptions(model,next));
+      this.cancel();
       for(const model of this.models){
         const before=modelOptions(model,this.options),after=modelOptions(model,next);
         if(JSON.stringify(before)===JSON.stringify(after))continue;
@@ -40,7 +50,13 @@
     }
     entry(model){
       const runner=this.runners.get(model.id),result=runner.result(),prediction=runner.preview(),tau=result.state.tau;
-      return {model,result,prediction,decision:prediction?(tau===null?'LEARNING':prediction.score>tau?'BLOCK':'ALLOW'):null};
+      return {model,result,prediction,decision:prediction?(prediction.policyDecision||(prediction.evaluationEligible===false?'CONTEXT':tau===null?'LEARNING':prediction.score>tau?'BLOCK':'ALLOW')):null};
+    }
+    evaluationRecords(id){
+      const excluded=new Set();
+      for(const runner of this.runners.values())for(const record of runner.state.decisions)if(record.decision==='LEARNING')excluded.add(record.event.id);
+      const populations=this.models.filter(m=>m.native_run).map(m=>new Set(m.native_run.evaluation_ids));
+      return this.runners.get(id).state.decisions.filter(r=>!excluded.has(r.event.id)&&populations.every(ids=>ids.has(r.event.id)));
     }
     seek(count){
       this.cancel();

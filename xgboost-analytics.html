@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src 'self' blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>XGBoost analytics</title>
 <style>:root {
   color-scheme: light dark;
@@ -1236,6 +1236,140 @@ html>body{padding:0}</style>
 </script>
 
 <script>
+/* Serialized fraud heads shared with prediction_heads/implementations in Python. */
+(function(global){
+  'use strict';
+  const labels={empirical_tail:'Historical likelihood rank',fixed_likelihood:'Fixed link likelihood'};
+  function object(value){return !!value&&typeof value==='object'&&!Array.isArray(value);}
+  function keys(state,expected){
+    if(!object(state)||Object.keys(state).sort().join(',')!==expected.slice().sort().join(','))throw Error('Invalid prediction head state fields.');
+  }
+  function threshold(alpha){
+    if(!Number.isFinite(alpha)||alpha<=0||alpha>1)throw Error('Head alpha must be finite and between zero and one, excluding zero.');
+    return -Math.log2(alpha);
+  }
+  function sigmoid(logit){
+    if(!Number.isFinite(logit))throw Error('Link logit must be finite.');
+    if(logit>=0)return 1/(1+Math.exp(-logit));
+    const value=Math.exp(logit);return Math.max(Number.MIN_VALUE,value/(1+value));
+  }
+  function load(state){
+    if(!object(state)||state.version!==1)throw Error('Unsupported prediction head state version.');
+    let probability,count;
+    if(state.id==='empirical_tail'){
+      keys(state,['version','id','reference_logits']);
+      if(!Array.isArray(state.reference_logits)||!state.reference_logits.length||state.reference_logits.some((value,index,all)=>!Number.isFinite(value)||(index>0&&value<all[index-1])))throw Error('Head reference logits must be nonempty, finite and sorted.');
+      const reference=state.reference_logits.slice();count=reference.length;
+      probability=logit=>{
+        let lo=0,hi=reference.length;
+        while(lo<hi){const mid=lo+Math.floor((hi-lo)/2);if(reference[mid]<=logit)lo=mid+1;else hi=mid;}
+        return (1+lo)/(reference.length+1);
+      };
+    }else if(state.id==='fixed_likelihood'){
+      keys(state,['version','id','reference_count']);
+      if(!Number.isSafeInteger(state.reference_count)||state.reference_count<1)throw Error('Head reference count must be a positive integer.');
+      count=state.reference_count;probability=sigmoid;
+    }else throw Error('Unknown prediction head: '+state.id);
+    return Object.freeze({id:state.id,label:labels[state.id],reference_count:count,threshold,
+      score(logit){
+        if(!Number.isFinite(logit))throw Error('Link logit must be finite.');
+        const tail_probability=probability(logit);
+        return {tail_probability,score:Math.max(0,-Math.log2(tail_probability))};
+      }});
+  }
+  global.FraudPredictionHeads={load,threshold,sigmoid,labels:Object.freeze(labels)};
+  if(typeof module!=='undefined')module.exports=global.FraudPredictionHeads;
+})(globalThis);
+
+</script>
+
+<script>
+/* Recorded native inference: exact observed-request replay with a swappable head. */
+(function(global){
+  'use strict';
+  const registry=typeof module!=='undefined'?require('../../shared/runtime/model-registry'):global.FraudAdapters;
+  const heads=typeof module!=='undefined'?require('../../shared/runtime/prediction-heads'):global.FraudPredictionHeads;
+  const loadedHeads=new WeakMap();
+  const own=(value,key)=>Object.prototype.hasOwnProperty.call(value,key);
+  const eventIdentity=event=>[event.id,event.kind,event.t,event.u,event.v,event.amount,own(event,'settled')?event.settled:null,own(event,'reference')?event.reference:null];
+  function signature(data){
+    const units=data.units||{time:'minutes',currency:'EUR'};
+    return JSON.stringify({units:[units.time,units.currency],accounts:data.accounts.map(account=>[account.id,String(account.external_id??account.id)]),events:data.events.map(eventIdentity)});
+  }
+  function optionIdentity(options={}){
+    const policy=options.decisionPolicy||'shared';
+    return JSON.stringify([options.mode||'enforce',options.trainingMode||'unsupervised',options.predictionHead||(options.trainingMode==='supervised'?'fraud_linear':'empirical_tail'),policy,
+      ...(policy==='shared'?[options.alpha??.02,options.eta??.025,Math.max(1,Math.floor(options.warmup??128))]:policy==='manual'?[options.manualTau]:policy==='tuned'?[options.falseBlockCost??1,options.missedFraudCost??20]:[options.objective||'f1'])]);
+  }
+  function policyOptions(model,options={}){
+    const run=model.native_run;
+    if(!run)throw Error('Native recording requires an exported comparison bundle.');
+    if(run.version===2){
+      if(optionIdentity(options)!==optionIdentity(run.options))throw Error('Native prediction settings changed; compute this dataset again with the current settings.');
+      return {...options,...run.options};
+    }
+    if((options.mode||'enforce')!=='shadow')throw Error('Native recorded predictions require shadow mode with observed history.');
+    if((options.trainingMode||model.training_mode||'unsupervised')!=='unsupervised')throw Error('Native recorded predictions do not support a supervised-mode switch.');
+    const head=loadedHeads.get(model)||heads.load(run.head);
+    return {...options,mode:'shadow',trainingMode:'unsupervised',decisionPolicy:'manual',manualTau:head.threshold(run.alpha),alpha:run.alpha,predictionHead:head.id};
+  }
+  function validateDataset(model,data,options={}){
+    const run=model.native_run;
+    policyOptions(model,options);
+    if(signature(data)!==run.dataset_signature)throw Error('Dataset differs from the native recording; export predictions for this exact event history.');
+    const payments=data.events.filter(event=>event.kind==='payment');
+    if(Object.keys(run.predictions).length!==payments.length||payments.some(event=>!own(run.predictions,event.id)||!Number.isFinite(run.version===2?run.predictions[event.id].logit:run.predictions[event.id])))throw Error('Native recording must contain one finite logit per payment.');
+    const paymentIds=new Set(payments.map(event=>event.id));
+    if(!Array.isArray(run.evaluation_ids)||(run.version!==2&&!run.evaluation_ids.length)||new Set(run.evaluation_ids).size!==run.evaluation_ids.length||run.evaluation_ids.some(id=>!paymentIds.has(id)))throw Error('Invalid native evaluation payment IDs.');
+    if(run.version!==2||run.options.trainingMode!=='supervised'){
+      const head=heads.load(run.head);head.threshold(run.alpha);loadedHeads.set(model,head);
+    }
+    return true;
+  }
+  function current(model,state,event){
+    const expected=model.native_run.events[state.events.length];
+    if(!expected||JSON.stringify(eventIdentity(event))!==JSON.stringify(eventIdentity(expected)))throw Error('Event or replay position differs from the native recording.');
+  }
+  const adapter={
+    validateDataset,policyOptions,
+    initializePolicy(model,trainingMode,options){
+      if(model.native_run.version===2)return JSON.parse(JSON.stringify(model.native_run.policy_state));
+      const policy=typeof module!=='undefined'?require('../../shared/runtime/policy'):global.FraudPolicy;
+      return policy.initialize(model,trainingMode,options);
+    },
+    initialize(model,n){return Array.from({length:n},()=>[]);},
+    update(model,state,event,settled){
+      current(model,state,event);
+      if(model.native_run.version===2&&event.kind==='payment'&&settled!==model.native_run.predictions[event.id].settled)throw Error('Native settlement differs from the computed model history.');
+      return state.memory;
+    },
+    readout(model,state){return [state.memory];},
+    predict(model,state,event){
+      current(model,state,event);
+      if(model.native_run.version===2){
+        const run=model.native_run,row=run.predictions[event.id];
+        if(state.mode!==run.options.mode||state.trainingMode!==run.options.trainingMode||state.predictionHead!==run.options.predictionHead)throw Error('Native recording differs from the active execution settings.');
+        if(!row)throw Error('No native prediction for this payment.');
+        return {score:row.score,parts:[row.score],memory:[[],[]],embedding:[[],[]],evidence:run.options.trainingMode==='supervised'?{...row.evidence}:{...row.evidence,logit:row.logit},evaluationEligible:row.evaluationEligible,
+          decisionThreshold:row.tauBefore,nextDecisionThreshold:row.tauAfter,policyDecision:row.decision,policySettlement:row.settled};
+      }
+      if(state.mode!=='shadow'||state.trainingMode!=='unsupervised')throw Error('Native recording supports only unsupervised scoring in shadow mode.');
+      const run=model.native_run,head=loadedHeads.get(model)||heads.load(run.head),logit=run.predictions[event.id];
+      if(!own(run.predictions,event.id)||!Number.isFinite(logit))throw Error('No native prediction for this payment.');
+      const prediction=head.score(logit);
+      return {...prediction,parts:[prediction.score],memory:[[],[]],embedding:[[],[]],
+        evidence:{kind:'native-likelihood',logit,likelihood_probability:heads.sigmoid(logit),tail_probability:prediction.tail_probability,head:head.id,reference_count:head.reference_count,alpha:run.alpha},
+        evaluationEligible:run.evaluation_ids.includes(event.id)};
+    }
+  };
+  registry.register('native_recording',adapter);
+  global.FraudNativeRecording={signature,eventIdentity,optionIdentity,validateDataset};
+  if(typeof module!=='undefined')module.exports=global.FraudNativeRecording;
+})(globalThis);
+
+</script>
+
+<script>
 /* Numerical primitives shared by the explicitly registered model implementations. */
 (function(global){
 'use strict';
@@ -1713,7 +1847,7 @@ if(typeof module!=='undefined')module.exports=adapter;
   function build(name='relay',size='medium',seed=42,reportDelay=1440,forwardDelay=2){
     const {n,base,days}=sizes[size]||sizes.medium,w=background(n,base,days*1440,seed),{events,accounts,truth,add,r}=w;
     const focus=[],bookmarks=[],start=days*1440*.53;
-    const tag=(e,fraud=false)=>{focus.push(e.id);truth[e.id]=fraud;return e;};
+    const tag=(e,fraud=false)=>{focus.push(e.id);if(e.kind==='payment')truth[e.id]=fraud;return e;};
     const pay=(t,u,v,a,bad=true)=>tag(add(t,u,v,a),bad);
     const [m,a,b,c,d,f,g,h,j,k]=Array.from({length:10},(_,i)=>n-10+i);
     const bookmark=(label,e)=>bookmarks.push({label,id:e.id});
@@ -1839,7 +1973,9 @@ if(typeof module!=='undefined')module.exports=adapter;
   'use strict';
   if(typeof module!=='undefined'){
     const registry=require('./model-registry');
-    for(const entry of require('../../models/registry.json').models)if(entry.browser)require('../../'+entry.browser);
+    const manifest=require('../../models/registry.json');
+    for(const source of manifest.browser_support)require('../../'+source);
+    for(const entry of manifest.models)if(entry.browser)require('../../'+entry.browser);
     module.exports=registry;
   }else if(!global.FraudAdapters)throw Error('Model registry is not loaded.');
 })(globalThis);
@@ -1928,7 +2064,11 @@ if(typeof module!=='undefined')module.exports=adapter;
   const zero=n=>Array(n).fill(0),matrix=(n,m)=>Array.from({length:n},()=>zero(m));
   const clone=x=>JSON.parse(JSON.stringify(x));
   const trainingMode=(model,mode)=>mode||model.training_mode||'unsupervised';
-  const policyState=(model,mode,options)=>({...policy.initialize(model,mode,options),eta:options.eta??.025,warmup:Math.max(1,Math.floor(options.warmup??model.policy?.default_warmup_requests??128)),mode:options.mode||'enforce'});
+  function policyState(model,mode,options){
+    const adapter=adapters.get(model),effective=adapter.policyOptions?adapter.policyOptions(model,{...options,trainingMode:mode}):options;
+    const initialized=adapter.initializePolicy?adapter.initializePolicy(model,mode,effective):policy.initialize(model,mode,effective);
+    return {...initialized,predictionHead:effective.predictionHead||null,eta:effective.eta??.025,warmup:Math.max(1,Math.floor(effective.warmup??model.policy?.default_warmup_requests??128)),mode:effective.mode||'enforce'};
+  }
   const owner=(model,mode)=> (model.id||'gru_attention')+'@'+(model.checkpoint_id||'v2')+':'+trainingMode(model,mode)+':'+JSON.stringify(model.architecture||null);
   function assertOwner(model,s){if(s.modelOwner!==owner(model,s.trainingMode))throw Error('Model/state mismatch. Replay history with the selected checkpoint and training mode.');}
   function initial(model,n,options={}){
@@ -1966,12 +2106,24 @@ if(typeof module!=='undefined')module.exports=adapter;
   function quantile(values,q){const a=values.slice().sort((a,b)=>a-b);return a[Math.min(a.length-1,Math.max(0,Math.ceil(q*a.length)-1))];}
   function decision(s,e,result){
     if(!result)return {event:e,score:null,tauBefore:s.tau,tauAfter:s.tau,decision:null};
-    const learning=s.tau===null,block=!learning&&result.score>s.tau;
-    return {event:e,score:result.score,parts:result.parts,buckets:result.buckets,gap:result.gap,memory:result.memory,embedding:result.embedding,previousPairCount:result.previousPairCount,tauBefore:s.tau,decision:learning?'LEARNING':block?'BLOCK':'ALLOW',settled:s.mode==='shadow'||!block};
+    const supplied=Object.prototype.hasOwnProperty.call(result,'decisionThreshold'),tau=supplied?result.decisionThreshold:s.tau;
+    if(supplied&&tau!==null&&!Number.isFinite(tau))throw Error('Adapter decision threshold must be finite or null.');
+    if(supplied&&tau!==s.tau)throw Error('Adapter decision threshold differs from chronological policy state.');
+    const context=result.evaluationEligible===false,learning=tau===null,block=!context&&!learning&&result.score>tau;
+    const status=result.policyDecision||(context?'CONTEXT':learning?'LEARNING':block?'BLOCK':'ALLOW');
+    if(result.policyDecision&&(!['CONTEXT','LEARNING','BLOCK','ALLOW'].includes(status)||status==='CONTEXT'&&!context||status==='LEARNING'&&!learning||status==='BLOCK'&&(context||learning||result.score<=tau)||status==='ALLOW'&&(context||learning||result.score>tau)))throw Error('Adapter decision is inconsistent with its score and threshold.');
+    const settled=s.mode==='shadow'||status!=='BLOCK';
+    if(result.policySettlement!==undefined&&result.policySettlement!==settled)throw Error('Adapter settlement is inconsistent with the execution mode.');
+    const recordedPolicy=supplied?{decisionThreshold:tau,nextDecisionThreshold:result.nextDecisionThreshold,policyDecision:status,policySettlement:settled}:{};
+    return {event:e,score:result.score,parts:result.parts,buckets:result.buckets,gap:result.gap,memory:result.memory,embedding:result.embedding,...(result.evidence===undefined?{}:{evidence:result.evidence}),...(result.evaluationEligible===undefined?{}:{evaluationEligible:result.evaluationEligible}),...recordedPolicy,previousPairCount:result.previousPairCount,tauBefore:tau,decision:status,settled};
   }
   function finishDecision(s,record){
     if(record.score!==null){
-      if(s.decisionPolicy==='shared'){
+      if(Object.prototype.hasOwnProperty.call(record,'nextDecisionThreshold')){
+        if(record.nextDecisionThreshold!==null&&!Number.isFinite(record.nextDecisionThreshold))throw Error('Adapter next threshold must be finite or null.');
+        s.tau=record.nextDecisionThreshold;
+        if(record.decision==='LEARNING')s.calibration.push(record.score);
+      }else if(s.decisionPolicy==='shared'&&record.decision!=='CONTEXT'){
         if(record.decision==='LEARNING'){s.calibration.push(record.score);if(s.calibration.length>=s.warmup)s.tau=quantile(s.calibration,1-s.alpha);}
         else s.tau+=s.eta*((record.decision==='BLOCK'?1:0)-s.alpha);
       }
@@ -1986,17 +2138,19 @@ if(typeof module!=='undefined')module.exports=adapter;
     return finishDecision(s,record);
   }
   class Runner{
-    constructor(model,data,options={}){this.model=model;this.data=data;this.options={...options};this.state=initial(model,data.accounts.length,options);this.position=0;this.trace=[];this.predictions=new Map();this.inferenceCalls=0;this.snapshots=new Map([[0,this.snapshot()]]);}
+    constructor(model,data,options={}){const adapter=adapters.get(model);if(adapter.validateDataset)adapter.validateDataset(model,data,options);this.model=model;this.data=data;this.options={...options};this.state=initial(model,data.accounts.length,options);this.position=0;this.trace=[];this.predictions=new Map();this.inferenceCalls=0;this.snapshots=new Map([[0,this.snapshot()]]);}
     snapshot(){return clone({...this.state,decisions:[]});}
+    validateOptions(options){const adapter=adapters.get(this.model);if(adapter.validateDataset)adapter.validateDataset(this.model,this.data,options);}
     restorePolicy(){
       Object.assign(this.state,policyState(this.model,this.state.trainingMode,this.options));
       this.state.decisions=this.trace.slice(0,this.position).filter(r=>r.score!==null);
-      this.state.calibration=this.state.decisionPolicy==='shared'?this.state.decisions.slice(0,this.state.warmup).map(r=>r.score):[];
+      this.state.calibration=this.state.decisionPolicy==='shared'?this.state.decisions.filter(r=>r.decision==='LEARNING').slice(0,this.state.warmup).map(r=>r.score):[];
       if(this.position)this.state.tau=this.trace[this.position-1].tauAfter;
     }
     reconfigure(options){
       if(this.state.mode!=='shadow'||(options.mode||'shadow')!=='shadow'||trainingMode(this.model,options.trainingMode)!==this.state.trainingMode)throw Error('Only same-history policy changes can reuse model state.');
-      this.options={...options};const s={...policyState(this.model,this.state.trainingMode,options),calibration:[],decisions:[]};
+      this.validateOptions(options);
+      const s={...policyState(this.model,this.state.trainingMode,options),calibration:[],decisions:[]};this.options={...options};
       this.trace=this.trace.map(r=>finishDecision(s,decision(s,r.event,r.score===null?null:r)));
       this.restorePolicy();return this;
     }
@@ -2057,7 +2211,7 @@ if(typeof module!=='undefined')module.exports=adapter;
   'use strict';
   const policy=typeof module!=='undefined'?require('./policy'):global.FraudPolicy;
   function metrics(records,truth,alpha=.02,costs={falseBlock:1,missedFraud:20}){
-    const eligible=records.filter(r=>r.decision!=='LEARNING'),labeled=eligible.filter(r=>Object.prototype.hasOwnProperty.call(truth,r.event.id));
+    const eligible=records.filter(r=>r.decision!=='LEARNING'&&r.decision!=='CONTEXT'),labeled=eligible.filter(r=>Object.prototype.hasOwnProperty.call(truth,r.event.id));
     const tp=labeled.filter(r=>truth[r.event.id]&&r.decision==='BLOCK').length,fn=labeled.filter(r=>truth[r.event.id]&&r.decision!=='BLOCK').length;
     const fp=labeled.filter(r=>!truth[r.event.id]&&r.decision==='BLOCK').length,tn=labeled.length-tp-fn-fp;
     // Fixed-budget comparison is a retrospective ranking metric, separate

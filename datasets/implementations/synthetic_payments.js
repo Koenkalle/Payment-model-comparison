@@ -40,7 +40,7 @@
   function build(name='relay',size='medium',seed=42,reportDelay=1440,forwardDelay=2){
     const {n,base,days}=sizes[size]||sizes.medium,w=background(n,base,days*1440,seed),{events,accounts,truth,add,r}=w;
     const focus=[],bookmarks=[],start=days*1440*.53;
-    const tag=(e,fraud=false)=>{focus.push(e.id);truth[e.id]=fraud;return e;};
+    const tag=(e,fraud=false)=>{focus.push(e.id);if(e.kind==='payment')truth[e.id]=fraud;return e;};
     const pay=(t,u,v,a,bad=true)=>tag(add(t,u,v,a),bad);
     const [m,a,b,c,d,f,g,h,j,k]=Array.from({length:10},(_,i)=>n-10+i);
     const bookmark=(label,e)=>bookmarks.push({label,id:e.id});

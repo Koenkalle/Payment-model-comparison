@@ -3,7 +3,7 @@
   'use strict';
   const policy=typeof module!=='undefined'?require('./policy'):global.FraudPolicy;
   function metrics(records,truth,alpha=.02,costs={falseBlock:1,missedFraud:20}){
-    const eligible=records.filter(r=>r.decision!=='LEARNING'),labeled=eligible.filter(r=>Object.prototype.hasOwnProperty.call(truth,r.event.id));
+    const eligible=records.filter(r=>r.decision!=='LEARNING'&&r.decision!=='CONTEXT'),labeled=eligible.filter(r=>Object.prototype.hasOwnProperty.call(truth,r.event.id));
     const tp=labeled.filter(r=>truth[r.event.id]&&r.decision==='BLOCK').length,fn=labeled.filter(r=>truth[r.event.id]&&r.decision!=='BLOCK').length;
     const fp=labeled.filter(r=>!truth[r.event.id]&&r.decision==='BLOCK').length,tn=labeled.length-tp-fn-fp;
     // Fixed-budget comparison is a retrospective ranking metric, separate

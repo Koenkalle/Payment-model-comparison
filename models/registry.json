@@ -2,6 +2,8 @@
   "version": 1,
   "browser_support": [
     "shared/runtime/model-registry.js",
+    "shared/runtime/prediction-heads.js",
+    "models/implementations/native_recording.js",
     "models/implementations/_math.js",
     "models/implementations/xgboost_numpy_core.js",
     "models/implementations/_neural.js",
@@ -17,6 +19,7 @@
       "checkpoint": null,
       "inputs": ["temporal-graph/v1"],
       "execution": ["python"],
+      "comparison": {"runtime": "python", "artifact": "models/native-dyg-tami", "artifacts": {"unsupervised": "models/native-dyg-tami", "supervised": "models/native-dyg-tami-fraud"}, "prediction_heads": ["empirical_tail", "fixed_likelihood", "fraud_linear"], "modes": ["shadow", "enforce"], "training_modes": ["unsupervised", "supervised"], "decision_policies": ["shared", "manual", "tuned", "auto"]},
       "tasks": {
         "temporal-fraud-classification": {
           "python_module": "models.implementations.dyg_tami_fraud",

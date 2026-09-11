@@ -6,7 +6,11 @@
   const zero=n=>Array(n).fill(0),matrix=(n,m)=>Array.from({length:n},()=>zero(m));
   const clone=x=>JSON.parse(JSON.stringify(x));
   const trainingMode=(model,mode)=>mode||model.training_mode||'unsupervised';
-  const policyState=(model,mode,options)=>({...policy.initialize(model,mode,options),eta:options.eta??.025,warmup:Math.max(1,Math.floor(options.warmup??model.policy?.default_warmup_requests??128)),mode:options.mode||'enforce'});
+  function policyState(model,mode,options){
+    const adapter=adapters.get(model),effective=adapter.policyOptions?adapter.policyOptions(model,{...options,trainingMode:mode}):options;
+    const initialized=adapter.initializePolicy?adapter.initializePolicy(model,mode,effective):policy.initialize(model,mode,effective);
+    return {...initialized,predictionHead:effective.predictionHead||null,eta:effective.eta??.025,warmup:Math.max(1,Math.floor(effective.warmup??model.policy?.default_warmup_requests??128)),mode:effective.mode||'enforce'};
+  }
   const owner=(model,mode)=> (model.id||'gru_attention')+'@'+(model.checkpoint_id||'v2')+':'+trainingMode(model,mode)+':'+JSON.stringify(model.architecture||null);
   function assertOwner(model,s){if(s.modelOwner!==owner(model,s.trainingMode))throw Error('Model/state mismatch. Replay history with the selected checkpoint and training mode.');}
   function initial(model,n,options={}){
@@ -44,12 +48,24 @@
   function quantile(values,q){const a=values.slice().sort((a,b)=>a-b);return a[Math.min(a.length-1,Math.max(0,Math.ceil(q*a.length)-1))];}
   function decision(s,e,result){
     if(!result)return {event:e,score:null,tauBefore:s.tau,tauAfter:s.tau,decision:null};
-    const learning=s.tau===null,block=!learning&&result.score>s.tau;
-    return {event:e,score:result.score,parts:result.parts,buckets:result.buckets,gap:result.gap,memory:result.memory,embedding:result.embedding,previousPairCount:result.previousPairCount,tauBefore:s.tau,decision:learning?'LEARNING':block?'BLOCK':'ALLOW',settled:s.mode==='shadow'||!block};
+    const supplied=Object.prototype.hasOwnProperty.call(result,'decisionThreshold'),tau=supplied?result.decisionThreshold:s.tau;
+    if(supplied&&tau!==null&&!Number.isFinite(tau))throw Error('Adapter decision threshold must be finite or null.');
+    if(supplied&&tau!==s.tau)throw Error('Adapter decision threshold differs from chronological policy state.');
+    const context=result.evaluationEligible===false,learning=tau===null,block=!context&&!learning&&result.score>tau;
+    const status=result.policyDecision||(context?'CONTEXT':learning?'LEARNING':block?'BLOCK':'ALLOW');
+    if(result.policyDecision&&(!['CONTEXT','LEARNING','BLOCK','ALLOW'].includes(status)||status==='CONTEXT'&&!context||status==='LEARNING'&&!learning||status==='BLOCK'&&(context||learning||result.score<=tau)||status==='ALLOW'&&(context||learning||result.score>tau)))throw Error('Adapter decision is inconsistent with its score and threshold.');
+    const settled=s.mode==='shadow'||status!=='BLOCK';
+    if(result.policySettlement!==undefined&&result.policySettlement!==settled)throw Error('Adapter settlement is inconsistent with the execution mode.');
+    const recordedPolicy=supplied?{decisionThreshold:tau,nextDecisionThreshold:result.nextDecisionThreshold,policyDecision:status,policySettlement:settled}:{};
+    return {event:e,score:result.score,parts:result.parts,buckets:result.buckets,gap:result.gap,memory:result.memory,embedding:result.embedding,...(result.evidence===undefined?{}:{evidence:result.evidence}),...(result.evaluationEligible===undefined?{}:{evaluationEligible:result.evaluationEligible}),...recordedPolicy,previousPairCount:result.previousPairCount,tauBefore:tau,decision:status,settled};
   }
   function finishDecision(s,record){
     if(record.score!==null){
-      if(s.decisionPolicy==='shared'){
+      if(Object.prototype.hasOwnProperty.call(record,'nextDecisionThreshold')){
+        if(record.nextDecisionThreshold!==null&&!Number.isFinite(record.nextDecisionThreshold))throw Error('Adapter next threshold must be finite or null.');
+        s.tau=record.nextDecisionThreshold;
+        if(record.decision==='LEARNING')s.calibration.push(record.score);
+      }else if(s.decisionPolicy==='shared'&&record.decision!=='CONTEXT'){
         if(record.decision==='LEARNING'){s.calibration.push(record.score);if(s.calibration.length>=s.warmup)s.tau=quantile(s.calibration,1-s.alpha);}
         else s.tau+=s.eta*((record.decision==='BLOCK'?1:0)-s.alpha);
       }
@@ -64,17 +80,19 @@
     return finishDecision(s,record);
   }
   class Runner{
-    constructor(model,data,options={}){this.model=model;this.data=data;this.options={...options};this.state=initial(model,data.accounts.length,options);this.position=0;this.trace=[];this.predictions=new Map();this.inferenceCalls=0;this.snapshots=new Map([[0,this.snapshot()]]);}
+    constructor(model,data,options={}){const adapter=adapters.get(model);if(adapter.validateDataset)adapter.validateDataset(model,data,options);this.model=model;this.data=data;this.options={...options};this.state=initial(model,data.accounts.length,options);this.position=0;this.trace=[];this.predictions=new Map();this.inferenceCalls=0;this.snapshots=new Map([[0,this.snapshot()]]);}
     snapshot(){return clone({...this.state,decisions:[]});}
+    validateOptions(options){const adapter=adapters.get(this.model);if(adapter.validateDataset)adapter.validateDataset(this.model,this.data,options);}
     restorePolicy(){
       Object.assign(this.state,policyState(this.model,this.state.trainingMode,this.options));
       this.state.decisions=this.trace.slice(0,this.position).filter(r=>r.score!==null);
-      this.state.calibration=this.state.decisionPolicy==='shared'?this.state.decisions.slice(0,this.state.warmup).map(r=>r.score):[];
+      this.state.calibration=this.state.decisionPolicy==='shared'?this.state.decisions.filter(r=>r.decision==='LEARNING').slice(0,this.state.warmup).map(r=>r.score):[];
       if(this.position)this.state.tau=this.trace[this.position-1].tauAfter;
     }
     reconfigure(options){
       if(this.state.mode!=='shadow'||(options.mode||'shadow')!=='shadow'||trainingMode(this.model,options.trainingMode)!==this.state.trainingMode)throw Error('Only same-history policy changes can reuse model state.');
-      this.options={...options};const s={...policyState(this.model,this.state.trainingMode,options),calibration:[],decisions:[]};
+      this.validateOptions(options);
+      const s={...policyState(this.model,this.state.trainingMode,options),calibration:[],decisions:[]};this.options={...options};
       this.trace=this.trace.map(r=>finishDecision(s,decision(s,r.event,r.score===null?null:r)));
       this.restorePolicy();return this;
     }
