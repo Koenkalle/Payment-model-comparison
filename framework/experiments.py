@@ -53,7 +53,14 @@ def report(model,dataset,indices,threshold,explain=False):
     return {'version':1,'schema':'model-evaluation/v1','feature_names':list(dataset.feature_names),'threshold':threshold,'dataset':dataset.provenance,'metrics':metrics(dataset.labels[indices],prediction.probabilities,threshold),'rows':rows}
 
 def train_experiment(config,output,base_dir=None):
+    if config.get('task')=='temporal-fraud-classification':
+        from .temporal_fraud_experiments import train
+        return train(config,output,base_dir)
+    if config.get('task') not in (None,'dynamic-link-prediction'):
+        raise ValueError('Unsupported experiment task: '+str(config['task']))
     dataset=load_dataset(config['dataset'],base_dir)
+    if config.get('task')=='dynamic-link-prediction' and not isinstance(dataset,TemporalGraphDataset):
+        raise ValueError('Dynamic link prediction requires temporal graph input.')
     if isinstance(dataset,TemporalGraphDataset):
         from .temporal_experiments import train
         return train(config,output,dataset)
@@ -85,6 +92,9 @@ def train_experiment(config,output,base_dir=None):
 def evaluate_artifact(artifact,dataset_config,base_dir=None,partition='all'):
     artifact=Path(artifact);metadata=json.loads((artifact/'manifest.json').read_text())
     if metadata.get('version')!=1:raise ValueError('Unsupported model artifact version.')
+    if metadata.get('task')=='temporal-fraud-classification':
+        from .temporal_fraud_experiments import evaluate
+        return evaluate(artifact,dataset_config,base_dir,partition)
     if metadata.get('task')=='dynamic-link-prediction':
         from .temporal_experiments import evaluate
         return evaluate(artifact,dataset_config,base_dir,partition)

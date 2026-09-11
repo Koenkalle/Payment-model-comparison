@@ -40,6 +40,26 @@ class TemporalGraphDataset:
     schema: str='temporal-graph/v1'
 
 @dataclass(frozen=True)
+class LabeledTemporalGraphDataset:
+    """Fraud targets kept outside the graph; NaN availability means retrospective.
+
+    Label timestamps use the graph's relative seconds. Unknown (-1) outcomes
+    remain graph context and must never become legitimate training examples.
+    """
+    graph: TemporalGraphDataset
+    labels: np.ndarray
+    label_available_at: np.ndarray
+    provenance: dict
+    document: dict|None=None
+    schema: str='labeled-temporal-graph/v1'
+
+    @property
+    def ids(self): return self.graph.ids
+
+    @property
+    def times(self): return self.graph.times
+
+@dataclass(frozen=True)
 class Predictions:
     probabilities: np.ndarray
     margins: np.ndarray|None=None
@@ -54,5 +74,12 @@ class FittedModel(Protocol):
 class FittedTemporalModel(Protocol):
     def fit_graph(self,dataset:TemporalGraphDataset,training:np.ndarray,validation:np.ndarray,parameters:dict)->None: ...
     def predict_graph(self,dataset:TemporalGraphDataset,indices:np.ndarray,seed:int)->dict: ...
+    def save(self,path:Path)->None: ...
+    def load_graph(self,path:Path,dataset:TemporalGraphDataset)->None: ...
+
+class FittedTemporalFraudModel(Protocol):
+    def pretraining_parameters(self,parameters:dict,overrides:dict|None=None)->dict: ...
+    def fit_fraud(self,dataset:LabeledTemporalGraphDataset,training:np.ndarray,validation:np.ndarray,parameters:dict,*,pretrained_model=None)->None: ...
+    def predict_fraud(self,dataset:TemporalGraphDataset,indices:np.ndarray)->dict: ...
     def save(self,path:Path)->None: ...
     def load_graph(self,path:Path,dataset:TemporalGraphDataset)->None: ...

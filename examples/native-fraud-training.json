@@ -1,0 +1,37 @@
+{
+  "model": "dyg_tami_native",
+  "task": "temporal-fraud-classification",
+  "dataset": {"loader": "payment_json", "path": "../models/native-fraud-history.json"},
+  "graph": {"node_feature_dim": 32},
+  "initialization": {
+    "method": "link_pretrain_train_partition",
+    "parameters": {
+      "epochs": 12,
+      "patience": 4,
+      "learning_rate": 0.0005,
+      "weight_decay": 0.0001
+    }
+  },
+  "encoder_training": "finetune",
+  "prediction_head": {"id": "fraud_linear"},
+  "split": {"boundaries": [1045696.9919999999, 1394349.5099999998, 1742654.3939999999]},
+  "parameters": {
+    "epochs": 40,
+    "patience": 6,
+    "batch_size": 64,
+    "learning_rate": 0.0002,
+    "weight_decay": 0.0001,
+    "time_feat_dim": 32,
+    "channel_embedding_dim": 32,
+    "num_layers": 3,
+    "num_heads": 4,
+    "dropout": 0.15,
+    "patch_size": 2,
+    "max_input_sequence_length": 64,
+    "gamma": 0.9,
+    "class_weight": 8.0,
+    "seed": 42,
+    "device": "cuda:0",
+    "num_threads": 4
+  }
+}

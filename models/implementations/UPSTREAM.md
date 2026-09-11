@@ -49,5 +49,12 @@ configurations. Link prediction evaluates observed links against sampled links;
 it is not supervised fraud detection, calibrated probability estimation, or a
 claim to reproduce the papers' benchmark scores.
 
+`dyg_tami_fraud.py` is this repository's downstream fraud-classification task.
+It reuses the backbone, LTE, interaction projection and detached TRC memory, and
+adds the independently implemented `fraud_linear` head with candidate amount as
+an extra input. Confirmed payment outcomes supervise either this head alone or
+the head and temporal encoder together. This classifier and its fraud-training
+protocol are local extensions, not an upstream fraud benchmark implementation.
+
 The `*_prototype.py` entries preserve old browser checkpoint compatibility.
 They are separate from this native implementation and remain labeled prototypes.

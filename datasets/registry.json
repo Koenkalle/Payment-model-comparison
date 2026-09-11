@@ -2,6 +2,7 @@
   "version": 1,
   "browser_support": ["shared/runtime/dataset-registry.js"],
   "datasets": [
+    {"id":"payment_episodes","label":"Independent chronological payment episodes","schema":"payment-events/v1","python_module":"datasets.implementations.payment_episodes","browser":null,"origin":"configured"},
     {"id":"temporal_csv","label":"Temporal links / DyGLib CSV","schema":"temporal-graph/v1","python_module":"datasets.implementations.temporal_csv","browser":null,"origin":"user-supplied"},
     {"id":"payment_graph","label":"Payment events as temporal links","schema":"temporal-graph/v1","python_module":"datasets.implementations.payment_graph","browser":null,"origin":"user-supplied"},
     {"id":"synthetic_payments","label":"Synthetic payment scenarios","schema":"payment-events/v1","python_module":"datasets.implementations.synthetic_payments","browser":"datasets/implementations/synthetic_payments.js","origin":"synthetic"},

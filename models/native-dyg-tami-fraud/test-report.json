@@ -1,0 +1,4046 @@
+{
+  "version": 1,
+  "schema": "temporal-fraud-evaluation/v1",
+  "task": "temporal-fraud-classification",
+  "partition": "test",
+  "threshold": 0.32632500655345226,
+  "threshold_units": "fraud-surprise-bits",
+  "history": "observed attempts; strictly earlier context; frozen weights and reset state",
+  "label_cutoff": null,
+  "dataset": {
+    "loader": "payment_json",
+    "source_name": "native-fraud-history.json",
+    "source_sha256": "584a688d8759c975a4866e926e90bd1c7f9275edd79b0017514d600ed2a71b84",
+    "configuration": {
+      "loader": "payment_json",
+      "path": "../models/native-fraud-history.json"
+    },
+    "configuration_sha256": "e1e113b363afa3505a1f856663bbc7cd4b5eeec60f52adf64236fbdffca39b32",
+    "origin": "user-supplied",
+    "source_provenance": {
+      "loader": "payment_episodes",
+      "origin": "synthetic",
+      "configuration": {
+        "loader": "payment_episodes",
+        "name": "Independent labeled fraud history (synthetic)",
+        "gap_minutes": 60,
+        "episodes": [
+          {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "relay",
+              "size": "small",
+              "seed": 73001
+            }
+          },
+          {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "split",
+              "size": "small",
+              "seed": 73002
+            }
+          },
+          {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "takeover",
+              "size": "small",
+              "seed": 73003
+            }
+          },
+          {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "mixed",
+              "size": "small",
+              "seed": 73004
+            }
+          },
+          {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "relay",
+              "size": "small",
+              "seed": 73005
+            }
+          },
+          {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "split",
+              "size": "small",
+              "seed": 73006
+            }
+          }
+        ]
+      },
+      "episodes": [
+        {
+          "loader": "synthetic_payments",
+          "origin": "synthetic",
+          "configuration": {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "relay",
+              "size": "small",
+              "seed": 73001
+            }
+          }
+        },
+        {
+          "loader": "synthetic_payments",
+          "origin": "synthetic",
+          "configuration": {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "split",
+              "size": "small",
+              "seed": 73002
+            }
+          }
+        },
+        {
+          "loader": "synthetic_payments",
+          "origin": "synthetic",
+          "configuration": {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "takeover",
+              "size": "small",
+              "seed": 73003
+            }
+          }
+        },
+        {
+          "loader": "synthetic_payments",
+          "origin": "synthetic",
+          "configuration": {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "mixed",
+              "size": "small",
+              "seed": 73004
+            }
+          }
+        },
+        {
+          "loader": "synthetic_payments",
+          "origin": "synthetic",
+          "configuration": {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "relay",
+              "size": "small",
+              "seed": 73005
+            }
+          }
+        },
+        {
+          "loader": "synthetic_payments",
+          "origin": "synthetic",
+          "configuration": {
+            "loader": "synthetic_payments",
+            "options": {
+              "name": "split",
+              "size": "small",
+              "seed": 73006
+            }
+          }
+        }
+      ],
+      "episode_bounds": [
+        {
+          "episode": 1,
+          "start_minutes": 0.0,
+          "end_minutes": 5746.6903999999995
+        },
+        {
+          "episode": 2,
+          "start_minutes": 5806.6903999999995,
+          "end_minutes": 11558.526600000001
+        },
+        {
+          "episode": 3,
+          "start_minutes": 11618.526600000001,
+          "end_minutes": 17368.283199999998
+        },
+        {
+          "episode": 4,
+          "start_minutes": 17428.283199999998,
+          "end_minutes": 23179.158499999998
+        },
+        {
+          "episode": 5,
+          "start_minutes": 23239.158499999998,
+          "end_minutes": 28984.239899999997
+        },
+        {
+          "episode": 6,
+          "start_minutes": 29044.239899999997,
+          "end_minutes": 34796.10739999999
+        }
+      ]
+    },
+    "task": "temporal-fraud-classification",
+    "label_semantics": {
+      "fraud": 1,
+      "legitimate": 0,
+      "unknown": -1
+    },
+    "label_availability": "retrospective",
+    "explicit_label_times": 0,
+    "retrospective_labels": 2710
+  },
+  "metrics": {
+    "rows": 425,
+    "known": 425,
+    "unknown": 0,
+    "tp": 3,
+    "fp": 4,
+    "fn": 13,
+    "tn": 405,
+    "precision": 0.42857142857142855,
+    "recall": 0.1875,
+    "f1": 0.2608695652173913,
+    "block_rate": 0.01647058823529412,
+    "fraud": 16,
+    "legitimate": 409,
+    "average_precision": 0.20124134257812343,
+    "roc_auc": 0.8097493887530562,
+    "log_loss": 0.13917157716119108,
+    "false_block_rate": 0.009779951100244499
+  },
+  "metric_definitions": {
+    "average_precision": "Non-interpolated average precision on known payment outcomes; fraud is positive."
+  },
+  "rows": [
+    {
+      "id": "episode-6:P00001",
+      "timestamp_seconds": 1742654.3939999999,
+      "fraud_logit": -2.3035566806793213,
+      "fraud_probability": 0.09082882631507234,
+      "score": 0.13737615230780706,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00003",
+      "timestamp_seconds": 1744316.0579999997,
+      "fraud_logit": -2.46974515914917,
+      "fraud_probability": 0.07800656170435187,
+      "score": 0.11717161166443477,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00004",
+      "timestamp_seconds": 1745345.3159999996,
+      "fraud_logit": -1.1771275997161865,
+      "fraud_probability": 0.23556905444393794,
+      "score": 0.38754191246864295,
+      "label": 0,
+      "decision": "BLOCK"
+    },
+    {
+      "id": "episode-6:P00005",
+      "timestamp_seconds": 1745669.4659999998,
+      "fraud_logit": -2.4569735527038574,
+      "fraud_probability": 0.07893008006359437,
+      "score": 0.11861741705425702,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00006",
+      "timestamp_seconds": 1746375.6539999999,
+      "fraud_logit": -2.5132486820220947,
+      "fraud_probability": 0.07493460156457835,
+      "score": 0.1123727328656539,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00007",
+      "timestamp_seconds": 1747703.9699999997,
+      "fraud_logit": -2.400690793991089,
+      "fraud_probability": 0.08312003516427886,
+      "score": 0.1251952219955616,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00008",
+      "timestamp_seconds": 1748133.7079999996,
+      "fraud_logit": -3.041867256164551,
+      "fraud_probability": 0.04556988875323641,
+      "score": 0.06728853565439985,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00010",
+      "timestamp_seconds": 1749996.6359999997,
+      "fraud_logit": -1.2859930992126465,
+      "fraud_probability": 0.2165317924977762,
+      "score": 0.35205336238412943,
+      "label": 0,
+      "decision": "BLOCK"
+    },
+    {
+      "id": "episode-6:P00011",
+      "timestamp_seconds": 1750305.93,
+      "fraud_logit": -2.4751594066619873,
+      "fraud_probability": 0.0776180493091538,
+      "score": 0.11656381249566092,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00012",
+      "timestamp_seconds": 1751034.7259999998,
+      "fraud_logit": -2.934115171432495,
+      "fraud_probability": 0.05049266527334177,
+      "score": 0.0747489499808306,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00013",
+      "timestamp_seconds": 1752120.6479999998,
+      "fraud_logit": -3.1377058029174805,
+      "fraud_probability": 0.041578446229641096,
+      "score": 0.06126774188591845,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00014",
+      "timestamp_seconds": 1752524.8979999998,
+      "fraud_logit": -2.398881196975708,
+      "fraud_probability": 0.08325805061326846,
+      "score": 0.12541240330502887,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00015",
+      "timestamp_seconds": 1753148.3039999998,
+      "fraud_logit": -1.5426383018493652,
+      "fraud_probability": 0.17615207057920196,
+      "score": 0.27955003383506094,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00016",
+      "timestamp_seconds": 1754216.73,
+      "fraud_logit": -2.512816905975342,
+      "fraud_probability": 0.07496453751789085,
+      "score": 0.11241942053799044,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00017",
+      "timestamp_seconds": 1755089.9039999999,
+      "fraud_logit": -3.205375909805298,
+      "fraud_probability": 0.03896391823839115,
+      "score": 0.057337497393711793,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00018",
+      "timestamp_seconds": 1756183.6439999999,
+      "fraud_logit": -3.4746553897857666,
+      "fraud_probability": 0.03004202853424399,
+      "score": 0.044005858589207345,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00019",
+      "timestamp_seconds": 1756234.9019999998,
+      "fraud_logit": -3.283947229385376,
+      "fraud_probability": 0.03612601823146513,
+      "score": 0.05308355606890517,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00020",
+      "timestamp_seconds": 1757008.9199999997,
+      "fraud_logit": -2.4839696884155273,
+      "fraud_probability": 0.07698963310312151,
+      "score": 0.11558124313037117,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00021",
+      "timestamp_seconds": 1758441.4379999998,
+      "fraud_logit": -3.2163236141204834,
+      "fraud_probability": 0.038556036215400546,
+      "score": 0.0567253200324653,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00023",
+      "timestamp_seconds": 1759582.1879999998,
+      "fraud_logit": -3.4608356952667236,
+      "fraud_probability": 0.030447353596482454,
+      "score": 0.04460885654174733,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00024",
+      "timestamp_seconds": 1760621.7179999996,
+      "fraud_logit": -2.8051469326019287,
+      "fraud_probability": 0.05704667823383944,
+      "score": 0.08474173875183555,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00025",
+      "timestamp_seconds": 1761454.2539999997,
+      "fraud_logit": -2.38733172416687,
+      "fraud_probability": 0.08414383092698743,
+      "score": 0.1268070472835029,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00026",
+      "timestamp_seconds": 1761598.3739999998,
+      "fraud_logit": -3.6459765434265137,
+      "fraud_probability": 0.025432236175702286,
+      "score": 0.037165592180630105,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00027",
+      "timestamp_seconds": 1762640.4119999998,
+      "fraud_logit": -1.3682628870010376,
+      "fraud_probability": 0.202900648156465,
+      "score": 0.32716853945596247,
+      "label": 0,
+      "decision": "BLOCK"
+    },
+    {
+      "id": "episode-6:P00028",
+      "timestamp_seconds": 1763209.2359999998,
+      "fraud_logit": -2.3836510181427,
+      "fraud_probability": 0.08442791406495172,
+      "score": 0.1272546163722811,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00029",
+      "timestamp_seconds": 1764379.3439999998,
+      "fraud_logit": -3.7198646068573,
+      "fraud_probability": 0.02366370604102828,
+      "score": 0.034549932693241,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00030",
+      "timestamp_seconds": 1765123.3079999997,
+      "fraud_logit": -2.4203107357025146,
+      "fraud_probability": 0.08163695584284981,
+      "score": 0.12286350718990006,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00031",
+      "timestamp_seconds": 1765705.4519999998,
+      "fraud_logit": -2.9929730892181396,
+      "fraud_probability": 0.04774433700253065,
+      "score": 0.07057913246727165,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00032",
+      "timestamp_seconds": 1766823.1919999998,
+      "fraud_logit": -3.788407564163208,
+      "fraud_probability": 0.02213075782522245,
+      "score": 0.03228652978948966,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00033",
+      "timestamp_seconds": 1767044.9939999997,
+      "fraud_logit": -3.078399419784546,
+      "fraud_probability": 0.04400710344658681,
+      "score": 0.06492819649853292,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00034",
+      "timestamp_seconds": 1767762.7079999999,
+      "fraud_logit": -2.614880323410034,
+      "fraud_probability": 0.06818686635037857,
+      "score": 0.1018874299082118,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00035",
+      "timestamp_seconds": 1768640.8079999997,
+      "fraud_logit": -2.8868906497955322,
+      "fraud_probability": 0.052805422762459316,
+      "score": 0.07826727343792222,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00036",
+      "timestamp_seconds": 1769267.5739999998,
+      "fraud_logit": -2.5462493896484375,
+      "fraud_probability": 0.07267885912768608,
+      "score": 0.10885904933707043,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00037",
+      "timestamp_seconds": 1770206.3159999999,
+      "fraud_logit": -2.737128734588623,
+      "fraud_probability": 0.06081770019734357,
+      "score": 0.0905228757787918,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00038",
+      "timestamp_seconds": 1771265.5919999997,
+      "fraud_logit": -2.979705572128296,
+      "fraud_probability": 0.04835117452782258,
+      "score": 0.07149880204451468,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00039",
+      "timestamp_seconds": 1771793.1239999998,
+      "fraud_logit": -3.9866745471954346,
+      "fraud_probability": 0.01822309151748938,
+      "score": 0.02653286015482136,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00040",
+      "timestamp_seconds": 1772440.5419999997,
+      "fraud_logit": -3.136732339859009,
+      "fraud_probability": 0.041617255736004985,
+      "score": 0.06132616233336382,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00041",
+      "timestamp_seconds": 1773262.7939999998,
+      "fraud_logit": -3.8456485271453857,
+      "fraud_probability": 0.02092530945768194,
+      "score": 0.03050917217307279,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00042",
+      "timestamp_seconds": 1773883.1279999998,
+      "fraud_logit": -2.889246940612793,
+      "fraud_probability": 0.05268769225040117,
+      "score": 0.07808796638185166,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00043",
+      "timestamp_seconds": 1775079.9479999996,
+      "fraud_logit": -2.9856109619140625,
+      "fraud_probability": 0.04808017142577802,
+      "score": 0.0710880211323626,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00044",
+      "timestamp_seconds": 1775474.1539999999,
+      "fraud_logit": -4.020401954650879,
+      "fraud_probability": 0.017629377704941745,
+      "score": 0.02566067719938072,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00045",
+      "timestamp_seconds": 1776640.0319999997,
+      "fraud_logit": -3.410440683364868,
+      "fraud_probability": 0.031970756131153896,
+      "score": 0.046877463351045257,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00046",
+      "timestamp_seconds": 1777149.8519999997,
+      "fraud_logit": -3.175184488296509,
+      "fraud_probability": 0.04011032828108479,
+      "score": 0.059059500731719304,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00047",
+      "timestamp_seconds": 1778238.72,
+      "fraud_logit": -3.6249635219573975,
+      "fraud_probability": 0.02595827950899142,
+      "score": 0.03794452724460641,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00049",
+      "timestamp_seconds": 1779256.596,
+      "fraud_logit": -2.7992191314697266,
+      "fraud_probability": 0.05736638715120441,
+      "score": 0.08523096835516292,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00050",
+      "timestamp_seconds": 1780681.6919999998,
+      "fraud_logit": -3.1739771366119385,
+      "fraud_probability": 0.040156838939035586,
+      "score": 0.05912940701705387,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00051",
+      "timestamp_seconds": 1781021.1059999997,
+      "fraud_logit": -3.6597211360931396,
+      "fraud_probability": 0.025093783400511407,
+      "score": 0.0366646527988768,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00052",
+      "timestamp_seconds": 1782005.988,
+      "fraud_logit": -4.1778669357299805,
+      "fraud_probability": 0.015099679268437725,
+      "score": 0.02195037444339358,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00053",
+      "timestamp_seconds": 1782996.2639999997,
+      "fraud_logit": -3.9955391883850098,
+      "fraud_probability": 0.018065169613073202,
+      "score": 0.026300816780704454,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00054",
+      "timestamp_seconds": 1783729.2419999999,
+      "fraud_logit": -3.206904172897339,
+      "fraud_probability": 0.038906731613205583,
+      "score": 0.057251652119481564,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00055",
+      "timestamp_seconds": 1784177.6039999998,
+      "fraud_logit": -3.5758204460144043,
+      "fraud_probability": 0.027230209769272574,
+      "score": 0.03982966890300672,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00056",
+      "timestamp_seconds": 1784870.5739999998,
+      "fraud_logit": -3.857029438018799,
+      "fraud_probability": 0.020693410605622194,
+      "score": 0.030167502929350283,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00059",
+      "timestamp_seconds": 1787414.7959999999,
+      "fraud_logit": -2.7523019313812256,
+      "fraud_probability": 0.05995677730731754,
+      "score": 0.0892010022132681,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00060",
+      "timestamp_seconds": 1787905.3739999998,
+      "fraud_logit": -4.2043280601501465,
+      "fraud_probability": 0.01471116561222864,
+      "score": 0.021381386708444965,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00061",
+      "timestamp_seconds": 1788662.616,
+      "fraud_logit": -3.3271710872650146,
+      "fraud_probability": 0.03465073311684482,
+      "score": 0.05087708573415088,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00062",
+      "timestamp_seconds": 1789473.7559999998,
+      "fraud_logit": -3.0548365116119385,
+      "fraud_probability": 0.04500912615443947,
+      "score": 0.06644114846218249,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00063",
+      "timestamp_seconds": 1790119.8659999997,
+      "fraud_logit": -3.6349093914031982,
+      "fraud_probability": 0.025707985834918883,
+      "score": 0.037573854153119327,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00064",
+      "timestamp_seconds": 1791212.1239999998,
+      "fraud_logit": -4.158531665802002,
+      "fraud_probability": 0.015389939539487562,
+      "score": 0.022375614199062213,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00065",
+      "timestamp_seconds": 1791753.7079999996,
+      "fraud_logit": -3.274686574935913,
+      "fraud_probability": 0.036449871710650145,
+      "score": 0.05356837081243115,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00066",
+      "timestamp_seconds": 1792455.8399999999,
+      "fraud_logit": -2.9711244106292725,
+      "fraud_probability": 0.04874755622909721,
+      "score": 0.07209983997774025,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00067",
+      "timestamp_seconds": 1793558.2859999998,
+      "fraud_logit": -3.3190581798553467,
+      "fraud_probability": 0.034923137277927174,
+      "score": 0.051284245717009055,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00068",
+      "timestamp_seconds": 1793927.028,
+      "fraud_logit": -2.9869444370269775,
+      "fraud_probability": 0.04801917707770841,
+      "score": 0.07099558328016352,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00069",
+      "timestamp_seconds": 1794960.9719999998,
+      "fraud_logit": -3.234900951385498,
+      "fraud_probability": 0.03787325689482458,
+      "score": 0.05570113893253737,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00070",
+      "timestamp_seconds": 1796042.5139999997,
+      "fraud_logit": -2.878509521484375,
+      "fraud_probability": 0.05322619633602261,
+      "score": 0.07890830627038731,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00071",
+      "timestamp_seconds": 1796331.15,
+      "fraud_logit": -4.371522426605225,
+      "fraud_probability": 0.012474417857281908,
+      "score": 0.018109972783794406,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00072",
+      "timestamp_seconds": 1796929.9259999997,
+      "fraud_logit": -2.66447377204895,
+      "fraud_probability": 0.06510251062852905,
+      "score": 0.09711991136645369,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00073",
+      "timestamp_seconds": 1798161.666,
+      "fraud_logit": -4.196676254272461,
+      "fraud_probability": 0.01482248944380943,
+      "score": 0.02154440024109153,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00074",
+      "timestamp_seconds": 1798948.5599999996,
+      "fraud_logit": -4.235947132110596,
+      "fraud_probability": 0.014259818403943785,
+      "score": 0.020720659357185634,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00075",
+      "timestamp_seconds": 1799767.1279999998,
+      "fraud_logit": -3.933223247528076,
+      "fraud_probability": 0.019204426597083834,
+      "score": 0.02797562711893729,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00077",
+      "timestamp_seconds": 1801270.8359999997,
+      "fraud_logit": -3.119178533554077,
+      "fraud_probability": 0.04232305485196839,
+      "score": 0.06238902372139488,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00078",
+      "timestamp_seconds": 1801974.738,
+      "fraud_logit": -2.896514654159546,
+      "fraud_probability": 0.05232612533998972,
+      "score": 0.07753742854704071,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00079",
+      "timestamp_seconds": 1802367.8159999996,
+      "fraud_logit": -3.6551196575164795,
+      "fraud_probability": 0.02520660070283095,
+      "score": 0.03683161283870804,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00080",
+      "timestamp_seconds": 1803563.6219999997,
+      "fraud_logit": -4.03740119934082,
+      "fraud_probability": 0.017337376303728128,
+      "score": 0.025231911958463128,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00082",
+      "timestamp_seconds": 1804677.6239999998,
+      "fraud_logit": -4.0373454093933105,
+      "fraud_probability": 0.0173383268110368,
+      "score": 0.02523330744538886,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00083",
+      "timestamp_seconds": 1805397.7619999999,
+      "fraud_logit": -4.1616902351379395,
+      "fraud_probability": 0.01534215064524982,
+      "score": 0.022305593456433695,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00084",
+      "timestamp_seconds": 1806854.8619999997,
+      "fraud_logit": -4.188124656677246,
+      "fraud_probability": 0.014947886081774591,
+      "score": 0.021728042904599863,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00085",
+      "timestamp_seconds": 1807251.366,
+      "fraud_logit": -2.812500238418579,
+      "fraud_probability": 0.056652412566188214,
+      "score": 0.0841386481961112,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00086",
+      "timestamp_seconds": 1807704.3839999998,
+      "fraud_logit": -2.916283369064331,
+      "fraud_probability": 0.0513544630836428,
+      "score": 0.0760589725097573,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00087",
+      "timestamp_seconds": 1809128.2859999998,
+      "fraud_logit": -4.08427095413208,
+      "fraud_probability": 0.016556670317749805,
+      "score": 0.024086174403856665,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00088",
+      "timestamp_seconds": 1809930.3119999997,
+      "fraud_logit": -2.903947114944458,
+      "fraud_probability": 0.05195878765736622,
+      "score": 0.07697831893893671,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00089",
+      "timestamp_seconds": 1810700.2799999998,
+      "fraud_logit": -4.305230140686035,
+      "fraud_probability": 0.013318015173433475,
+      "score": 0.01934292696648225,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00090",
+      "timestamp_seconds": 1811363.0339999998,
+      "fraud_logit": -3.9639060497283936,
+      "fraud_probability": 0.01863494288788893,
+      "score": 0.02713819175975791,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00091",
+      "timestamp_seconds": 1812046.0979999998,
+      "fraud_logit": -3.567816972732544,
+      "fraud_probability": 0.027443015654685557,
+      "score": 0.040145311499196104,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00092",
+      "timestamp_seconds": 1812660.7979999997,
+      "fraud_logit": -3.9296162128448486,
+      "fraud_probability": 0.01927248527614821,
+      "score": 0.02807574107569811,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00093",
+      "timestamp_seconds": 1813074.7139999997,
+      "fraud_logit": -4.498476028442383,
+      "fraud_probability": 0.011003514802699529,
+      "score": 0.01596270109957366,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00094",
+      "timestamp_seconds": 1814302.2839999998,
+      "fraud_logit": -3.84574818611145,
+      "fraud_probability": 0.020923267797985222,
+      "score": 0.030506163731248096,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00096",
+      "timestamp_seconds": 1816101.4799999997,
+      "fraud_logit": -3.0351474285125732,
+      "fraud_probability": 0.045863050180028675,
+      "score": 0.06773173992902777,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00097",
+      "timestamp_seconds": 1816640.988,
+      "fraud_logit": -4.3075666427612305,
+      "fraud_probability": 0.013287346915468531,
+      "score": 0.019298085511223067,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00098",
+      "timestamp_seconds": 1817138.2439999997,
+      "fraud_logit": -2.9637224674224854,
+      "fraud_probability": 0.04909194218135281,
+      "score": 0.07262223954442715,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00099",
+      "timestamp_seconds": 1818092.4359999998,
+      "fraud_logit": -3.880077838897705,
+      "fraud_probability": 0.020231454104451523,
+      "score": 0.02948711823792884,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00100",
+      "timestamp_seconds": 1818778.734,
+      "fraud_logit": -2.9520280361175537,
+      "fraud_probability": 0.049640748390458206,
+      "score": 0.07345511561014302,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00101",
+      "timestamp_seconds": 1819480.9859999998,
+      "fraud_logit": -3.003005027770996,
+      "fraud_probability": 0.04729030054098526,
+      "score": 0.0698914179536457,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00102",
+      "timestamp_seconds": 1820684.9399999997,
+      "fraud_logit": -1.006511926651001,
+      "fraud_probability": 0.2676630269185321,
+      "score": 0.4494204606820403,
+      "label": 0,
+      "decision": "BLOCK"
+    },
+    {
+      "id": "episode-6:P00103",
+      "timestamp_seconds": 1821097.9079999998,
+      "fraud_logit": -3.1299548149108887,
+      "fraud_probability": 0.04188842046871241,
+      "score": 0.061734416104736164,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00104",
+      "timestamp_seconds": 1822043.8919999998,
+      "fraud_logit": -4.339929580688477,
+      "fraud_probability": 0.01286965877445754,
+      "score": 0.018687503392577947,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00105",
+      "timestamp_seconds": 1822724.2199999997,
+      "fraud_logit": -3.6457417011260986,
+      "fraud_probability": 0.025438057493621595,
+      "score": 0.03717420975642956,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00106",
+      "timestamp_seconds": 1823650.194,
+      "fraud_logit": -3.2956392765045166,
+      "fraud_probability": 0.03572109107900122,
+      "score": 0.05247760162806182,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00107",
+      "timestamp_seconds": 1824124.086,
+      "fraud_logit": -3.662538528442383,
+      "fraud_probability": 0.025024950616973917,
+      "score": 0.03656279560661198,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00108",
+      "timestamp_seconds": 1824875.19,
+      "fraud_logit": -2.9452455043792725,
+      "fraud_probability": 0.049961703953493565,
+      "score": 0.07394242523029113,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00109",
+      "timestamp_seconds": 1825663.5479999997,
+      "fraud_logit": -3.131944417953491,
+      "fraud_probability": 0.04180864291690133,
+      "score": 0.06161429451410504,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00110",
+      "timestamp_seconds": 1826153.1839999997,
+      "fraud_logit": -2.8614065647125244,
+      "fraud_probability": 0.05409468359002522,
+      "score": 0.08023231553226,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00111",
+      "timestamp_seconds": 1827220.0259999996,
+      "fraud_logit": -4.037519454956055,
+      "fraud_probability": 0.017335361722435355,
+      "score": 0.025228954256204784,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00113",
+      "timestamp_seconds": 1828901.4239999996,
+      "fraud_logit": -2.877490758895874,
+      "fraud_probability": 0.05327755838398787,
+      "score": 0.07898657394278673,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00115",
+      "timestamp_seconds": 1830152.3699999996,
+      "fraud_logit": -4.530426025390625,
+      "fraud_probability": 0.010661198239205989,
+      "score": 0.015463434451750383,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00116",
+      "timestamp_seconds": 1830815.4599999997,
+      "fraud_logit": -4.475367546081543,
+      "fraud_probability": 0.011257854124711806,
+      "score": 0.016333765379583184,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00117",
+      "timestamp_seconds": 1831846.5839999998,
+      "fraud_logit": -3.480333089828491,
+      "fraud_probability": 0.029877023887069903,
+      "score": 0.04376045502800771,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00118",
+      "timestamp_seconds": 1832849.6579999998,
+      "fraud_logit": -4.104745388031006,
+      "fraud_probability": 0.016226573292938105,
+      "score": 0.023602008799196217,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00119",
+      "timestamp_seconds": 1833639.768,
+      "fraud_logit": -3.638946533203125,
+      "fraud_probability": 0.02560706058703015,
+      "score": 0.03742441557456162,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00120",
+      "timestamp_seconds": 1834267.1339999998,
+      "fraud_logit": -4.438811302185059,
+      "fraud_probability": 0.0116721212767318,
+      "score": 0.016938358203441948,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00121",
+      "timestamp_seconds": 1834756.14,
+      "fraud_logit": -3.674044370651245,
+      "fraud_probability": 0.024745751894111837,
+      "score": 0.03614971739456161,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00122",
+      "timestamp_seconds": 1835729.0339999998,
+      "fraud_logit": -2.769695997238159,
+      "fraud_probability": 0.0589838848110015,
+      "score": 0.08770866512783906,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00123",
+      "timestamp_seconds": 1836189.5759999997,
+      "fraud_logit": -3.048844814300537,
+      "fraud_probability": 0.04526737235557871,
+      "score": 0.0668313311411853,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00124",
+      "timestamp_seconds": 1837453.5119999999,
+      "fraud_logit": -3.715773344039917,
+      "fraud_probability": 0.02375841392944629,
+      "score": 0.034689885729130975,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00125",
+      "timestamp_seconds": 1838305.3019999997,
+      "fraud_logit": -4.560619354248047,
+      "fraud_probability": 0.0103473932186778,
+      "score": 0.015005903460193417,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00126",
+      "timestamp_seconds": 1838660.3219999997,
+      "fraud_logit": -3.4588356018066406,
+      "fraud_probability": 0.03050645246291452,
+      "score": 0.044696798378116714,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00127",
+      "timestamp_seconds": 1839308.5979999998,
+      "fraud_logit": -4.324057579040527,
+      "fraud_probability": 0.013072864032964123,
+      "score": 0.018984519283100455,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00128",
+      "timestamp_seconds": 1840573.6319999998,
+      "fraud_logit": -3.9108057022094727,
+      "fraud_probability": 0.019631257503706905,
+      "score": 0.028603607994393654,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00129",
+      "timestamp_seconds": 1840889.2079999996,
+      "fraud_logit": -4.24737024307251,
+      "fraud_probability": 0.014100137471257277,
+      "score": 0.02048697482546646,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00130",
+      "timestamp_seconds": 1842038.1899999997,
+      "fraud_logit": -4.127679824829102,
+      "fraud_probability": 0.015864497773174842,
+      "score": 0.02307112593667762,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00131",
+      "timestamp_seconds": 1842479.97,
+      "fraud_logit": -3.9705519676208496,
+      "fraud_probability": 0.018513792475990543,
+      "score": 0.026960100732874307,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00132",
+      "timestamp_seconds": 1843017.5219999996,
+      "fraud_logit": -4.163756847381592,
+      "fraud_probability": 0.015310962060932295,
+      "score": 0.022259897478522115,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00133",
+      "timestamp_seconds": 1844334.768,
+      "fraud_logit": -4.2127509117126465,
+      "fraud_probability": 0.01458957622535274,
+      "score": 0.021203362177338436,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00134",
+      "timestamp_seconds": 1844764.7699999998,
+      "fraud_logit": -3.2776358127593994,
+      "fraud_probability": 0.03634643219666361,
+      "score": 0.05341350220740907,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00135",
+      "timestamp_seconds": 1845597.9179999998,
+      "fraud_logit": -4.329000473022461,
+      "fraud_probability": 0.013009244242973277,
+      "score": 0.018891522552143415,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00137",
+      "timestamp_seconds": 1846969.326,
+      "fraud_logit": -3.292095899581909,
+      "fraud_probability": 0.03584334402503237,
+      "score": 0.05266052059348653,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00138",
+      "timestamp_seconds": 1848345.3299999998,
+      "fraud_logit": -3.970458745956421,
+      "fraud_probability": 0.018515486485868943,
+      "score": 0.026962590774752764,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00140",
+      "timestamp_seconds": 1849523.0219999999,
+      "fraud_logit": -4.254733085632324,
+      "fraud_probability": 0.013998149547423323,
+      "score": 0.02033774074233913,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00141",
+      "timestamp_seconds": 1850153.076,
+      "fraud_logit": -4.114020824432373,
+      "fraud_probability": 0.016079169471001565,
+      "score": 0.02338585858934354,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00142",
+      "timestamp_seconds": 1851176.514,
+      "fraud_logit": -3.268218517303467,
+      "fraud_probability": 0.03667772052218422,
+      "score": 0.05390956242499431,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00143",
+      "timestamp_seconds": 1851729.5819999997,
+      "fraud_logit": -3.1323368549346924,
+      "fraud_probability": 0.04179292445102021,
+      "score": 0.06159062829481428,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00144",
+      "timestamp_seconds": 1852251.5219999999,
+      "fraud_logit": -4.315710067749023,
+      "fraud_probability": 0.01318100223913953,
+      "score": 0.019142604916576843,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00145",
+      "timestamp_seconds": 1853189.8139999998,
+      "fraud_logit": -3.4650752544403076,
+      "fraud_probability": 0.0303224493194105,
+      "score": 0.044423010857580825,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00146",
+      "timestamp_seconds": 1854089.2259999998,
+      "fraud_logit": -4.214328289031982,
+      "fraud_probability": 0.0145669160675476,
+      "score": 0.021170186841838856,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00147",
+      "timestamp_seconds": 1854848.3099999998,
+      "fraud_logit": -4.108247756958008,
+      "fraud_probability": 0.01617075865322837,
+      "score": 0.023520159444906118,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00148",
+      "timestamp_seconds": 1855615.0139999997,
+      "fraud_logit": -3.3193039894104004,
+      "fraud_probability": 0.03491485357973442,
+      "score": 0.05127186245565962,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00149",
+      "timestamp_seconds": 1856539.3619999997,
+      "fraud_logit": -3.0369653701782227,
+      "fraud_probability": 0.04578356336967249,
+      "score": 0.06761155754771678,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00150",
+      "timestamp_seconds": 1857359.2499999998,
+      "fraud_logit": -4.346479415893555,
+      "fraud_probability": 0.012786714407980425,
+      "score": 0.018566284953567415,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00153",
+      "timestamp_seconds": 1859783.8739999998,
+      "fraud_logit": -4.207712173461914,
+      "fraud_probability": 0.014662194216323655,
+      "score": 0.021309682826449402,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00154",
+      "timestamp_seconds": 1860568.9859999998,
+      "fraud_logit": -2.9214587211608887,
+      "fraud_probability": 0.051102919133581635,
+      "score": 0.07567647652991084,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00155",
+      "timestamp_seconds": 1861341.228,
+      "fraud_logit": -3.4521560668945312,
+      "fraud_probability": 0.03070462584511497,
+      "score": 0.04499172863435418,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00156",
+      "timestamp_seconds": 1861641.312,
+      "fraud_logit": -4.206967830657959,
+      "fraud_probability": 0.014672951782064802,
+      "score": 0.021325433740883627,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00157",
+      "timestamp_seconds": 1862265.3599999999,
+      "fraud_logit": -3.5748488903045654,
+      "fraud_probability": 0.02725595686591274,
+      "score": 0.03986785440239016,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00158",
+      "timestamp_seconds": 1863431.0459999999,
+      "fraud_logit": -3.042762517929077,
+      "fraud_probability": 0.045530966725417225,
+      "score": 0.06722970319414648,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00159",
+      "timestamp_seconds": 1864454.4059999997,
+      "fraud_logit": -3.989759922027588,
+      "fraud_probability": 0.01816797301941309,
+      "score": 0.026451867262172853,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00160",
+      "timestamp_seconds": 1864771.9439999997,
+      "fraud_logit": -3.1606643199920654,
+      "fraud_probability": 0.04067312467721675,
+      "score": 0.059905620565622035,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00161",
+      "timestamp_seconds": 1865575.9859999996,
+      "fraud_logit": -3.8938539028167725,
+      "fraud_probability": 0.019960180230764242,
+      "score": 0.029087726663071363,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00162",
+      "timestamp_seconds": 1866703.3079999997,
+      "fraud_logit": -3.9087772369384766,
+      "fraud_probability": 0.019670335149412854,
+      "score": 0.028661115182103708,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00163",
+      "timestamp_seconds": 1867278.1379999998,
+      "fraud_logit": -3.211975336074829,
+      "fraud_probability": 0.03871754838805246,
+      "score": 0.05696769753267574,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00165",
+      "timestamp_seconds": 1868618.8199999998,
+      "fraud_logit": -4.240242958068848,
+      "fraud_probability": 0.014199560060592585,
+      "score": 0.02063247003741973,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00166",
+      "timestamp_seconds": 1869433.89,
+      "fraud_logit": -4.28570032119751,
+      "fraud_probability": 0.013577103965982447,
+      "score": 0.01972180811155914,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00167",
+      "timestamp_seconds": 1870590.4139999999,
+      "fraud_logit": -4.137622833251953,
+      "fraud_probability": 0.015710004384742245,
+      "score": 0.02284466387748985,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00170",
+      "timestamp_seconds": 1872372.096,
+      "fraud_logit": -3.8653385639190674,
+      "fraud_probability": 0.02052569348090141,
+      "score": 0.02992044654320425,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00171",
+      "timestamp_seconds": 1872997.4519999998,
+      "fraud_logit": -3.0195014476776123,
+      "fraud_probability": 0.046552597983856206,
+      "score": 0.0687747420268478,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00172",
+      "timestamp_seconds": 1873829.964,
+      "fraud_logit": -3.287801742553711,
+      "fraud_probability": 0.03599204022163577,
+      "score": 0.05288303610291072,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00173",
+      "timestamp_seconds": 1874850.9779999997,
+      "fraud_logit": -3.892686605453491,
+      "fraud_probability": 0.019983027434801105,
+      "score": 0.02912135992114078,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00174",
+      "timestamp_seconds": 1875528.9659999998,
+      "fraud_logit": -4.20598840713501,
+      "fraud_probability": 0.01468711868367329,
+      "score": 0.02134617676794743,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00175",
+      "timestamp_seconds": 1876416.7559999998,
+      "fraud_logit": -4.175840377807617,
+      "fraud_probability": 0.015129847222319128,
+      "score": 0.021994565538800064,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00176",
+      "timestamp_seconds": 1877281.95,
+      "fraud_logit": -4.270198822021484,
+      "fraud_probability": 0.013786285016190789,
+      "score": 0.02002777877359503,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00177",
+      "timestamp_seconds": 1878184.4939999997,
+      "fraud_logit": -3.3454320430755615,
+      "fraud_probability": 0.03404506666860801,
+      "score": 0.049972213254867455,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00179",
+      "timestamp_seconds": 1879386.96,
+      "fraud_logit": -3.930724620819092,
+      "fraud_probability": 0.019251546353590613,
+      "score": 0.028044939291507344,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00180",
+      "timestamp_seconds": 1880583.6539999999,
+      "fraud_logit": -4.236004829406738,
+      "fraud_probability": 0.014259007406015437,
+      "score": 0.020719472409316476,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00181",
+      "timestamp_seconds": 1880644.3139999998,
+      "fraud_logit": -3.2505123615264893,
+      "fraud_probability": 0.037308480718483875,
+      "score": 0.054854513743942374,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00182",
+      "timestamp_seconds": 1881547.1459999997,
+      "fraud_logit": -4.161494255065918,
+      "fraud_probability": 0.015345111552165164,
+      "score": 0.022309931706668198,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00183",
+      "timestamp_seconds": 1882560.4139999999,
+      "fraud_logit": -4.258194923400879,
+      "fraud_probability": 0.013950448867580846,
+      "score": 0.020267947902037,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00184",
+      "timestamp_seconds": 1883386.3079999997,
+      "fraud_logit": -4.2025651931762695,
+      "fraud_probability": 0.014736739795476895,
+      "score": 0.021418833825372626,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00185",
+      "timestamp_seconds": 1883735.802,
+      "fraud_logit": -4.046266555786133,
+      "fraud_probability": 0.0171869835846103,
+      "score": 0.025011129949210432,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00186",
+      "timestamp_seconds": 1884730.728,
+      "fraud_logit": -3.8946781158447266,
+      "fraud_probability": 0.019944063541459164,
+      "score": 0.0290640018346668,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00187",
+      "timestamp_seconds": 1885915.6559999997,
+      "fraud_logit": -4.077785968780518,
+      "fraud_probability": 0.01666259410932548,
+      "score": 0.024241571216731796,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00188",
+      "timestamp_seconds": 1886511.7559999998,
+      "fraud_logit": -4.07123327255249,
+      "fraud_probability": 0.016770300461134497,
+      "score": 0.024399600321717303,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00189",
+      "timestamp_seconds": 1887162.7499999998,
+      "fraud_logit": -4.218433380126953,
+      "fraud_probability": 0.01450810590646366,
+      "score": 0.021084090081464103,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00190",
+      "timestamp_seconds": 1888244.4899999998,
+      "fraud_logit": -3.8413474559783936,
+      "fraud_probability": 0.021013609207487613,
+      "score": 0.03063929029089565,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00191",
+      "timestamp_seconds": 1888443.936,
+      "fraud_logit": -4.071688652038574,
+      "fraud_probability": 0.016762793334706236,
+      "score": 0.024388585141105548,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00194",
+      "timestamp_seconds": 1891049.91,
+      "fraud_logit": -4.246979236602783,
+      "fraud_probability": 0.014105574011539473,
+      "score": 0.02049493028993902,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00195",
+      "timestamp_seconds": 1891743.42,
+      "fraud_logit": -3.9980595111846924,
+      "fraud_probability": 0.01802051632337468,
+      "score": 0.02623521200440926,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00196",
+      "timestamp_seconds": 1892806.2119999998,
+      "fraud_logit": -3.23224139213562,
+      "fraud_probability": 0.03797028743591156,
+      "score": 0.05584664215307557,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00197",
+      "timestamp_seconds": 1893613.302,
+      "fraud_logit": -3.9927451610565186,
+      "fraud_probability": 0.018114799154691795,
+      "score": 0.026373736185182718,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00198",
+      "timestamp_seconds": 1894092.978,
+      "fraud_logit": -4.34278678894043,
+      "fraud_probability": 0.012833411188469467,
+      "score": 0.01863452836966274,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00199",
+      "timestamp_seconds": 1895145.9179999998,
+      "fraud_logit": -4.250938415527344,
+      "fraud_probability": 0.01405062105415934,
+      "score": 0.02041451787703223,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00200",
+      "timestamp_seconds": 1895835.8999999997,
+      "fraud_logit": -3.2492258548736572,
+      "fraud_probability": 0.03735471512419583,
+      "score": 0.05492380255378373,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00201",
+      "timestamp_seconds": 1896710.5139999997,
+      "fraud_logit": -4.732428073883057,
+      "fraud_probability": 0.008728213222306977,
+      "score": 0.01264742528817895,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00203",
+      "timestamp_seconds": 1897779.7919999997,
+      "fraud_logit": -4.308290481567383,
+      "fraud_probability": 0.013277860157092175,
+      "score": 0.019284214772435207,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00204",
+      "timestamp_seconds": 1898464.8299999998,
+      "fraud_logit": -4.264336109161377,
+      "fraud_probability": 0.013866223407670852,
+      "score": 0.020144722386747003,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00205",
+      "timestamp_seconds": 1899356.184,
+      "fraud_logit": -4.144306182861328,
+      "fraud_probability": 0.015606992212888188,
+      "score": 0.022693684619413425,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00206",
+      "timestamp_seconds": 1900382.2019999998,
+      "fraud_logit": -4.151345252990723,
+      "fraud_probability": 0.015499215991312536,
+      "score": 0.022535739867699398,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00207",
+      "timestamp_seconds": 1900634.7299999997,
+      "fraud_logit": -3.9658877849578857,
+      "fraud_probability": 0.01859873609550501,
+      "score": 0.027084965495107458,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00208",
+      "timestamp_seconds": 1901829.2099999997,
+      "fraud_logit": -4.351557731628418,
+      "fraud_probability": 0.012722768094819193,
+      "score": 0.018472838033366402,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00211",
+      "timestamp_seconds": 1903902.5399999998,
+      "fraud_logit": -4.2006754875183105,
+      "fraud_probability": 0.01476420268126002,
+      "score": 0.021459047566129413,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00212",
+      "timestamp_seconds": 1905110.6519999998,
+      "fraud_logit": -3.9451873302459717,
+      "fraud_probability": 0.018980367246395544,
+      "score": 0.02764608607501647,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00213",
+      "timestamp_seconds": 1905774.6479999998,
+      "fraud_logit": -4.230119228363037,
+      "fraud_probability": 0.01434197052055673,
+      "score": 0.02084089934790773,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00214",
+      "timestamp_seconds": 1906172.244,
+      "fraud_logit": -4.2500457763671875,
+      "fraud_probability": 0.0140629923295154,
+      "score": 0.02043262031713937,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00215",
+      "timestamp_seconds": 1907334.5219999999,
+      "fraud_logit": -3.2489306926727295,
+      "fraud_probability": 0.03736533041174473,
+      "score": 0.05493971153644263,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00216",
+      "timestamp_seconds": 1908111.8279999997,
+      "fraud_logit": -4.129941940307617,
+      "fraud_probability": 0.01582921843353939,
+      "score": 0.02301940905830107,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00218",
+      "timestamp_seconds": 1909590.6059999997,
+      "fraud_logit": -3.2165095806121826,
+      "fraud_probability": 0.03854914312797127,
+      "score": 0.05671497664504354,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00220",
+      "timestamp_seconds": 1911039.4319999998,
+      "fraud_logit": -3.3367741107940674,
+      "fraud_probability": 0.03433094292854951,
+      "score": 0.05039924487964106,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00221",
+      "timestamp_seconds": 1911654.9419999998,
+      "fraud_logit": -4.620874404907227,
+      "fraud_probability": 0.009748221205478396,
+      "score": 0.014132707234387183,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00222",
+      "timestamp_seconds": 1912160.9579999999,
+      "fraud_logit": -3.19525408744812,
+      "fraud_probability": 0.039344711006827036,
+      "score": 0.0579092518951679,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00223",
+      "timestamp_seconds": 1913427.2399999998,
+      "fraud_logit": -3.9737584590911865,
+      "fraud_probability": 0.018455617082743486,
+      "score": 0.026874590754810235,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00224",
+      "timestamp_seconds": 1914248.1839999997,
+      "fraud_logit": -4.291858673095703,
+      "fraud_probability": 0.013494873186144122,
+      "score": 0.019601546310848702,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00225",
+      "timestamp_seconds": 1914806.7119999998,
+      "fraud_logit": -3.3183722496032715,
+      "fraud_probability": 0.034946262912653646,
+      "score": 0.05131881668183618,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00226",
+      "timestamp_seconds": 1915647.8279999997,
+      "fraud_logit": -3.885159969329834,
+      "fraud_probability": 0.020130960635613752,
+      "score": 0.02933915064397005,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00227",
+      "timestamp_seconds": 1916154.2939999998,
+      "fraud_logit": -4.124405384063721,
+      "fraud_probability": 0.01591570213980687,
+      "score": 0.023146191014089483,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00228",
+      "timestamp_seconds": 1917266.802,
+      "fraud_logit": -3.256298542022705,
+      "fraud_probability": 0.037101216500658736,
+      "score": 0.05454393982805485,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00229",
+      "timestamp_seconds": 1917908.0279999997,
+      "fraud_logit": -4.274763107299805,
+      "fraud_probability": 0.013724365494479768,
+      "score": 0.019937201871915756,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00230",
+      "timestamp_seconds": 1918484.2139999997,
+      "fraud_logit": -4.675392150878906,
+      "fraud_probability": 0.009235774166374508,
+      "score": 0.013386317688016678,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00231",
+      "timestamp_seconds": 1919326.4759999998,
+      "fraud_logit": -4.2567243576049805,
+      "fraud_probability": 0.01397069219195507,
+      "score": 0.020297566335959583,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00232",
+      "timestamp_seconds": 1920082.8779999998,
+      "fraud_logit": -4.182462692260742,
+      "fraud_probability": 0.015031484743183252,
+      "score": 0.021850485657254844,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00233",
+      "timestamp_seconds": 1920639.846,
+      "fraud_logit": -4.316258430480957,
+      "fraud_probability": 0.013173871444404597,
+      "score": 0.019132179980437567,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00234",
+      "timestamp_seconds": 1921776.7799999998,
+      "fraud_logit": -4.16793155670166,
+      "fraud_probability": 0.015248149092722018,
+      "score": 0.022167871403218787,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00235",
+      "timestamp_seconds": 1922571.1979999996,
+      "fraud_logit": -3.947333812713623,
+      "fraud_probability": 0.018940440739953966,
+      "score": 0.02758737104140753,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00236",
+      "timestamp_seconds": 1923550.2719999999,
+      "fraud_logit": -4.093362331390381,
+      "fraud_probability": 0.016409288323790745,
+      "score": 0.023869983664166036,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00237",
+      "timestamp_seconds": 1923792.0179999997,
+      "fraud_logit": -4.671402454376221,
+      "fraud_probability": 0.009272353356595986,
+      "score": 0.013439583227049435,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00238",
+      "timestamp_seconds": 1925025.0659999999,
+      "fraud_logit": -3.277477741241455,
+      "fraud_probability": 0.03635196911570962,
+      "score": 0.053421791606073944,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00239",
+      "timestamp_seconds": 1925542.7759999998,
+      "fraud_logit": -4.699610710144043,
+      "fraud_probability": 0.00901677647754243,
+      "score": 0.013067460831626692,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00451",
+      "timestamp_seconds": 1925554.4939999997,
+      "fraud_logit": -3.444342613220215,
+      "fraud_probability": 0.030938023334017094,
+      "score": 0.04533915827758251,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00452",
+      "timestamp_seconds": 1925593.494,
+      "fraud_logit": -3.455630302429199,
+      "fraud_probability": 0.030601394578522456,
+      "score": 0.044838087845155465,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00453",
+      "timestamp_seconds": 1925632.4939999997,
+      "fraud_logit": -3.4258081912994385,
+      "fraud_probability": 0.031498558410033156,
+      "score": 0.04617389864205652,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00454",
+      "timestamp_seconds": 1925671.4939999997,
+      "fraud_logit": -3.391247034072876,
+      "fraud_probability": 0.03257013919229036,
+      "score": 0.0477710260157886,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00455",
+      "timestamp_seconds": 1925710.494,
+      "fraud_logit": -3.3583805561065674,
+      "fraud_probability": 0.033621801519474255,
+      "score": 0.04934018709814568,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00456",
+      "timestamp_seconds": 1925749.4939999997,
+      "fraud_logit": -3.450355291366577,
+      "fraud_probability": 0.03075826557570374,
+      "score": 0.045071567986401974,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00457",
+      "timestamp_seconds": 1925788.494,
+      "fraud_logit": -3.3816754817962646,
+      "fraud_probability": 0.03287308542335877,
+      "score": 0.04822287011191669,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00459",
+      "timestamp_seconds": 1925974.4939999997,
+      "fraud_logit": -4.053659915924072,
+      "fraud_probability": 0.017062542739907677,
+      "score": 0.024828471781573665,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00460",
+      "timestamp_seconds": 1925992.4939999997,
+      "fraud_logit": -3.3414194583892822,
+      "fraud_probability": 0.03417727153290542,
+      "score": 0.05016968039218124,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00461",
+      "timestamp_seconds": 1926010.494,
+      "fraud_logit": -3.411620616912842,
+      "fraud_probability": 0.03193425896758262,
+      "score": 0.0468230711055122,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00462",
+      "timestamp_seconds": 1926094.4939999997,
+      "fraud_logit": -1.1085375547409058,
+      "fraud_probability": 0.2481436340820991,
+      "score": 0.4114710180513129,
+      "label": 1,
+      "decision": "BLOCK"
+    },
+    {
+      "id": "episode-6:P00463",
+      "timestamp_seconds": 1926118.494,
+      "fraud_logit": -2.7338201999664307,
+      "fraud_probability": 0.06100695490440612,
+      "score": 0.09081362267738124,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00464",
+      "timestamp_seconds": 1926142.4939999997,
+      "fraud_logit": -2.9277050495147705,
+      "fraud_probability": 0.05080087376421209,
+      "score": 0.07521732239582575,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00465",
+      "timestamp_seconds": 1926214.4939999997,
+      "fraud_logit": -1.0652697086334229,
+      "fraud_probability": 0.2563036951328501,
+      "score": 0.427214490904919,
+      "label": 1,
+      "decision": "BLOCK"
+    },
+    {
+      "id": "episode-6:P00466",
+      "timestamp_seconds": 1926334.4939999997,
+      "fraud_logit": -3.3173224925994873,
+      "fraud_probability": 0.03498168327904015,
+      "score": 0.051371768888296226,
+      "label": 1,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00467",
+      "timestamp_seconds": 1926364.4939999997,
+      "fraud_logit": -1.0276929140090942,
+      "fraud_probability": 0.26353162531781477,
+      "score": 0.4413045202966923,
+      "label": 1,
+      "decision": "BLOCK"
+    },
+    {
+      "id": "episode-6:P00240",
+      "timestamp_seconds": 1926521.1959999998,
+      "fraud_logit": -3.5624020099639893,
+      "fraud_probability": 0.027587910865969567,
+      "score": 0.040360265665825366,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00241",
+      "timestamp_seconds": 1927028.4179999998,
+      "fraud_logit": -4.151821136474609,
+      "fraud_probability": 0.015491956163856199,
+      "score": 0.022525101299785518,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00242",
+      "timestamp_seconds": 1927984.4159999997,
+      "fraud_logit": -3.3673408031463623,
+      "fraud_probability": 0.03333188422859468,
+      "score": 0.048907437776132746,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00243",
+      "timestamp_seconds": 1928572.2239999997,
+      "fraud_logit": -4.266936302185059,
+      "fraud_probability": 0.013830713401142973,
+      "score": 0.020092772854972355,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00244",
+      "timestamp_seconds": 1929601.6199999999,
+      "fraud_logit": -3.4722774028778076,
+      "fraud_probability": 0.030111399388750328,
+      "score": 0.04410904302581361,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00245",
+      "timestamp_seconds": 1930304.3939999999,
+      "fraud_logit": -4.695552825927734,
+      "fraud_probability": 0.009053107932574961,
+      "score": 0.013120353927702368,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00246",
+      "timestamp_seconds": 1930894.116,
+      "fraud_logit": -4.31253719329834,
+      "fraud_probability": 0.013222336463725375,
+      "score": 0.01920303538041693,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00248",
+      "timestamp_seconds": 1932355.782,
+      "fraud_logit": -4.811136245727539,
+      "fraud_probability": 0.00807290478531164,
+      "score": 0.01169400576450115,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00249",
+      "timestamp_seconds": 1933552.542,
+      "fraud_logit": -4.068656921386719,
+      "fraud_probability": 0.016812834994269766,
+      "score": 0.024462012683141545,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00250",
+      "timestamp_seconds": 1933643.8139999998,
+      "fraud_logit": -4.080907344818115,
+      "fraud_probability": 0.016611527596941844,
+      "score": 0.02416665136643538,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00251",
+      "timestamp_seconds": 1934660.4359999998,
+      "fraud_logit": -4.375934600830078,
+      "fraud_probability": 0.012420181887779182,
+      "score": 0.01803074059269315,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00252",
+      "timestamp_seconds": 1935212.1599999997,
+      "fraud_logit": -4.2728776931762695,
+      "fraud_probability": 0.013749909886115307,
+      "score": 0.019974567941901267,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00253",
+      "timestamp_seconds": 1936139.4179999998,
+      "fraud_logit": -4.21762752532959,
+      "fraud_probability": 0.014519632221636979,
+      "score": 0.021100963944239475,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00254",
+      "timestamp_seconds": 1937309.4059999997,
+      "fraud_logit": -4.295041084289551,
+      "fraud_probability": 0.013452572033515513,
+      "score": 0.01953968514756375,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00255",
+      "timestamp_seconds": 1938071.5259999998,
+      "fraud_logit": -4.267877578735352,
+      "fraud_probability": 0.013817880803846832,
+      "score": 0.02007399980628871,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00256",
+      "timestamp_seconds": 1938715.848,
+      "fraud_logit": -4.242740631103516,
+      "fraud_probability": 0.014164640190808665,
+      "score": 0.020581366559812523,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00257",
+      "timestamp_seconds": 1939489.0019999999,
+      "fraud_logit": -4.021048069000244,
+      "fraud_probability": 0.017618191406902867,
+      "score": 0.025644249260213362,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00258",
+      "timestamp_seconds": 1940249.7299999997,
+      "fraud_logit": -3.21757435798645,
+      "fraud_probability": 0.038509698555064545,
+      "score": 0.05665578971726434,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00259",
+      "timestamp_seconds": 1941268.494,
+      "fraud_logit": -3.248915672302246,
+      "fraud_probability": 0.0373658706856457,
+      "score": 0.054940521242056825,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00260",
+      "timestamp_seconds": 1941635.778,
+      "fraud_logit": -3.2548611164093018,
+      "fraud_probability": 0.03715260230517706,
+      "score": 0.05462093236849681,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00261",
+      "timestamp_seconds": 1942765.1639999996,
+      "fraud_logit": -4.268011093139648,
+      "fraud_probability": 0.013816061528235318,
+      "score": 0.020071338373445106,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00262",
+      "timestamp_seconds": 1943527.7699999998,
+      "fraud_logit": -4.272253036499023,
+      "fraud_probability": 0.013758383334976587,
+      "score": 0.019986963028389558,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00263",
+      "timestamp_seconds": 1944293.1539999999,
+      "fraud_logit": -4.293198585510254,
+      "fraud_probability": 0.013477046874806548,
+      "score": 0.019575476807605182,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00264",
+      "timestamp_seconds": 1944855.0359999998,
+      "fraud_logit": -4.295029640197754,
+      "fraud_probability": 0.013452723915773781,
+      "score": 0.019539907255281486,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00265",
+      "timestamp_seconds": 1945591.7039999997,
+      "fraud_logit": -4.790355205535889,
+      "fraud_probability": 0.008241026422842418,
+      "score": 0.011938548746506612,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00266",
+      "timestamp_seconds": 1946612.916,
+      "fraud_logit": -4.276052951812744,
+      "fraud_probability": 0.013706917096157241,
+      "score": 0.019911679092901917,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00267",
+      "timestamp_seconds": 1947293.6339999996,
+      "fraud_logit": -4.3013763427734375,
+      "fraud_probability": 0.013368751663439975,
+      "score": 0.019417114157152714,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00268",
+      "timestamp_seconds": 1947816.4679999999,
+      "fraud_logit": -4.358654975891113,
+      "fraud_probability": 0.0126339279356674,
+      "score": 0.018343022935248282,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00269",
+      "timestamp_seconds": 1948643.5139999997,
+      "fraud_logit": -4.218102931976318,
+      "fraud_probability": 0.014512831286854714,
+      "score": 0.021091007742828582,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00270",
+      "timestamp_seconds": 1949063.5799999998,
+      "fraud_logit": -3.3816978931427,
+      "fraud_probability": 0.03287237291930383,
+      "score": 0.04822180724656518,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00271",
+      "timestamp_seconds": 1950479.028,
+      "fraud_logit": -4.220023155212402,
+      "fraud_probability": 0.014485393439968908,
+      "score": 0.021050840913824188,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00272",
+      "timestamp_seconds": 1951200.4499999997,
+      "fraud_logit": -4.233687400817871,
+      "fraud_probability": 0.014291617152708045,
+      "score": 0.020767199650429963,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00273",
+      "timestamp_seconds": 1951508.586,
+      "fraud_logit": -4.246756553649902,
+      "fraud_probability": 0.014108671110899373,
+      "score": 0.02049946239478522,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00274",
+      "timestamp_seconds": 1952409.8039999998,
+      "fraud_logit": -4.214814186096191,
+      "fraud_probability": 0.014559942795670976,
+      "score": 0.021159977859286666,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00276",
+      "timestamp_seconds": 1954064.4419999998,
+      "fraud_logit": -3.9875566959381104,
+      "fraud_probability": 0.01820731569084496,
+      "score": 0.026509678183629835,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00277",
+      "timestamp_seconds": 1954833.8879999998,
+      "fraud_logit": -3.8757615089416504,
+      "fraud_probability": 0.020317190424387323,
+      "score": 0.029613369255418003,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00278",
+      "timestamp_seconds": 1955785.5899999999,
+      "fraud_logit": -3.033886671066284,
+      "fraud_probability": 0.04591825205930206,
+      "score": 0.06781520989773852,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00279",
+      "timestamp_seconds": 1956252.9539999997,
+      "fraud_logit": -3.8072972297668457,
+      "fraud_probability": 0.021725635807883472,
+      "score": 0.031688958597043716,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00280",
+      "timestamp_seconds": 1956794.0519999997,
+      "fraud_logit": -3.300947427749634,
+      "fraud_probability": 0.03553870122775382,
+      "score": 0.05220474690803485,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00281",
+      "timestamp_seconds": 1957565.5379999997,
+      "fraud_logit": -4.379333972930908,
+      "fraud_probability": 0.012378554494287548,
+      "score": 0.017969930957472076,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00282",
+      "timestamp_seconds": 1958247.8219999997,
+      "fraud_logit": -3.9320626258850098,
+      "fraud_probability": 0.019226299824647183,
+      "score": 0.02800780176335107,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00283",
+      "timestamp_seconds": 1959506.1779999998,
+      "fraud_logit": -3.401538848876953,
+      "fraud_probability": 0.03224740647196004,
+      "score": 0.04728982601480002,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00284",
+      "timestamp_seconds": 1959928.89,
+      "fraud_logit": -4.078398704528809,
+      "fraud_probability": 0.01665255743621619,
+      "score": 0.02422684607301262,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00285",
+      "timestamp_seconds": 1960526.826,
+      "fraud_logit": -4.083773612976074,
+      "fraud_probability": 0.01656477024583991,
+      "score": 0.024098056912851586,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00286",
+      "timestamp_seconds": 1961935.9079999998,
+      "fraud_logit": -3.9512689113616943,
+      "fraud_probability": 0.01886745816707187,
+      "score": 0.027480050666447077,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00287",
+      "timestamp_seconds": 1962270.8579999998,
+      "fraud_logit": -4.178192138671875,
+      "fraud_probability": 0.015094843717256402,
+      "score": 0.021943291281334508,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00288",
+      "timestamp_seconds": 1963080.204,
+      "fraud_logit": -4.803983688354492,
+      "fraud_probability": 0.008130382547554467,
+      "score": 0.011777605945954062,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00289",
+      "timestamp_seconds": 1964205.8159999999,
+      "fraud_logit": -4.247186183929443,
+      "fraud_probability": 0.014102696365811327,
+      "score": 0.020490719332808945,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00290",
+      "timestamp_seconds": 1965061.1579999998,
+      "fraud_logit": -4.092076301574707,
+      "fraud_probability": 0.016430057789259774,
+      "score": 0.023900447881489616,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00291",
+      "timestamp_seconds": 1965715.4219999998,
+      "fraud_logit": -4.336513519287109,
+      "fraud_probability": 0.012913128818027437,
+      "score": 0.018751036438386187,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00292",
+      "timestamp_seconds": 1966210.5719999997,
+      "fraud_logit": -4.825906753540039,
+      "fraud_probability": 0.007955481834078007,
+      "score": 0.01152323163801004,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00293",
+      "timestamp_seconds": 1966662.858,
+      "fraud_logit": -4.33670711517334,
+      "fraud_probability": 0.012910661403990133,
+      "score": 0.01874743014835208,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00294",
+      "timestamp_seconds": 1967955.3839999998,
+      "fraud_logit": -4.860567092895508,
+      "fraud_probability": 0.007686549191800499,
+      "score": 0.011132185468126747,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00295",
+      "timestamp_seconds": 1968519.6479999998,
+      "fraud_logit": -4.8401288986206055,
+      "fraud_probability": 0.0078440198144384,
+      "score": 0.011361145494715274,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00296",
+      "timestamp_seconds": 1969676.358,
+      "fraud_logit": -3.6690938472747803,
+      "fraud_probability": 0.02486550636188772,
+      "score": 0.03632688123200992,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00297",
+      "timestamp_seconds": 1969916.562,
+      "fraud_logit": -4.181472301483154,
+      "fraud_probability": 0.01504615505774903,
+      "score": 0.021871973600638122,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00298",
+      "timestamp_seconds": 1970636.544,
+      "fraud_logit": -4.165250778198242,
+      "fraud_probability": 0.015288455059767055,
+      "score": 0.022226922227829012,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00299",
+      "timestamp_seconds": 1971423.2819999997,
+      "fraud_logit": -4.303931713104248,
+      "fraud_probability": 0.013335088136552428,
+      "score": 0.01936789072654584,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00300",
+      "timestamp_seconds": 1972441.764,
+      "fraud_logit": -4.218212127685547,
+      "fraud_probability": 0.014511269629787653,
+      "score": 0.021088721570879692,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00301",
+      "timestamp_seconds": 1973343.7739999997,
+      "fraud_logit": -4.346410751342773,
+      "fraud_probability": 0.012787581204320386,
+      "score": 0.0185675516740911,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00302",
+      "timestamp_seconds": 1973667.4499999997,
+      "fraud_logit": -4.257317066192627,
+      "fraud_probability": 0.01396252967936664,
+      "score": 0.020285623518846902,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00303",
+      "timestamp_seconds": 1974785.6579999998,
+      "fraud_logit": -3.273186445236206,
+      "fraud_probability": 0.0365025948367144,
+      "score": 0.05364731374581666,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00304",
+      "timestamp_seconds": 1975644.1319999998,
+      "fraud_logit": -4.188999176025391,
+      "fraud_probability": 0.014935014728858529,
+      "score": 0.0217091918048054,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00305",
+      "timestamp_seconds": 1975908.5999999999,
+      "fraud_logit": -3.956090211868286,
+      "fraud_probability": 0.018778415496113154,
+      "score": 0.027349124837939658,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00306",
+      "timestamp_seconds": 1976888.8739999998,
+      "fraud_logit": -4.27548885345459,
+      "fraud_probability": 0.01371454525535848,
+      "score": 0.019922837185967174,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00307",
+      "timestamp_seconds": 1977525.4919999999,
+      "fraud_logit": -3.468816041946411,
+      "fraud_probability": 0.03021265198838931,
+      "score": 0.044259662642056906,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00308",
+      "timestamp_seconds": 1978685.964,
+      "fraud_logit": -4.200150012969971,
+      "fraud_probability": 0.014771848299466896,
+      "score": 0.02147024319899258,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00309",
+      "timestamp_seconds": 1979424.4919999999,
+      "fraud_logit": -3.9991066455841064,
+      "fraud_probability": 0.018001995815166698,
+      "score": 0.02620800248137518,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00310",
+      "timestamp_seconds": 1980037.4279999996,
+      "fraud_logit": -4.257328033447266,
+      "fraud_probability": 0.013962378687643905,
+      "score": 0.020285402599257665,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00312",
+      "timestamp_seconds": 1981934.8019999997,
+      "fraud_logit": -4.186444282531738,
+      "fraud_probability": 0.01497264883898616,
+      "score": 0.021764310585841162,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00313",
+      "timestamp_seconds": 1982149.8479999998,
+      "fraud_logit": -4.4196271896362305,
+      "fraud_probability": 0.011895512863692639,
+      "score": 0.017264487183744272,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00314",
+      "timestamp_seconds": 1983463.17,
+      "fraud_logit": -4.2323899269104,
+      "fraud_probability": 0.014309906666972884,
+      "score": 0.0207939686591816,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00315",
+      "timestamp_seconds": 1983799.0679999997,
+      "fraud_logit": -4.127504348754883,
+      "fraud_probability": 0.015867237681503082,
+      "score": 0.023075142515341054,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00316",
+      "timestamp_seconds": 1984768.4819999998,
+      "fraud_logit": -4.382695198059082,
+      "fraud_probability": 0.012337529700215339,
+      "score": 0.017910004112023287,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00317",
+      "timestamp_seconds": 1985246.4539999997,
+      "fraud_logit": -4.470954895019531,
+      "fraud_probability": 0.011307077929029383,
+      "score": 0.016405590684543604,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00318",
+      "timestamp_seconds": 1986113.142,
+      "fraud_logit": -4.172236919403076,
+      "fraud_probability": 0.015183636043715688,
+      "score": 0.02207336068233596,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00319",
+      "timestamp_seconds": 1986722.2319999998,
+      "fraud_logit": -4.369246006011963,
+      "fraud_probability": 0.012502491787363417,
+      "score": 0.018150987109052028,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00321",
+      "timestamp_seconds": 1988284.0019999999,
+      "fraud_logit": -4.311244964599609,
+      "fraud_probability": 0.013239207435757305,
+      "score": 0.019227701398563973,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00322",
+      "timestamp_seconds": 1988923.254,
+      "fraud_logit": -4.30013370513916,
+      "fraud_probability": 0.013385152004085877,
+      "score": 0.019441095646499897,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00323",
+      "timestamp_seconds": 1990311.9719999998,
+      "fraud_logit": -4.2236127853393555,
+      "fraud_probability": 0.014434238643665685,
+      "score": 0.020975957340163588,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00324",
+      "timestamp_seconds": 1990850.6459999997,
+      "fraud_logit": -4.369973182678223,
+      "fraud_probability": 0.012493517115611405,
+      "score": 0.018137875525998336,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00326",
+      "timestamp_seconds": 1992454.1519999998,
+      "fraud_logit": -4.331369400024414,
+      "fraud_probability": 0.012978862275479017,
+      "score": 0.018847113585830067,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00327",
+      "timestamp_seconds": 1993141.314,
+      "fraud_logit": -4.398102283477783,
+      "fraud_probability": 0.012151193227358564,
+      "score": 0.01763784499124841,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00328",
+      "timestamp_seconds": 1994087.7299999995,
+      "fraud_logit": -4.283363342285156,
+      "fraud_probability": 0.013608438183428072,
+      "score": 0.01976763677014671,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00329",
+      "timestamp_seconds": 1995007.242,
+      "fraud_logit": -4.990811824798584,
+      "fraud_probability": 0.006754212127366178,
+      "score": 0.009777324699483248,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00330",
+      "timestamp_seconds": 1995186.9239999996,
+      "fraud_logit": -4.9064226150512695,
+      "fraud_probability": 0.007344567995788138,
+      "score": 0.010635074823503685,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00331",
+      "timestamp_seconds": 1996445.052,
+      "fraud_logit": -4.4175825119018555,
+      "fraud_probability": 0.011919570026549052,
+      "score": 0.01729961259053391,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00333",
+      "timestamp_seconds": 1997786.9339999997,
+      "fraud_logit": -3.4186580181121826,
+      "fraud_probability": 0.031717416661320066,
+      "score": 0.0464999501904679,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00334",
+      "timestamp_seconds": 1998447.666,
+      "fraud_logit": -4.254679203033447,
+      "fraud_probability": 0.013998893265378246,
+      "score": 0.020338828933613353,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00336",
+      "timestamp_seconds": 2000175.8159999999,
+      "fraud_logit": -4.260165691375732,
+      "fraud_probability": 0.013923365262678017,
+      "score": 0.020228322260670725,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00337",
+      "timestamp_seconds": 2000499.1019999997,
+      "fraud_logit": -4.275268077850342,
+      "fraud_probability": 0.013717531887599044,
+      "score": 0.01992720590703629,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00338",
+      "timestamp_seconds": 2001304.1579999998,
+      "fraud_logit": -4.471526622772217,
+      "fraud_probability": 0.011300688239624051,
+      "score": 0.01639626691654229,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00339",
+      "timestamp_seconds": 2002563.63,
+      "fraud_logit": -4.345407485961914,
+      "fraud_probability": 0.012800252678448355,
+      "score": 0.01858606966460914,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00340",
+      "timestamp_seconds": 2003020.4879999997,
+      "fraud_logit": -4.312097549438477,
+      "fraud_probability": 0.013228073947528531,
+      "score": 0.01921142375785997,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00341",
+      "timestamp_seconds": 2003718.876,
+      "fraud_logit": -3.416522264480591,
+      "fraud_probability": 0.03178307433435008,
+      "score": 0.046597780320424095,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00342",
+      "timestamp_seconds": 2004967.1159999997,
+      "fraud_logit": -4.199617862701416,
+      "fraud_probability": 0.014779595023457654,
+      "score": 0.021481586971705432,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00343",
+      "timestamp_seconds": 2005225.0799999998,
+      "fraud_logit": -3.3516037464141846,
+      "fraud_probability": 0.03384268666574004,
+      "score": 0.04966998171724908,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00344",
+      "timestamp_seconds": 2005904.8079999997,
+      "fraud_logit": -4.061583995819092,
+      "fraud_probability": 0.01693015205833297,
+      "score": 0.024634169980607735,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00345",
+      "timestamp_seconds": 2007202.4939999997,
+      "fraud_logit": -4.058044910430908,
+      "fraud_probability": 0.01698915571645444,
+      "score": 0.02472076285070541,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00346",
+      "timestamp_seconds": 2007914.328,
+      "fraud_logit": -4.293456554412842,
+      "fraud_probability": 0.013473617501342447,
+      "score": 0.019570461687100398,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00347",
+      "timestamp_seconds": 2008748.346,
+      "fraud_logit": -4.315433502197266,
+      "fraud_probability": 0.013184600084505378,
+      "score": 0.01914786485091252,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00348",
+      "timestamp_seconds": 2009529.2759999996,
+      "fraud_logit": -4.457398414611816,
+      "fraud_probability": 0.011459637275817128,
+      "score": 0.016628221585187692,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00349",
+      "timestamp_seconds": 2009902.5899999999,
+      "fraud_logit": -4.393155097961426,
+      "fraud_probability": 0.0122107205215915,
+      "score": 0.01772478372037197,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00350",
+      "timestamp_seconds": 2010870.9119999995,
+      "fraud_logit": -4.1534810066223145,
+      "fraud_probability": 0.01546666024759794,
+      "score": 0.022488033218589564,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00351",
+      "timestamp_seconds": 2011789.1759999997,
+      "fraud_logit": -4.410804271697998,
+      "fraud_probability": 0.011999665383969472,
+      "score": 0.017416564465257474,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00352",
+      "timestamp_seconds": 2012094.7199999997,
+      "fraud_logit": -4.369156837463379,
+      "fraud_probability": 0.01250359272612525,
+      "score": 0.018152595538201675,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00353",
+      "timestamp_seconds": 2013365.6819999996,
+      "fraud_logit": -4.139764308929443,
+      "fraud_probability": 0.015676924637221996,
+      "score": 0.022796178993985436,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00354",
+      "timestamp_seconds": 2013594.4079999998,
+      "fraud_logit": -4.348898887634277,
+      "fraud_probability": 0.012756208872370611,
+      "score": 0.01852170542285352,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00356",
+      "timestamp_seconds": 2015351.892,
+      "fraud_logit": -4.297396183013916,
+      "fraud_probability": 0.01342135189305234,
+      "score": 0.019494030546601333,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00357",
+      "timestamp_seconds": 2016253.866,
+      "fraud_logit": -4.3798723220825195,
+      "fraud_probability": 0.012371974727887583,
+      "score": 0.017960319415744413,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00358",
+      "timestamp_seconds": 2016612.534,
+      "fraud_logit": -4.129691123962402,
+      "fraud_probability": 0.015833126289210072,
+      "score": 0.02302513759169725,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00359",
+      "timestamp_seconds": 2017392.0539999998,
+      "fraud_logit": -4.289204120635986,
+      "fraud_probability": 0.013530258287582145,
+      "score": 0.01965329548534233,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00360",
+      "timestamp_seconds": 2018225.1059999997,
+      "fraud_logit": -3.662672996520996,
+      "fraud_probability": 0.025021669979868877,
+      "score": 0.03655794117374975,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00361",
+      "timestamp_seconds": 2019462.2759999998,
+      "fraud_logit": -3.3594229221343994,
+      "fraud_probability": 0.03358795007245189,
+      "score": 0.04928965154231771,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00362",
+      "timestamp_seconds": 2019898.4399999997,
+      "fraud_logit": -4.308376789093018,
+      "fraud_probability": 0.013276729441488154,
+      "score": 0.019282561544242544,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00363",
+      "timestamp_seconds": 2021066.7179999999,
+      "fraud_logit": -4.24801778793335,
+      "fraud_probability": 0.01409113857235038,
+      "score": 0.02047380654330116,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00364",
+      "timestamp_seconds": 2021520.8699999999,
+      "fraud_logit": -4.346855163574219,
+      "fraud_probability": 0.01278197213268929,
+      "score": 0.018559354697753067,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00365",
+      "timestamp_seconds": 2022573.8639999998,
+      "fraud_logit": -4.503724098205566,
+      "fraud_probability": 0.010946549332222087,
+      "score": 0.015879605318934037,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00366",
+      "timestamp_seconds": 2023284.9119999998,
+      "fraud_logit": -4.37639045715332,
+      "fraud_probability": 0.01241459163276712,
+      "score": 0.018022574153678226,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00367",
+      "timestamp_seconds": 2023663.1279999998,
+      "fraud_logit": -4.50365686416626,
+      "fraud_probability": 0.010947277280436226,
+      "score": 0.015880667149985074,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00368",
+      "timestamp_seconds": 2024623.794,
+      "fraud_logit": -4.355868339538574,
+      "fraud_probability": 0.01266873655788675,
+      "score": 0.018393884630109845,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00369",
+      "timestamp_seconds": 2025705.21,
+      "fraud_logit": -4.393171310424805,
+      "fraud_probability": 0.012210524974584438,
+      "score": 0.017724498118295403,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00370",
+      "timestamp_seconds": 2026140.3959999997,
+      "fraud_logit": -4.408444881439209,
+      "fraud_probability": 0.012027669775130825,
+      "score": 0.017457457537285424,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00371",
+      "timestamp_seconds": 2026727.352,
+      "fraud_logit": -4.518467426300049,
+      "fraud_probability": 0.01078807294087871,
+      "score": 0.015648460289604503,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00372",
+      "timestamp_seconds": 2027377.434,
+      "fraud_logit": -3.2452142238616943,
+      "fraud_probability": 0.03749923876583423,
+      "score": 0.05514041317602294,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00373",
+      "timestamp_seconds": 2028746.598,
+      "fraud_logit": -4.178465843200684,
+      "fraud_probability": 0.015090775094940985,
+      "score": 0.021937331551023082,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00374",
+      "timestamp_seconds": 2029334.4779999997,
+      "fraud_logit": -4.108084678649902,
+      "fraud_probability": 0.016173353314001604,
+      "score": 0.023523964281161384,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00375",
+      "timestamp_seconds": 2029906.314,
+      "fraud_logit": -4.37133264541626,
+      "fraud_probability": 0.012476755951395658,
+      "score": 0.01811338855431948,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00376",
+      "timestamp_seconds": 2030904.4679999996,
+      "fraud_logit": -4.189120769500732,
+      "fraud_probability": 0.014933225956010605,
+      "score": 0.02170657202701159,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00377",
+      "timestamp_seconds": 2031503.2619999999,
+      "fraud_logit": -3.610894203186035,
+      "fraud_probability": 0.02631639699432499,
+      "score": 0.03847504797022995,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00378",
+      "timestamp_seconds": 2032203.6419999998,
+      "fraud_logit": -4.1100969314575195,
+      "fraud_probability": 0.016141365951257793,
+      "score": 0.023477058396305202,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00380",
+      "timestamp_seconds": 2033609.1659999997,
+      "fraud_logit": -4.212402820587158,
+      "fraud_probability": 0.014594581479841858,
+      "score": 0.021210690163723445,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00381",
+      "timestamp_seconds": 2034281.4659999998,
+      "fraud_logit": -4.227456092834473,
+      "fraud_probability": 0.014379666077954096,
+      "score": 0.020896074907825628,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00383",
+      "timestamp_seconds": 2036113.7639999997,
+      "fraud_logit": -4.407191276550293,
+      "fraud_probability": 0.012042575484447742,
+      "score": 0.017479223890933645,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00385",
+      "timestamp_seconds": 2037455.652,
+      "fraud_logit": -5.043849945068359,
+      "fraud_probability": 0.0064075511769715555,
+      "score": 0.009273885587186894,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00386",
+      "timestamp_seconds": 2038636.2899999998,
+      "fraud_logit": -3.98301100730896,
+      "fraud_probability": 0.0182887517653783,
+      "score": 0.026629349368391727,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00387",
+      "timestamp_seconds": 2039127.1079999998,
+      "fraud_logit": -4.29374361038208,
+      "fraud_probability": 0.013469802463519327,
+      "score": 0.01956488259098738,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00388",
+      "timestamp_seconds": 2040140.166,
+      "fraud_logit": -4.968547344207764,
+      "fraud_probability": 0.0069052276536712195,
+      "score": 0.009996692269859268,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00389",
+      "timestamp_seconds": 2041079.1959999998,
+      "fraud_logit": -4.287965774536133,
+      "fraud_probability": 0.013546796689671932,
+      "score": 0.01967748281687488,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00390",
+      "timestamp_seconds": 2041420.2419999996,
+      "fraud_logit": -4.1376237869262695,
+      "fraud_probability": 0.01570998963789223,
+      "score": 0.022844642262714404,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00391",
+      "timestamp_seconds": 2042540.8199999996,
+      "fraud_logit": -4.468406677246094,
+      "fraud_probability": 0.01133560053996159,
+      "score": 0.016447211315170032,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00392",
+      "timestamp_seconds": 2042933.7599999995,
+      "fraud_logit": -4.3731489181518555,
+      "fraud_probability": 0.012454397302065838,
+      "score": 0.018080724667626502,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00393",
+      "timestamp_seconds": 2044176.606,
+      "fraud_logit": -4.198288917541504,
+      "fraud_probability": 0.014798958488012773,
+      "score": 0.02150994189479946,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00394",
+      "timestamp_seconds": 2044564.704,
+      "fraud_logit": -3.3049051761627197,
+      "fraud_probability": 0.035403295704800525,
+      "score": 0.052002213986283526,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00395",
+      "timestamp_seconds": 2045092.9979999997,
+      "fraud_logit": -4.300704002380371,
+      "fraud_probability": 0.013377622754271486,
+      "score": 0.01943008590957628,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00396",
+      "timestamp_seconds": 2046001.3199999998,
+      "fraud_logit": -4.268645286560059,
+      "fraud_probability": 0.013807423193800907,
+      "score": 0.02005870135190929,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00397",
+      "timestamp_seconds": 2046698.562,
+      "fraud_logit": -4.431410312652588,
+      "fraud_probability": 0.011757807513362917,
+      "score": 0.017063442672278325,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00398",
+      "timestamp_seconds": 2047383.9899999995,
+      "fraud_logit": -3.623277425765991,
+      "fraud_probability": 0.026000945611225935,
+      "score": 0.03800772322583164,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00399",
+      "timestamp_seconds": 2048201.964,
+      "fraud_logit": -4.362544059753418,
+      "fraud_probability": 0.012585506131034839,
+      "score": 0.01827227289989407,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00400",
+      "timestamp_seconds": 2049202.5599999998,
+      "fraud_logit": -4.40054988861084,
+      "fraud_probability": 0.012121848351233252,
+      "score": 0.017594989163337425,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00402",
+      "timestamp_seconds": 2050653.0539999998,
+      "fraud_logit": -3.5142822265625,
+      "fraud_probability": 0.02890857861847068,
+      "score": 0.042320973326144526,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00403",
+      "timestamp_seconds": 2051556.396,
+      "fraud_logit": -5.044628620147705,
+      "fraud_probability": 0.006402595651286424,
+      "score": 0.00926669018779459,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00404",
+      "timestamp_seconds": 2052102.2819999997,
+      "fraud_logit": -4.408452987670898,
+      "fraud_probability": 0.012027573449120683,
+      "score": 0.01745731687641253,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00406",
+      "timestamp_seconds": 2053964.6999999997,
+      "fraud_logit": -4.408589839935303,
+      "fraud_probability": 0.012025947354446093,
+      "score": 0.017454942359948905,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00407",
+      "timestamp_seconds": 2054674.3319999997,
+      "fraud_logit": -4.341875076293945,
+      "fraud_probability": 0.012844966547498794,
+      "score": 0.018651416052985953,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00408",
+      "timestamp_seconds": 2055448.5779999997,
+      "fraud_logit": -4.471356391906738,
+      "fraud_probability": 0.011302590384374563,
+      "score": 0.016399042499983835,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00409",
+      "timestamp_seconds": 2055975.78,
+      "fraud_logit": -5.053582191467285,
+      "fraud_probability": 0.006345887588141988,
+      "score": 0.009184352908583484,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00410",
+      "timestamp_seconds": 2057227.104,
+      "fraud_logit": -4.291868209838867,
+      "fraud_probability": 0.013494746226345146,
+      "score": 0.019601360640997007,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00411",
+      "timestamp_seconds": 2057943.2219999998,
+      "fraud_logit": -3.5755293369293213,
+      "fraud_probability": 0.02723792193925478,
+      "score": 0.03984110671039421,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00412",
+      "timestamp_seconds": 2058767.508,
+      "fraud_logit": -4.4999847412109375,
+      "fraud_probability": 0.010987108437337623,
+      "score": 0.01593876857202827,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00413",
+      "timestamp_seconds": 2059453.134,
+      "fraud_logit": -4.2392191886901855,
+      "fraud_probability": 0.01421389784491718,
+      "score": 0.020653453189719832,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00414",
+      "timestamp_seconds": 2059577.0219999999,
+      "fraud_logit": -4.41513729095459,
+      "fraud_probability": 0.011948402998044595,
+      "score": 0.017341712191598857,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00415",
+      "timestamp_seconds": 2060474.622,
+      "fraud_logit": -4.269662857055664,
+      "fraud_probability": 0.01379357401487141,
+      "score": 0.020038441615685527,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00416",
+      "timestamp_seconds": 2061348.048,
+      "fraud_logit": -4.456548690795898,
+      "fraud_probability": 0.011469267211049527,
+      "score": 0.01664227576850514,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00417",
+      "timestamp_seconds": 2062004.6099999999,
+      "fraud_logit": -5.074435234069824,
+      "fraud_probability": 0.006215740754393936,
+      "score": 0.00899540396346725,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00418",
+      "timestamp_seconds": 2062849.3499999996,
+      "fraud_logit": -4.359198570251465,
+      "fraud_probability": 0.012627148766291868,
+      "score": 0.01833311755087157,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00419",
+      "timestamp_seconds": 2063944.614,
+      "fraud_logit": -4.2865753173828125,
+      "fraud_probability": 0.013565390332917168,
+      "score": 0.01970467641270564,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00420",
+      "timestamp_seconds": 2064693.1079999995,
+      "fraud_logit": -4.349491119384766,
+      "fraud_probability": 0.012748752760685923,
+      "score": 0.018510809578454978,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00421",
+      "timestamp_seconds": 2065201.872,
+      "fraud_logit": -4.33967399597168,
+      "fraud_probability": 0.012872906134823971,
+      "score": 0.01869224943087403,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00422",
+      "timestamp_seconds": 2066003.2199999997,
+      "fraud_logit": -4.397847652435303,
+      "fraud_probability": 0.012154250081413184,
+      "score": 0.0176423093535866,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00423",
+      "timestamp_seconds": 2066894.8619999995,
+      "fraud_logit": -4.345781326293945,
+      "fraud_probability": 0.012795529540458548,
+      "score": 0.018579167280898663,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00424",
+      "timestamp_seconds": 2067448.518,
+      "fraud_logit": -4.375016212463379,
+      "fraud_probability": 0.012431451812645425,
+      "score": 0.01804720423157042,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00425",
+      "timestamp_seconds": 2068581.4859999998,
+      "fraud_logit": -4.300823211669922,
+      "fraud_probability": 0.013376049442425311,
+      "score": 0.019427785325846544,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00426",
+      "timestamp_seconds": 2069456.3999999997,
+      "fraud_logit": -4.36586856842041,
+      "fraud_probability": 0.012544258967715044,
+      "score": 0.01821200860816572,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00427",
+      "timestamp_seconds": 2070000.8039999998,
+      "fraud_logit": -4.274460792541504,
+      "fraud_probability": 0.01372845823088592,
+      "score": 0.019943188618988632,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00428",
+      "timestamp_seconds": 2070515.64,
+      "fraud_logit": -4.165594577789307,
+      "fraud_probability": 0.015283280116228084,
+      "score": 0.022219340468682045,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00429",
+      "timestamp_seconds": 2071669.8659999997,
+      "fraud_logit": -4.284917831420898,
+      "fraud_probability": 0.01358758765840333,
+      "score": 0.019737141141135145,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00430",
+      "timestamp_seconds": 2072526.8579999995,
+      "fraud_logit": -4.260170936584473,
+      "fraud_probability": 0.013923293248741154,
+      "score": 0.020228216899543457,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00431",
+      "timestamp_seconds": 2073194.3760000002,
+      "fraud_logit": -4.474120616912842,
+      "fraud_probability": 0.011271742298518827,
+      "score": 0.016354030056558874,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00432",
+      "timestamp_seconds": 2073756.5939999998,
+      "fraud_logit": -4.329941272735596,
+      "fraud_probability": 0.012997169903953783,
+      "score": 0.018873873468427546,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00433",
+      "timestamp_seconds": 2074913.5559999999,
+      "fraud_logit": -4.393250942230225,
+      "fraud_probability": 0.012209564538599782,
+      "score": 0.017723095374498708,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00434",
+      "timestamp_seconds": 2075205.846,
+      "fraud_logit": -4.456007480621338,
+      "fraud_probability": 0.011475404924807014,
+      "score": 0.01665123338246318,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00435",
+      "timestamp_seconds": 2075949.9239999999,
+      "fraud_logit": -3.4861209392547607,
+      "fraud_probability": 0.02970972231227775,
+      "score": 0.04351167796733686,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00436",
+      "timestamp_seconds": 2077085.0699999998,
+      "fraud_logit": -3.4037258625030518,
+      "fraud_probability": 0.032179224995176114,
+      "score": 0.04718818680021225,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00437",
+      "timestamp_seconds": 2077677.0419999997,
+      "fraud_logit": -4.296514511108398,
+      "fraud_probability": 0.013433031313768166,
+      "score": 0.01951110971420453,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00438",
+      "timestamp_seconds": 2078437.26,
+      "fraud_logit": -4.297495365142822,
+      "fraud_probability": 0.013420038664119517,
+      "score": 0.019492110185146485,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00439",
+      "timestamp_seconds": 2079250.6079999995,
+      "fraud_logit": -3.6663753986358643,
+      "fraud_probability": 0.024931506371806814,
+      "score": 0.036424530438443264,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00442",
+      "timestamp_seconds": 2081292.396,
+      "fraud_logit": -4.416903495788574,
+      "fraud_probability": 0.011927569785594143,
+      "score": 0.017311293076325514,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00443",
+      "timestamp_seconds": 2082587.7719999999,
+      "fraud_logit": -3.428440809249878,
+      "fraud_probability": 0.03141834569533286,
+      "score": 0.046054417463344315,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00444",
+      "timestamp_seconds": 2082996.4379999998,
+      "fraud_logit": -4.467045783996582,
+      "fraud_probability": 0.011350862360156361,
+      "score": 0.01646948209003426,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00445",
+      "timestamp_seconds": 2083554.5459999999,
+      "fraud_logit": -4.410818099975586,
+      "fraud_probability": 0.011999501441532829,
+      "score": 0.017416325073718385,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00446",
+      "timestamp_seconds": 2084429.7539999997,
+      "fraud_logit": -4.447131156921387,
+      "fraud_probability": 0.011576533314848111,
+      "score": 0.016798832026812708,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00447",
+      "timestamp_seconds": 2085640.4459999998,
+      "fraud_logit": -4.41037654876709,
+      "fraud_probability": 0.012004737385946509,
+      "score": 0.01742397070858102,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00448",
+      "timestamp_seconds": 2085944.016,
+      "fraud_logit": -4.26474666595459,
+      "fraud_probability": 0.013860610594407729,
+      "score": 0.020136510970600627,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00449",
+      "timestamp_seconds": 2086968.6899999997,
+      "fraud_logit": -4.103078842163086,
+      "fraud_probability": 0.016253198276996467,
+      "score": 0.023641054631520626,
+      "label": 0,
+      "decision": "ALLOW"
+    },
+    {
+      "id": "episode-6:P00450",
+      "timestamp_seconds": 2087766.4439999997,
+      "fraud_logit": -5.03776216506958,
+      "fraud_probability": 0.006446425687903794,
+      "score": 0.00933033243456814,
+      "label": 0,
+      "decision": "ALLOW"
+    }
+  ],
+  "training_rows_in_evaluation": 0,
+  "threshold_source": "policy_validation_f1"
+}

@@ -13,8 +13,6 @@ def load(config, base):
     dataset = load_dataset(nested, base)
     if not isinstance(dataset, EventDataset):
         raise ValueError('payment_graph requires payment events.')
-    events = [event for event in dataset.document['events'] if event['kind'] == 'payment']
-    names = [str(a.get('external_id', a['id'])) for a in dataset.document['accounts']]
     metadata = dict(dataset.provenance)
     # Equivalent configs in different directories should identify the same file.
     if 'path' in nested:
@@ -22,10 +20,20 @@ def load(config, base):
         path = Path(nested['path'])
         path = path if path.is_absolute() else base / path
         metadata.update(provenance({**nested, 'path': str(path.resolve())}, path))
+    return to_graph(dataset, config.get('node_feature_dim', 32), metadata)
+
+
+def to_graph(dataset, node_feature_dim=32, metadata=None):
+    """Convert ordinary payment events without exposing any outcome features."""
+    if not isinstance(dataset, EventDataset):
+        raise ValueError('Payment graph conversion requires payment events.')
+    events = [event for event in dataset.document['events'] if event['kind'] == 'payment']
+    names = [str(a.get('external_id', a['id'])) for a in dataset.document['accounts']]
+    metadata = dict(dataset.provenance if metadata is None else metadata)
     return graph_dataset(
         [e['id'] for e in events], [e['t'] * 60 for e in events],
         [names[e['u']] for e in events], [names[e['v']] for e in events],
         [[np.log1p(e['amount'])] for e in events], ['log1p_amount'],
         {**metadata, 'graph_conversion': 'observed-payments/v1',
          'outcomes_used': False, 'omitted_event_kinds': ['deposit', 'report']},
-        config.get('node_feature_dim', 32))
+        node_feature_dim)

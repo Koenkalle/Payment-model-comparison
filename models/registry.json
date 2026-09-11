@@ -17,6 +17,13 @@
       "checkpoint": null,
       "inputs": ["temporal-graph/v1"],
       "execution": ["python"],
+      "tasks": {
+        "temporal-fraud-classification": {
+          "python_module": "models.implementations.dyg_tami_fraud",
+          "inputs": ["labeled-temporal-graph/v1"],
+          "implementation_sources": ["models/implementations/dyg_tami_fraud.py", "models/implementations/dyg_tami.py", "models/implementations/dygformer.py", "models/implementations/tami.py", "models/implementations/temporal_history.py", "framework/temporal_sampling.py", "prediction_heads/implementations/fraud_linear.py", "prediction_heads/registry.py", "prediction_heads/registry.json", "framework/temporal_fraud_data.py", "framework/temporal_fraud_experiments.py", "datasets/implementations/payment_graph.py", "datasets/implementations/payment_json.py", "datasets/implementations/payment_csv.py", "datasets/implementations/temporal_csv.py", "datasets/implementations/_validation.py"]
+        }
+      },
       "training": {"encoder": "end-to-end DyGFormer with TAMI LTE", "decoder": "trainable TAMI TRC historical decoder"},
       "capabilities": {"explanations": false, "task": "dynamic-link-prediction"},
       "dependency": "torch",

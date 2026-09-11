@@ -27,8 +27,14 @@ def load_module(name):
         raise ValueError('Plugin modules must be declared under their implementation package.')
     return importlib.import_module(name)
 
-def create_model(identifier,input_schema):
+def create_model(identifier,input_schema,task=None):
     descriptor=model_entry(identifier)
+    if task is not None:
+        selected=descriptor.get('tasks',{}).get(task)
+        if selected is not None:
+            descriptor={**descriptor,**selected,'capabilities':{**descriptor.get('capabilities',{}),'task':task}}
+        elif descriptor.get('capabilities',{}).get('task')!=task:
+            raise ValueError(f'{identifier} does not support task {task}.')
     if 'python' not in descriptor['execution'] or input_schema not in descriptor['inputs']:
         raise ValueError(f'{identifier} does not support Python experiments with {input_schema}; capabilities: {descriptor["execution"]}, {descriptor["inputs"]}')
     return load_module(descriptor['python_module']).create(),descriptor

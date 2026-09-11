@@ -1,0 +1,4 @@
+{
+  "loader": "payment_json",
+  "path": "../../models/native-fraud-history.json"
+}

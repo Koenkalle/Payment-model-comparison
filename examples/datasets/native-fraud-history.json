@@ -1,0 +1,13 @@
+{
+  "loader": "payment_episodes",
+  "name": "Independent labeled fraud history (synthetic)",
+  "gap_minutes": 60,
+  "episodes": [
+    {"loader": "synthetic_payments", "options": {"name": "relay", "size": "small", "seed": 73001}},
+    {"loader": "synthetic_payments", "options": {"name": "split", "size": "small", "seed": 73002}},
+    {"loader": "synthetic_payments", "options": {"name": "takeover", "size": "small", "seed": 73003}},
+    {"loader": "synthetic_payments", "options": {"name": "mixed", "size": "small", "seed": 73004}},
+    {"loader": "synthetic_payments", "options": {"name": "relay", "size": "small", "seed": 73005}},
+    {"loader": "synthetic_payments", "options": {"name": "split", "size": "small", "seed": 73006}}
+  ]
+}

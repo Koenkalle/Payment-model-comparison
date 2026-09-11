@@ -1,0 +1,9 @@
+{
+  "dataset": {
+    "loader": "payment_json",
+    "path": "../native-fraud-history.json"
+  },
+  "graph": {
+    "node_feature_dim": 32
+  }
+}

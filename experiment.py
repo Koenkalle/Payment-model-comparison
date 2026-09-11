@@ -12,7 +12,7 @@ def main():
     for command in ('prepare','train','evaluate'):
         child=sub.add_parser(command);child.add_argument('--config',required=True,type=Path)
         child.add_argument('--output',required=True,type=Path)
-        if command=='evaluate':child.add_argument('--artifact',required=True,type=Path);child.add_argument('--partition',choices=['all','train','validation','test'],default='all')
+        if command=='evaluate':child.add_argument('--artifact',required=True,type=Path);child.add_argument('--partition',choices=['all','train','validation','model_validation','policy_validation','test'],default='all')
     args=parser.parse_args()
     try:
         if args.command=='list':

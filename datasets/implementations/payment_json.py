@@ -38,11 +38,24 @@ def normalize(raw,metadata=None):
         if identifier not in payment_ids:raise ValueError('Outcome refers to an unknown payment: '+identifier)
         value=label(outcome)
         if value>=0:truth[identifier]=bool(value)
+    availability=raw.get('label_available_at',{})
+    if not isinstance(availability,dict):raise ValueError('label_available_at must map payment IDs to confirmation times in minutes.')
+    payment_times={event['id']:event['t'] for event in normalized if event['kind']=='payment'}
+    confirmed={}
+    for identifier,value in availability.items():
+        if identifier not in truth:raise ValueError('Label availability requires a known payment outcome: '+identifier)
+        value=number(value,'label availability time')
+        if value<payment_times[identifier]:raise ValueError('A payment outcome cannot be confirmed before the payment.')
+        confirmed[identifier]=value
     return {'schema':'payment-events/v1','units':dict(units),'name':str(raw.get('name','Imported payments')),'size':str(raw.get('size','imported')),'seed':raw.get('seed'),
             'accounts':normalized_accounts,'events':normalized,'truth':truth,'focus':[],'bookmarks':[], 'startIndex':0,
-            'description':str(raw.get('description','User-supplied payment events.')),'provenance':copy.deepcopy(metadata or raw.get('provenance',{'origin':'user-supplied'}))}
+            'description':str(raw.get('description','User-supplied payment events.')),'provenance':copy.deepcopy(metadata or raw.get('provenance',{'origin':'user-supplied'})),
+            **({'label_available_at':confirmed} if availability else {})}
 
 def load(config,base):
     path=source(config,base);metadata=provenance(config,path)
-    document=normalize(json.loads(path.read_text()),metadata)
+    raw=json.loads(path.read_text())
+    if isinstance(raw,dict) and isinstance(raw.get('provenance'),dict):
+        metadata['source_provenance']=copy.deepcopy(raw['provenance'])
+    document=normalize(raw,metadata)
     return EventDataset(document,metadata)

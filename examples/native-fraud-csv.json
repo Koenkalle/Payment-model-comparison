@@ -1,0 +1,16 @@
+{
+  "model": "dyg_tami_native",
+  "task": "temporal-fraud-classification",
+  "dataset": {
+    "loader": "payment_csv",
+    "path": "YOUR_LABELED_PAYMENTS.csv",
+    "columns": {"id": "transaction_id", "time": "timestamp", "sender": "sender_id", "recipient": "recipient_id", "amount": "amount_eur", "label": "is_fraud", "label_available_at": "outcome_confirmed_at"},
+    "time_unit": "iso8601",
+    "currency": "EUR"
+  },
+  "initialization": {"method": "link_pretrain_train_partition"},
+  "encoder_training": "finetune",
+  "prediction_head": {"id": "fraud_linear"},
+  "split": {"train": 0.6, "model_validation": 0.15, "policy_validation": 0.1},
+  "parameters": {"epochs": 10, "patience": 3, "seed": 42, "device": "cpu"}
+}

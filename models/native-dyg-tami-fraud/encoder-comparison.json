@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "task": "temporal-fraud-classification",
+  "dataset": "models/native-fraud-history.json",
+  "origin": "synthetic",
+  "configuration": "examples/native-fraud-training.json",
+  "difference": "Only encoder_training changes between finetune and frozen; same initialization, seed, training schedule, and reserved data. Each model selects its cutoff on policy validation.",
+  "test_count": 425,
+  "test_fraud": 16,
+  "runs": {
+    "finetune": {
+      "checkpoint_sha256": "18ea3c3b0ed025440cf686136a41b17ae68fad8cacc74f30a0a2d9e64a74bf2e",
+      "best_epoch": 6,
+      "epochs_run": 6,
+      "threshold": 0.32632500655345226,
+      "threshold_source": "policy_validation_f1",
+      "metrics": {
+        "rows": 425,
+        "known": 425,
+        "unknown": 0,
+        "tp": 3,
+        "fp": 4,
+        "fn": 13,
+        "tn": 405,
+        "precision": 0.42857142857142855,
+        "recall": 0.1875,
+        "f1": 0.2608695652173913,
+        "block_rate": 0.01647058823529412,
+        "fraud": 16,
+        "legitimate": 409,
+        "average_precision": 0.20124134257812343,
+        "roc_auc": 0.8097493887530562,
+        "log_loss": 0.13917157716119108,
+        "false_block_rate": 0.009779951100244499
+      }
+    },
+    "frozen": {
+      "checkpoint_sha256": "6754fbcf6fea9a33923dc5564e5168b3b8bae9e4d2dda7626ccb63fac444cac1",
+      "best_epoch": 6,
+      "epochs_run": 6,
+      "threshold": 0.1696474432653807,
+      "threshold_source": "policy_validation_f1",
+      "metrics": {
+        "rows": 425,
+        "known": 425,
+        "unknown": 0,
+        "tp": 14,
+        "fp": 194,
+        "fn": 2,
+        "tn": 215,
+        "precision": 0.0673076923076923,
+        "recall": 0.875,
+        "f1": 0.125,
+        "block_rate": 0.4894117647058824,
+        "fraud": 16,
+        "legitimate": 409,
+        "average_precision": 0.057276769760702825,
+        "roc_auc": 0.6618276283618582,
+        "log_loss": 0.2096903566984435,
+        "false_block_rate": 0.4743276283618582
+      }
+    }
+  }
+}
