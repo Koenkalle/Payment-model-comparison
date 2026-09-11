@@ -1,11 +1,12 @@
 """CLI for independently registered datasets and real model implementations."""
-import argparse,json
+import argparse,json,logging
 from pathlib import Path
 from framework.registry import manifest,load_dataset
 from framework.experiments import train_experiment,evaluate_artifact
 from framework.contracts import EventDataset
 
 def main():
+    logging.basicConfig(level=logging.INFO,format='%(message)s')
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='command',required=True)
     sub.add_parser('list',help='List model and dataset implementations and capabilities.')
     for command in ('prepare','train','evaluate'):

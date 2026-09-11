@@ -4,6 +4,8 @@ This is a dynamic link predictor. Its outputs are not fraud probabilities.
 See UPSTREAM.md for pinned sources, licenses and experiment-protocol adaptations.
 """
 import json
+import logging
+import time
 import numpy as np
 import torch
 from torch import nn
@@ -16,6 +18,7 @@ DEFAULTS = dict(time_feat_dim=32, channel_embedding_dim=32, patch_size=2,
                 num_layers=2, num_heads=2, dropout=0.1, max_input_sequence_length=64,
                 gamma=0.9, epochs=10, batch_size=32, learning_rate=0.0001,
                 weight_decay=0.0, patience=3, seed=42, device='cpu', num_threads=2)
+LOGGER = logging.getLogger(__name__)
 
 
 class Model:
@@ -94,7 +97,11 @@ class Model:
         loss_function = nn.BCEWithLogitsLoss(reduction='sum')
         best_loss, best_weights, stale = float('inf'), None, 0
         self.training_history = []
+        started = time.perf_counter()
+        LOGGER.info('Link pretraining: %d training links, %d validation links, up to %d epochs on %s.',
+                    len(training), len(validation), p['epochs'], p['device'])
         for epoch in range(p['epochs']):
+            epoch_started = time.perf_counter()
             self._bind(dataset, training)
             self.network.train()
             sampler = DestinationSampler(p['seed'] + epoch)
@@ -136,18 +143,27 @@ class Model:
             positive, negative = evaluation['positive_logits'][valid], evaluation['negative_logits'][valid]
             val_loss = float(np.concatenate([np.logaddexp(0, -positive), np.logaddexp(0, negative)]).mean())
             self.training_history.append({'epoch': epoch + 1, 'train_loss': total / count, 'validation_loss': val_loss})
-            if val_loss < best_loss:
+            improved = val_loss < best_loss
+            if improved:
                 best_loss = val_loss
                 best_weights = {key: value.detach().cpu().clone() for key, value in self.network.state_dict().items()}
                 self.best_epoch = epoch + 1
                 stale = 0
             else:
                 stale += 1
-                if stale >= p['patience']:
-                    break
+            LOGGER.info('Link epoch %d/%d: train_loss=%.6f validation_loss=%.6f%s epoch=%.1fs total=%.1fs',
+                        epoch + 1, p['epochs'], total / count, val_loss,
+                        ' new_best' if improved else f' patience={stale}/{p["patience"]}',
+                        time.perf_counter() - epoch_started, time.perf_counter() - started)
+            if stale >= p['patience']:
+                LOGGER.info('Link pretraining stopped early after epoch %d; best epoch was %d.',
+                            epoch + 1, self.best_epoch)
+                break
         self.network.load_state_dict(best_weights)
         self.network.eval()
         self.memory.reset_memory()
+        LOGGER.info('Link pretraining complete: best_epoch=%d best_validation_loss=%.6f elapsed=%.1fs',
+                    self.best_epoch, best_loss, time.perf_counter() - started)
 
     def predict_graph(self, dataset, indices, seed=10042):
         """Replay the observed prefix with frozen weights; no outcomes are read.

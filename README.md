@@ -98,6 +98,10 @@ python experiment.py evaluate --config examples/datasets/dyg-tami-payments.confi
 ```
 
 Outputs include `model.npz`, the experiment manifest and `test-report.json`.
+Training logs one line per epoch to stderr, including training and validation
+loss, best-epoch or patience status, epoch duration and total elapsed time. Fraud
+experiments also report partition label counts and the transitions from link
+pretraining to fraud fitting, policy-threshold selection and final evaluation.
 The checkpoint stores every learned tensor and a detached pair-memory snapshot,
 without pickle. Evaluation resets state and replays the observed prefix using
 frozen model weights, so rerunning validation after test is safe. The report
