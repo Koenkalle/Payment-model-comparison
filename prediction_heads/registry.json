@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "prediction_heads": [
+    {
+      "id": "empirical_tail",
+      "kind": "link-logits",
+      "input_contract": "link-logit/v1",
+      "output_contract": "likelihood-score/v1",
+      "label": "Reference likelihood percentile",
+      "python_module": "prediction_heads.implementations.empirical_tail",
+      "description": "Compare the link logit with frozen reference logits. Flag scores strictly below the selected reference tail probability."
+    },
+    {
+      "id": "fixed_likelihood",
+      "kind": "link-logits",
+      "input_contract": "link-logit/v1",
+      "output_contract": "likelihood-score/v1",
+      "label": "Fixed link likelihood cutoff",
+      "python_module": "prediction_heads.implementations.fixed_likelihood",
+      "description": "Apply a fixed cutoff to sigmoid(link logit), without claiming it is a fraud probability."
+    },
+    {
+      "id": "fraud_linear",
+      "kind": "transaction-representation",
+      "input_contract": "tami-payment-representation/v1",
+      "output_contract": "fraud-logit/v1",
+      "label": "Fraud-label-trained linear classifier",
+      "python_module": "prediction_heads.implementations.fraud_linear",
+      "description": "Learn a fraud logit from the current TAMI interaction, prior directed-pair memory, and training-normalized candidate amount."
+    }
+  ]
+}
