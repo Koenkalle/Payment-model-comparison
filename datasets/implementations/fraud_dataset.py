@@ -8,7 +8,7 @@ def load(config, base):
     config = resolved_config(config, base)
     stream = open_source(config, base)
     try:
-        result = project(stream, config.get('view', 'stream'), config)
+        result = project(stream, config.get("view", "stream"), config)
     except BaseException:
         stream.close()
         raise

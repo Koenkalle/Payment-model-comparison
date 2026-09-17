@@ -7,7 +7,7 @@ def timestamp_groups(dataset, indices):
     if not len(indices):
         return
     if np.any(np.diff(indices) <= 0):
-        raise ValueError('Graph indices must be unique and chronological.')
+        raise ValueError("Graph indices must be unique and chronological.")
     cuts = np.flatnonzero(np.diff(dataset.times[indices]) != 0) + 1
     yield from np.split(indices, cuts)
 
@@ -18,6 +18,7 @@ class DestinationSampler:
     Historical pairs remain eligible: a previously observed link need not recur.
     No future links are consulted and sampled negatives never update graph state.
     """
+
     def __init__(self, seed):
         self.rng = np.random.default_rng(seed)
         self.candidates = set()
@@ -29,7 +30,9 @@ class DestinationSampler:
         self.observe(dataset, group)
         forbidden = {}
         for i in group:
-            forbidden.setdefault(int(dataset.sources[i]), set()).add(int(dataset.destinations[i]))
+            forbidden.setdefault(int(dataset.sources[i]), set()).add(
+                int(dataset.destinations[i])
+            )
         candidates = sorted(self.candidates)
         destinations = []
         for i in group:

@@ -6,4 +6,4 @@ that a transaction is less likely under the fitted link model and reference set.
 
 from .registry import create_head, load_head
 
-__all__ = ['create_head', 'load_head']
+__all__ = ["create_head", "load_head"]

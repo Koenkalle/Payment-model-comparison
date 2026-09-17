@@ -13,25 +13,36 @@ from datasets.implementations.payment_json import normalize
 class ScenarioContractTests(unittest.TestCase):
     def test_all_scenarios_sizes_and_seeds_are_payment_documents(self):
         script = "const s=require('./datasets/implementations/synthetic_payments');process.stdout.write(JSON.stringify(s.catalog.flatMap(x=>['small','medium','large'].flatMap(size=>[42,314].map(seed=>s.build(x.id,size,seed))))));"
-        documents = json.loads(subprocess.check_output(['node', '-e', script], cwd=ROOT, text=True))
+        documents = json.loads(
+            subprocess.check_output(["node", "-e", script], cwd=ROOT, text=True)
+        )
         self.assertEqual(len(documents), 30)
         for document in documents:
-            with self.subTest(scenario=document['name'], size=document['size'], seed=document['seed']):
+            with self.subTest(
+                scenario=document["name"], size=document["size"], seed=document["seed"]
+            ):
                 normalized = normalize(document)
-                self.assertEqual(len(normalized['events']), len(document['events']))
-                payments = {event['id'] for event in document['events'] if event['kind'] == 'payment'}
-                self.assertEqual(set(normalized['truth']), payments)
-                self.assertEqual(normalized['truth'], document['truth'])
+                self.assertEqual(len(normalized["events"]), len(document["events"]))
+                payments = {
+                    event["id"]
+                    for event in document["events"]
+                    if event["kind"] == "payment"
+                }
+                self.assertEqual(set(normalized["truth"]), payments)
+                self.assertEqual(normalized["truth"], document["truth"])
 
     def test_checked_in_scenario_files_import_without_repairs(self):
-        paths = sorted(ROOT.joinpath('datasets').glob('*-*-*.json'))
+        paths = sorted(ROOT.joinpath("datasets").glob("*-*-*.json"))
         self.assertTrue(paths)
-        self.assertEqual({path.name.split('-')[0] for path in paths}, {'relay', 'split', 'benign', 'takeover', 'mixed'})
+        self.assertEqual(
+            {path.name.split("-")[0] for path in paths},
+            {"relay", "split", "benign", "takeover", "mixed"},
+        )
         for path in paths:
             with self.subTest(path=path.name):
                 document = json.loads(path.read_text())
-                self.assertEqual(normalize(document)['truth'], document['truth'])
+                self.assertEqual(normalize(document)["truth"], document["truth"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

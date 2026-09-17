@@ -16,12 +16,18 @@ from models.implementations import tabfm
 
 
 REAL_DEPENDENCIES = tabfm._dependencies
-VERSIONS = {"tabfm": "1.0.1", "torch": "test", "numpy": np.__version__,
-            "scikit-learn": "test", "scipy": "test"}
+VERSIONS = {
+    "tabfm": "1.0.1",
+    "torch": "test",
+    "numpy": np.__version__,
+    "scikit-learn": "test",
+    "scipy": "test",
+}
 
 
 class FakeClassifier:
     """Keeps the true class order intentionally reversed to catch column bugs."""
+
     instances = []
 
     def __init__(self, **parameters):
@@ -48,11 +54,21 @@ class TabFMTests(unittest.TestCase):
         checkpoint = self.base / "classification"
         checkpoint.mkdir()
         (checkpoint / "config.json").write_text("{}")
-        (checkpoint / "model.safetensors").write_bytes(b"fake; the fake loader never opens this")
+        (checkpoint / "model.safetensors").write_bytes(
+            b"fake; the fake loader never opens this"
+        )
         self.load_weights = Mock(return_value=object())
         self.snapshot = Mock(return_value=str(self.base))
-        self.dependencies = patch.object(tabfm, "_dependencies", return_value=(
-            FakeClassifier, self.load_weights, self.snapshot, dict(VERSIONS)))
+        self.dependencies = patch.object(
+            tabfm,
+            "_dependencies",
+            return_value=(
+                FakeClassifier,
+                self.load_weights,
+                self.snapshot,
+                dict(VERSIONS),
+            ),
+        )
         self.dependencies.start()
         FakeClassifier.instances.clear()
         self.x = np.column_stack((np.arange(100) / 10, np.arange(100) % 7))
@@ -77,19 +93,46 @@ class TabFMTests(unittest.TestCase):
 
     def test_thread_limit_applies_on_preparation_only(self):
         torch = SimpleNamespace(__version__="test", set_num_threads=Mock())
-        upstream = SimpleNamespace(__version__="test", TabFMClassifier=FakeClassifier,
-                                   tabfm_v1_0_0_pytorch=SimpleNamespace(load=self.load_weights))
-        modules = {"tabfm": upstream, "torch": torch,
-                   "huggingface_hub": SimpleNamespace(snapshot_download=self.snapshot),
-                   "safetensors.torch": object(),
-                   "sklearn": SimpleNamespace(__version__="test"),
-                   "scipy": SimpleNamespace(__version__="test")}
-        arguments = {"model", "n_estimators", "norm_methods", "max_num_features", "max_num_rows",
-                     "batch_size", "random_state", "use_amp", "cache_context", "maybe_quantize_kv_cache",
-                     "keep_cache_on_device", "model_type", "checkpoint_path", "device", "dtype", "use_cache"}
+        upstream = SimpleNamespace(
+            __version__="test",
+            TabFMClassifier=FakeClassifier,
+            tabfm_v1_0_0_pytorch=SimpleNamespace(load=self.load_weights),
+        )
+        modules = {
+            "tabfm": upstream,
+            "torch": torch,
+            "huggingface_hub": SimpleNamespace(snapshot_download=self.snapshot),
+            "safetensors.torch": object(),
+            "sklearn": SimpleNamespace(__version__="test"),
+            "scipy": SimpleNamespace(__version__="test"),
+        }
+        arguments = {
+            "model",
+            "n_estimators",
+            "norm_methods",
+            "max_num_features",
+            "max_num_rows",
+            "batch_size",
+            "random_state",
+            "use_amp",
+            "cache_context",
+            "maybe_quantize_kv_cache",
+            "keep_cache_on_device",
+            "model_type",
+            "checkpoint_path",
+            "device",
+            "dtype",
+            "use_cache",
+        }
         with patch.object(tabfm.sys, "version_info", (3, 12, 1)):
-            with patch.object(tabfm.importlib, "import_module", side_effect=modules.__getitem__):
-                with patch.object(tabfm.inspect, "signature", return_value=SimpleNamespace(parameters=arguments)):
+            with patch.object(
+                tabfm.importlib, "import_module", side_effect=modules.__getitem__
+            ):
+                with patch.object(
+                    tabfm.inspect,
+                    "signature",
+                    return_value=SimpleNamespace(parameters=arguments),
+                ):
                     _, load_weights, _, _ = REAL_DEPENDENCIES()
         torch.set_num_threads.assert_not_called()
         self.load_weights.assert_not_called()
@@ -105,18 +148,31 @@ class TabFMTests(unittest.TestCase):
             with patch.object(tabfm.importlib.util, "find_spec", return_value=None):
                 self.assertIn("requirements-tabfm.txt", tabfm.availability_error())
             with patch.object(tabfm.importlib.util, "find_spec", return_value=object()):
-                with patch.object(tabfm, "_dependencies", side_effect=RuntimeError("Unsupported TabFM API")):
+                with patch.object(
+                    tabfm,
+                    "_dependencies",
+                    side_effect=RuntimeError("Unsupported TabFM API"),
+                ):
                     self.assertIn("Unsupported TabFM API", tabfm.availability_error())
         self.snapshot.assert_not_called()
 
     def test_official_loader_gets_pinned_safe_snapshot_and_cpu(self):
         model = self.fit_model()
         self.snapshot.assert_called_once_with(
-            repo_id=tabfm.WEIGHTS_REPOSITORY, revision=tabfm.WEIGHTS_REVISION,
-            allow_patterns=["classification/config.json", "classification/model.safetensors"])
+            repo_id=tabfm.WEIGHTS_REPOSITORY,
+            revision=tabfm.WEIGHTS_REVISION,
+            allow_patterns=[
+                "classification/config.json",
+                "classification/model.safetensors",
+            ],
+        )
         self.load_weights.assert_called_once_with(
-            model_type="classification", checkpoint_path=str(self.base / "classification"),
-            device="cpu", dtype=None, use_cache=True)
+            model_type="classification",
+            checkpoint_path=str(self.base / "classification"),
+            device="cpu",
+            dtype=None,
+            use_cache=True,
+        )
         params = model.classifier.parameters
         self.assertEqual(params["batch_size"], 1)
         self.assertEqual(params["random_state"], 42)
@@ -136,8 +192,12 @@ class TabFMTests(unittest.TestCase):
         first = self.fit_model({"max_context_rows": 20, "seed": 7})
         second = self.fit_model({"max_context_rows": 20, "seed": 7})
         different = self.fit_model({"max_context_rows": 20, "seed": 8})
-        self.assertEqual(first.state["context_indices"], second.state["context_indices"])
-        self.assertNotEqual(first.state["context_indices"], different.state["context_indices"])
+        self.assertEqual(
+            first.state["context_indices"], second.state["context_indices"]
+        )
+        self.assertNotEqual(
+            first.state["context_indices"], different.state["context_indices"]
+        )
         indices = first.state["context_indices"]
         np.testing.assert_array_equal(first.classifier.x, self.x[indices])
         np.testing.assert_array_equal(first.classifier.y, self.y[indices])
@@ -145,7 +205,10 @@ class TabFMTests(unittest.TestCase):
         self.assertEqual(int(first.classifier.y.sum()), 2)
         self.assertEqual(first.provenance["training_rows"], 100)
         self.assertEqual(first.provenance["context_rows"], 20)
-        self.assertEqual(first.state["parameters"], {**tabfm.DEFAULT_PARAMETERS, "max_context_rows": 20, "seed": 7})
+        self.assertEqual(
+            first.state["parameters"],
+            {**tabfm.DEFAULT_PARAMETERS, "max_context_rows": 20, "seed": 7},
+        )
 
     def test_rare_classes_survive_context_sampling(self):
         for minority in (0, 1):
@@ -162,15 +225,21 @@ class TabFMTests(unittest.TestCase):
         result = model.predict(query, self.names)
         expected = model.classifier.predict_proba(query)[:, 0]
         np.testing.assert_allclose(result.probabilities, expected)
-        self.assertEqual([len(x) for x in model.classifier.prediction_batches[:-1]], [3, 3, 2])
+        self.assertEqual(
+            [len(x) for x in model.classifier.prediction_batches[:-1]], [3, 3, 2]
+        )
         self.assertTrue(np.isfinite(result.margins).all())
         self.assertIsNone(result.contributions)
         np.testing.assert_array_equal(model.classifier.x, self.x)
         self.assertEqual(len(model.state["context_y"]), 100)
-        self.assertEqual(model.predict(np.empty((0, 2)), self.names).probabilities.shape, (0,))
+        self.assertEqual(
+            model.predict(np.empty((0, 2)), self.names).probabilities.shape, (0,)
+        )
 
     def test_json_roundtrip_rebuilds_same_context_and_predictions(self):
-        model = self.fit_model({"max_context_rows": 20, "inference_batch_size": 3, "seed": 6})
+        model = self.fit_model(
+            {"max_context_rows": 20, "inference_batch_size": 3, "seed": 6}
+        )
         expected = model.predict(self.x[:10], self.names)
         artifact = self.base / "model.json"
         model.save(artifact)
@@ -182,23 +251,41 @@ class TabFMTests(unittest.TestCase):
         self.assertIsNot(restored.classifier, model.classifier)
         np.testing.assert_array_equal(restored.classifier.x, model.classifier.x)
         np.testing.assert_array_equal(restored.classifier.y, model.classifier.y)
-        np.testing.assert_allclose(restored.predict(self.x[:10], self.names).probabilities, expected.probabilities)
+        np.testing.assert_allclose(
+            restored.predict(self.x[:10], self.names).probabilities,
+            expected.probabilities,
+        )
 
     def test_input_and_parameter_validation_happens_before_weights(self):
-        bad_parameters = [{"max_context_rows": 1}, {"max_context_rows": 2049},
-                          {"n_estimators": True}, {"n_estimators": 9},
-                          {"inference_batch_size": 0}, {"inference_batch_size": 257},
-                          {"seed": -1}, {"seed": 2147483648}, {"seed": "42"},
-                          {"learning_rate": .1}]
+        bad_parameters = [
+            {"max_context_rows": 1},
+            {"max_context_rows": 2049},
+            {"n_estimators": True},
+            {"n_estimators": 9},
+            {"inference_batch_size": 0},
+            {"inference_batch_size": 257},
+            {"seed": -1},
+            {"seed": 2147483648},
+            {"seed": "42"},
+            {"learning_rate": 0.1},
+        ]
         for parameters in bad_parameters:
             with self.subTest(parameters=parameters), self.assertRaises(ValueError):
                 self.fit_model(parameters)
-        for labels in (np.zeros(100), np.full(100, -1), self.y[:-1], self.y.reshape(-1, 1)):
+        for labels in (
+            np.zeros(100),
+            np.full(100, -1),
+            self.y[:-1],
+            self.y.reshape(-1, 1),
+        ):
             with self.assertRaises(ValueError):
                 tabfm.create().fit(self.x, labels, self.names, {})
-        for x, names in ((self.x, ("same", "same")), (self.x, ("one",)),
-                         (np.full((100, 2), np.nan), self.names),
-                         (np.zeros((100, 501)), tuple(f"f{i}" for i in range(501)))):
+        for x, names in (
+            (self.x, ("same", "same")),
+            (self.x, ("one",)),
+            (np.full((100, 2), np.nan), self.names),
+            (np.zeros((100, 501)), tuple(f"f{i}" for i in range(501))),
+        ):
             with self.assertRaises(ValueError):
                 tabfm.create().fit(x, self.y, names, {})
         self.snapshot.assert_not_called()
@@ -209,8 +296,10 @@ class TabFMTests(unittest.TestCase):
             model.predict(self.x, self.names[::-1])
         with self.assertRaisesRegex(ValueError, "explanations"):
             model.predict(self.x, self.names, explain=True)
-        for probabilities in ([[np.nan, .5]], [[1.1, -.1]], [[.5]], [[.2, .2]]):
-            with patch.object(model.classifier, "predict_proba", return_value=np.array(probabilities)):
+        for probabilities in ([[np.nan, 0.5]], [[1.1, -0.1]], [[0.5]], [[0.2, 0.2]]):
+            with patch.object(
+                model.classifier, "predict_proba", return_value=np.array(probabilities)
+            ):
                 with self.assertRaisesRegex(ValueError, "probabilities"):
                     model.predict(self.x[:1], self.names)
 
@@ -245,7 +334,16 @@ class TabFMTests(unittest.TestCase):
         artifact = self.base / "model.json"
         model.save(artifact)
         self.snapshot.reset_mock()
-        with patch.object(tabfm, "_dependencies", return_value=(FakeClassifier, self.load_weights, self.snapshot, {**VERSIONS, "tabfm": "99.0"})):
+        with patch.object(
+            tabfm,
+            "_dependencies",
+            return_value=(
+                FakeClassifier,
+                self.load_weights,
+                self.snapshot,
+                {**VERSIONS, "tabfm": "99.0"},
+            ),
+        ):
             with self.assertRaisesRegex(ValueError, "library versions"):
                 tabfm.create().load(artifact, self.names)
         self.snapshot.assert_not_called()

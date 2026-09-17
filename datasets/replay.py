@@ -23,6 +23,7 @@ SCORE_KINDS = {
 @dataclass(frozen=True)
 class EventEdge:
     """An observed directed transaction, with typed, role-bearing endpoints."""
+
     event_id: str
     event_time: float
     event_type: str
@@ -38,15 +39,20 @@ class HistoryView:
     in an event and are not part of node identity. This lightweight projection
     needs neither a graph library nor fabricated identifiers.
     """
+
     events: tuple
 
     @property
     def edges(self):
         return tuple(
-            EventEdge(event.event_id, event.event_time, event.event_type, source, destination)
+            EventEdge(
+                event.event_id, event.event_time, event.event_type, source, destination
+            )
             for event in self.events
-            for source in event.entities if source.role == "source"
-            for destination in event.entities if destination.role == "destination"
+            for source in event.entities
+            if source.role == "source"
+            for destination in event.entities
+            if destination.role == "destination"
         )
 
     def neighbors(self, entity, *, direction="both"):
@@ -55,9 +61,17 @@ class HistoryView:
         identity = (entity.kind, entity.id)
         found = {}
         for edge in self.edges:
-            if direction in {"both", "outgoing"} and (edge.source.kind, edge.source.id) == identity:
-                found.setdefault((edge.destination.kind, edge.destination.id), edge.destination)
-            if direction in {"both", "incoming"} and (edge.destination.kind, edge.destination.id) == identity:
+            if (
+                direction in {"both", "outgoing"}
+                and (edge.source.kind, edge.source.id) == identity
+            ):
+                found.setdefault(
+                    (edge.destination.kind, edge.destination.id), edge.destination
+                )
+            if (
+                direction in {"both", "incoming"}
+                and (edge.destination.kind, edge.destination.id) == identity
+            ):
                 found.setdefault((edge.source.kind, edge.source.id), edge.source)
         return tuple(found.values())
 
@@ -65,6 +79,7 @@ class HistoryView:
 @dataclass(frozen=True)
 class Feedback:
     """Released supervision only; source diagnostics never enter model hooks."""
+
     event: object
     label: int
     available_at: float
@@ -84,7 +99,11 @@ def _positive_int(value, name):
 
 
 def _finite(value, name):
-    if isinstance(value, bool) or not isinstance(value, Real) or not math.isfinite(value):
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, Real)
+        or not math.isfinite(value)
+    ):
         raise ValueError(f"{name} must be a finite number")
     return float(value)
 
@@ -97,7 +116,10 @@ def _score_kind(kind):
 def _prediction_rows(rows, score_kind):
     _score_kind(score_kind)
     if isinstance(rows, Mapping):
-        rows = ({"event_id": identifier, "score": score} for identifier, score in rows.items())
+        rows = (
+            {"event_id": identifier, "score": score}
+            for identifier, score in rows.items()
+        )
     result = {}
     for source in rows:
         if not isinstance(source, Mapping):
@@ -124,11 +146,16 @@ def _prediction_rows(rows, score_kind):
 def _check_ids(rows, expected):
     missing, extra = set(expected) - rows.keys(), rows.keys() - set(expected)
     if missing or extra:
-        raise ValueError(f"prediction IDs do not match: missing={sorted(missing)[:5]}, extra={sorted(extra)[:5]}")
+        raise ValueError(
+            f"prediction IDs do not match: missing={sorted(missing)[:5]}, extra={sorted(extra)[:5]}"
+        )
 
 
 def _dataset_metadata(stream):
-    return {"descriptor": _plain(stream.descriptor), "provenance": _plain(stream.provenance)}
+    return {
+        "descriptor": _plain(stream.descriptor),
+        "provenance": _plain(stream.provenance),
+    }
 
 
 def _check_identity(stream, identity):
@@ -148,16 +175,20 @@ def _check_identity(stream, identity):
 
 def _joined_row(event, prediction, outcome):
     row = dict(prediction)
-    row.update(event_id=event.event_id, event_time=event.event_time,
-               label=-1 if outcome is None else outcome.label,
-               label_available_at=None if outcome is None else outcome.available_at)
+    row.update(
+        event_id=event.event_id,
+        event_time=event.event_time,
+        label=-1 if outcome is None else outcome.label,
+        label_available_at=None if outcome is None else outcome.available_at,
+    )
     # Outcomes are joined only in this evaluator-owned output, never history.
     row["diagnostics"] = {} if outcome is None else _plain(outcome.diagnostics)
     return row
 
 
-def join_predictions(stream, rows, *, score_kind="probability", event_ids=None,
-                     dataset_identity=None):
+def join_predictions(
+    stream, rows, *, score_kind="probability", event_ids=None, dataset_identity=None
+):
     """Join predictions to final outcomes in stream order, with exact ID checks.
 
     By default every source event needs one prediction. ``event_ids`` explicitly
@@ -171,7 +202,10 @@ def join_predictions(stream, rows, *, score_kind="probability", event_ids=None,
     selected = None
     if event_ids is not None:
         requested = tuple(event_ids)
-        if any(not isinstance(identifier, str) or not identifier for identifier in requested):
+        if any(
+            not isinstance(identifier, str) or not identifier
+            for identifier in requested
+        ):
             raise ValueError("event_ids must contain nonempty strings")
         selected = set(requested)
         if len(selected) != len(requested):
@@ -179,14 +213,20 @@ def join_predictions(stream, rows, *, score_kind="probability", event_ids=None,
         _check_ids(predictions, selected)
     output, seen = [], set()
     for batch in stream.iter_batches(batch_size=1024):
-        events = tuple(event for event in batch if selected is None or event.event_id in selected)
+        events = tuple(
+            event for event in batch if selected is None or event.event_id in selected
+        )
         truth = stream.truth_for([event.event_id for event in events]) if events else {}
         for event in events:
             if event.event_id in seen:
                 raise ValueError(f"duplicate stream event_id: {event.event_id}")
             seen.add(event.event_id)
             if event.event_id in predictions:
-                output.append(_joined_row(event, predictions[event.event_id], truth.get(event.event_id)))
+                output.append(
+                    _joined_row(
+                        event, predictions[event.event_id], truth.get(event.event_id)
+                    )
+                )
     _check_ids(predictions, seen)
     return output
 
@@ -208,8 +248,18 @@ def _groups(stream, batch_size):
         yield tuple(current)
 
 
-def replay(stream, model_factory, *, split_time, history="growing", label_delay=None,
-           learning=False, batch_size=1024, max_events=None, score_kind="probability"):
+def replay(
+    stream,
+    model_factory,
+    *,
+    split_time,
+    history="growing",
+    label_delay=None,
+    learning=False,
+    batch_size=1024,
+    max_events=None,
+    score_kind="probability",
+):
     """Predict the suffix ``event_time >= split_time`` against causal history.
 
     Timestamps are atomic even across input batches. The prefix is observed
@@ -294,15 +344,23 @@ def replay(stream, model_factory, *, split_time, history="growing", label_delay=
 
         truth = stream.truth_for(identifiers)
         if not prefix:
-            output.extend(_joined_row(event, predictions[event.event_id], truth.get(event.event_id))
-                          for event in events)
+            output.extend(
+                _joined_row(
+                    event, predictions[event.event_id], truth.get(event.event_id)
+                )
+                for event in events
+            )
         if learning:
             for event in events:
                 outcome = truth.get(event.event_id)
                 if outcome is None or outcome.label == -1:
                     pending_unknown += 1
                     continue
-                available_at = outcome.available_at if label_delay is None else event.event_time + label_delay
+                available_at = (
+                    outcome.available_at
+                    if label_delay is None
+                    else event.event_time + label_delay
+                )
                 if available_at is None:
                     retrospective += 1
                     continue
@@ -310,14 +368,27 @@ def replay(stream, model_factory, *, split_time, history="growing", label_delay=
                 if available_at < event.event_time:
                     raise ValueError("label availability cannot precede its event")
                 sequence += 1
-                heapq.heappush(pending, (available_at, sequence, Feedback(event, outcome.label, available_at)))
+                heapq.heappush(
+                    pending,
+                    (
+                        available_at,
+                        sequence,
+                        Feedback(event, outcome.label, available_at),
+                    ),
+                )
             release(time)
 
     if not output:
-        raise ValueError("replay split contains no evaluation events; choose an earlier split_time")
+        raise ValueError(
+            "replay split contains no evaluation events; choose an earlier split_time"
+        )
 
     def maturity(row):
-        available = row["label_available_at"] if label_delay is None else row["event_time"] + label_delay
+        available = (
+            row["label_available_at"]
+            if label_delay is None
+            else row["event_time"] + label_delay
+        )
         if row["label"] == -1:
             return "unknown"
         if available is None:
@@ -334,14 +405,22 @@ def replay(stream, model_factory, *, split_time, history="growing", label_delay=
             "split_time": split_time,
             "split_rule": "prefix event_time < split_time; evaluation event_time >= split_time",
             "history": history,
-            "retention": {"max_events": max_events, "scope": "runner_history_only",
-                          "policy": "unbounded" if max_events is None else "last_observed_events"},
+            "retention": {
+                "max_events": max_events,
+                "scope": "runner_history_only",
+                "policy": "unbounded" if max_events is None else "last_observed_events",
+            },
             "ties": "atomic_timestamp_groups",
             "learning": learning,
-            "feedback": {"policy": "recorded" if label_delay is None else "fixed_delay",
-                         "label_delay": label_delay, "released": released,
-                         "pending": len(pending), "retrospective_unavailable": retrospective,
-                         "unknown": pending_unknown, "horizon": last_time},
+            "feedback": {
+                "policy": "recorded" if label_delay is None else "fixed_delay",
+                "label_delay": label_delay,
+                "released": released,
+                "pending": len(pending),
+                "retrospective_unavailable": retrospective,
+                "unknown": pending_unknown,
+                "horizon": last_time,
+            },
             "score_kind": score_kind,
             "score_semantics": SCORE_KINDS[score_kind],
             "evaluation_labels": "retrospective final outcomes joined by event_id",

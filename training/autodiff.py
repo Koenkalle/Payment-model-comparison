@@ -20,6 +20,7 @@ def unbroadcast(g, shape):
 
 class T:
     """Small reverse-mode autodiff engine for the exact operations used here."""
+
     def __init__(self, data, parents=(), back=None):
         self.d = np.asarray(data, dtype=np.float64)
         self.g = np.zeros_like(self.d)
@@ -28,28 +29,38 @@ class T:
     def __add__(self, other):
         o = other if isinstance(other, T) else T(other)
         z = T(self.d + o.d, (self, o))
+
         def back():
             self.g += unbroadcast(z.g, self.d.shape)
             o.g += unbroadcast(z.g, o.d.shape)
+
         z.back = back
         return z
+
     __radd__ = __add__
 
     def __mul__(self, other):
         o = other if isinstance(other, T) else T(other)
         z = T(self.d * o.d, (self, o))
+
         def back():
             self.g += unbroadcast(z.g * o.d, self.d.shape)
             o.g += unbroadcast(z.g * self.d, o.d.shape)
+
         z.back = back
         return z
+
     __rmul__ = __mul__
 
     def __matmul__(self, other):
         z = T(self.d @ other.d, (self, other))
+
         def back():
             self.g += z.g @ other.d.T
-            other.g += self.d.reshape(-1, self.d.shape[-1]).T @ z.g.reshape(-1, z.g.shape[-1])
+            other.g += self.d.reshape(-1, self.d.shape[-1]).T @ z.g.reshape(
+                -1, z.g.shape[-1]
+            )
+
         z.back = back
         return z
 
@@ -68,7 +79,11 @@ class T:
 
     def sum(self, axis, keepdims=False):
         z = T(self.d.sum(axis, keepdims=keepdims), (self,))
-        z.back = lambda: self.acc(np.broadcast_to(z.g if keepdims else np.expand_dims(z.g, axis), self.d.shape))
+        z.back = lambda: self.acc(
+            np.broadcast_to(
+                z.g if keepdims else np.expand_dims(z.g, axis), self.d.shape
+            )
+        )
         return z
 
     def expand(self, axis):
@@ -84,12 +99,14 @@ class T:
 
     def backward(self):
         order, seen = [], set()
+
         def visit(x):
             if id(x) not in seen:
                 seen.add(id(x))
                 for p in x.parents:
                     visit(p)
                 order.append(x)
+
         visit(self)
         self.g = np.ones_like(self.d)
         for x in reversed(order):
@@ -99,12 +116,14 @@ class T:
 
 def cat(*xs):
     out = T(np.concatenate([x.d for x in xs], axis=-1), xs)
+
     def back():
         start = 0
         for x in xs:
             w = x.d.shape[-1]
-            x.g += out.g[..., start:start+w]
+            x.g += out.g[..., start : start + w]
             start += w
+
     out.back = back
     return out
 
@@ -114,5 +133,3 @@ def gather(x, ids):
     out = T(x.d[batches, ids], (x,))
     out.back = lambda: np.add.at(x.g, (batches, ids), out.g)
     return out
-
-
