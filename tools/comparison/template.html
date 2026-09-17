@@ -22,7 +22,30 @@
     #fraud-memory-demo #fd-work-status {min-height:1.5em}
     @media(max-width:480px){#fraud-memory-demo .fd-inspect {grid-template-columns:1fr}}
   </style>
-  <div class="fd-header"><h2>Payment model comparison</h2><span class="text-small text-muted">Native models, custom models and fixed-encoder prototypes</span></div>
+  <div class="fd-header"><h2>Bundled checkpoint replay</h2><span class="text-small text-muted">Native models, custom models and fixed-encoder prototypes</span></div>
+  <p class="text-small text-muted">Explore the repository’s bundled checkpoints and payment histories below. Models trained in the Model trainer are evaluated in Trained model comparison above.</p>
+  <details id="fd-benchmark-panel" open>
+    <summary>Benchmark datasets</summary>
+    <div class="viz-controls">
+      <label class="form-label" for="fd-benchmark-source">Dataset<select class="form-select" id="fd-benchmark-source" disabled><option>Connecting to local datasets…</option></select></label>
+      <button class="btn" type="button" id="fd-benchmark-load" disabled>Load dataset</button>
+    </div>
+    <p class="text-small" id="fd-benchmark-help" role="status">Start the local app with python serve.py to browse benchmark datasets.</p>
+    <div class="viz-controls" id="fd-benchmark-upload" hidden>
+      <label class="form-label" for="fd-benchmark-file">Source CSV<input class="form-control" type="file" accept=".csv,text/csv" id="fd-benchmark-file"></label>
+      <label class="form-label" for="fd-benchmark-release">Release name<input class="form-control" type="text" maxlength="200" placeholder="Optional; use the same name for related files" id="fd-benchmark-release"></label>
+    </div>
+    <div class="viz-controls" id="fd-benchmark-currency" hidden>
+      <label class="form-label" for="fd-benchmark-factor">EUR per source amount unit<input class="form-control" type="number" min="0" step="any" placeholder="Required, e.g. 1 for EUR amounts" id="fd-benchmark-factor"></label>
+    </div>
+    <details><summary>Time interval (optional)</summary>
+      <div class="viz-controls">
+        <label class="form-label" for="fd-benchmark-start">Start, seconds (inclusive)<input class="form-control" type="number" min="0" step="any" placeholder="Beginning" id="fd-benchmark-start"></label>
+        <label class="form-label" for="fd-benchmark-stop">End, seconds (exclusive)<input class="form-control" type="number" min="0" step="any" placeholder="End of dataset" id="fd-benchmark-stop"></label>
+      </div>
+      <p class="text-small text-muted">Choose an interval containing at most 20,000 events and 256 accounts. CSV uploads: up to 6 MiB.</p>
+    </details>
+  </details>
   <div class="viz-controls">
     <label class="form-label" for="fd-dataset-file">Load payment JSON<input class="form-control" type="file" accept=".json,application/json" id="fd-dataset-file"></label>
     <button class="btn" type="button" id="fd-dataset-reset">Use synthetic scenarios</button>
@@ -79,7 +102,7 @@
     <summary>Threshold and replay settings</summary>
     <div class="viz-controls fd-space">
       <label class="form-label" for="fd-alpha"><span id="fd-alpha-label">Shared target α</span><select class="form-select" id="fd-alpha"><option value="0.005">0.5%</option><option value="0.01">1%</option><option value="0.02" selected>2%</option><option value="0.05">5%</option></select></label>
-      <label class="form-label" for="fd-warmup">Unsupervised warm-up<select class="form-select" id="fd-warmup"><option value="32">32 requests</option><option value="64">64 requests</option><option value="128" selected>128 requests</option><option value="256">256 requests</option><option value="512">512 requests</option></select></label>
+      <label class="form-label" for="fd-warmup">Shared policy warm-up<select class="form-select" id="fd-warmup"><option value="1">1 request</option><option value="4">4 requests</option><option value="8">8 requests</option><option value="16">16 requests</option><option value="32">32 requests</option><option value="64">64 requests</option><option value="128" selected>128 requests</option><option value="256">256 requests</option><option value="512">512 requests</option></select></label>
       <label class="form-label" for="fd-seed">Dataset seed<input class="form-control" type="number" min="1" max="99999" step="1" value="42" id="fd-seed"></label>
       <label class="form-label" for="fd-forward">Relay interval: <output id="fd-forward-value">2 min</output><input class="form-range" id="fd-forward" type="range" min="1" max="180" step="1" value="2"></label>
       <label class="form-label" for="fd-delay">Report delay: <output id="fd-delay-value">24 h</output><input class="form-range" id="fd-delay" type="range" min="3" max="72" step="3" value="24"></label>

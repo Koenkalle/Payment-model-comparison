@@ -23,11 +23,18 @@ const document={getElementById:id=>elements[id],createElement:tag=>new Element(t
 let scheduled;
 const context={document,console,Intl,Math,JSON,Number,String,Array,Map,Set,WeakMap,Error,Date,Promise,setTimeout,clearTimeout,performance:require('perf_hooks').performance,ResizeObserver:class{constructor(f){this.f=f;}observe(){this.f();}},setInterval:fn=>(scheduled=fn,1),clearInterval:()=>scheduled=null};context.globalThis=context;vm.createContext(context);
 const registry=require('../../tools/registry.json'),tool=registry.tools.find(t=>t.id==='comparison');
-for(const file of require('../../shared/runtime/plugin-scripts')().concat(registry.shared_scripts,tool.scripts))vm.runInContext(fs.readFileSync(__dirname+'/../../'+file,'utf8'),context,{filename:file});
+// This minimal DOM exercises bundled replay. The saved-run panel uses actual
+// HTTP, navigation and browser forms in tests/pipeline/test_browser.js.
+const replayScripts=tool.scripts.filter(file=>!['tools/pipeline/client.js','tools/comparison/pipeline.js'].includes(file));
+for(const file of require('../../shared/runtime/plugin-scripts')().concat(registry.shared_scripts,replayScripts))vm.runInContext(fs.readFileSync(__dirname+'/../../'+file,'utf8'),context,{filename:file});
 async function run(){
 await elements['fraud-memory-demo'].demo.whenIdle();
 const get=()=>elements['fraud-memory-demo'].demo.getSnapshot();const start=get();assert.strictEqual(start.accounts,32);assert(start.events>450);assert(start.tau>0);assert.strictEqual(start.comparison.length,9);assert.strictEqual(start.warmup,128);assert.strictEqual(start.trainingMode,'unsupervised');
 assert(start.comparison.every(x=>JSON.stringify(x.payments)===JSON.stringify(start.comparison[0].payments)));
+
+
+
+
 elements['fd-model'].value='statistics';await elements['fd-model'].fire('change');assert.strictEqual(get().model,'statistics');assert(elements['fd-memory-panels'].hidden);assert.strictEqual(get().count,start.count);assert.notStrictEqual(get().score,start.score);
 elements['fd-model'].value='gru_attention';await elements['fd-model'].fire('change');assert.strictEqual(get().score,start.score);assert(!elements['fd-memory-panels'].hidden);
 elements['fd-training-mode'].value='supervised';await elements['fd-training-mode'].fire('change');assert.strictEqual(get().trainingMode,'supervised');assert(Number.isFinite(get().score));assert(elements['fd-method'].textContent.includes('Supervised fraud head'));const supervisedScore=get().score;

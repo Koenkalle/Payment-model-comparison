@@ -16,11 +16,14 @@ def main():
                         help='Historical calibration config (default: ARTIFACT/calibration.config.json).')
     parser.add_argument('--supervised-artifact', type=Path, default=DEFAULT_SUPERVISED_ARTIFACT,
                         help='Fraud-label-trained artifact for the existing supervised comparison mode.')
+    parser.add_argument('--dataset-config', type=Path, action='append', default=[],
+                        help='Add a local fraud_dataset/prepared_fraud config to the web dataset picker (repeatable).')
     args = parser.parse_args()
     try:
         service = ComparisonService(args.artifact, args.calibration_config,
                                     supervised_artifact=args.supervised_artifact)
-        server = make_server(service, args.host, args.port)
+        from framework.dataset_service import DatasetService
+        server = make_server(service, args.host, args.port, dataset_service=DatasetService(args.dataset_config))
     except (OSError, ValueError) as error:
         parser.exit(2, str(error) + '\n')
     address = '[' + args.host + ']' if ':' in args.host else args.host

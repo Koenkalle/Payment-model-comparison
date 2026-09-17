@@ -283,11 +283,15 @@ class ComparisonHTTPServer(ThreadingHTTPServer):
     allow_reuse_address = True
 
 
-def make_server(service, host='127.0.0.1', port=8000, root=ROOT):
+def make_server(service, host='127.0.0.1', port=8000, root=ROOT, *, dataset_service=None,
+                pipeline_service=None):
     """Serve repo pages and the same-origin API on a loopback address only."""
     if not _loopback(host):
         raise ValueError('The comparison service only binds to a loopback address.')
     root = Path(root).resolve()
+    if dataset_service is None:
+        from .dataset_service import DatasetService
+        dataset_service = DatasetService()
 
     class Handler(BaseHTTPRequestHandler):
         server_version = 'PaymentComparison/1'
@@ -333,6 +337,24 @@ def make_server(service, host='127.0.0.1', port=8000, root=ROOT):
                 return
             try:
                 pathname = unquote(urlsplit(self.path).path)
+                if pathname.startswith('/api/pipeline/'):
+                    if pipeline_service is None:
+                        self._error(503, 'The preparation pipeline is unavailable. Start the app with python serve.py.')
+                        return
+                    try:
+                        result = pipeline_service.get(pathname, urlsplit(self.path).query)
+                        self._send(200, json.dumps(result, allow_nan=False).encode('utf-8'), head=head)
+                    except (FileNotFoundError, KeyError) as error:
+                        self._error(404, str(error))
+                    except (ValueError, TypeError) as error:
+                        self._error(400, str(error))
+                    except Exception:
+                        traceback.print_exc()
+                        self._error(500, 'Pipeline lookup failed. Check the server output and retry.')
+                    return
+                if pathname == '/api/datasets':
+                    self._send(200, json.dumps(dataset_service.catalog(), allow_nan=False).encode('utf-8'), head=head)
+                    return
                 if pathname == '/api/models':
                     try:
                         self._send(200, json.dumps(service.models(), allow_nan=False).encode('utf-8'), head=head)
@@ -367,7 +389,12 @@ def make_server(service, host='127.0.0.1', port=8000, root=ROOT):
             if not self._trusted_request():
                 self._error(403, 'This service accepts same-origin loopback requests only.')
                 return
-            if urlsplit(self.path).path != '/api/compare':
+            endpoint = urlsplit(self.path).path
+            graph_query = re.fullmatch(r'/api/pipeline/datasets/ds-[0-9a-f]{32}/graph/query', endpoint)
+            feature_selection = re.fullmatch(r'/api/pipeline/datasets/ds-[0-9a-f]{32}/features', endpoint)
+            if endpoint not in ('/api/compare', '/api/datasets/load',
+                                '/api/pipeline/datasets/generate', '/api/pipeline/datasets/import',
+                                '/api/pipeline/train', '/api/pipeline/compare') and not graph_query and not feature_selection:
                 self._error(404, 'Unknown API endpoint.')
                 return
             if self.headers.get_content_type() != 'application/json':
@@ -388,6 +415,16 @@ def make_server(service, host='127.0.0.1', port=8000, root=ROOT):
                 def reject_constant(value):
                     raise ValueError('Nonfinite JSON value: ' + value)
                 payload = json.loads(body, parse_constant=reject_constant)
+                if endpoint.startswith('/api/pipeline/'):
+                    if pipeline_service is None:
+                        self._error(503, 'The preparation pipeline is unavailable. Start the app with python serve.py.')
+                        return
+                    status, result = pipeline_service.post(endpoint, payload)
+                    self._send(status, json.dumps(result, allow_nan=False).encode('utf-8'))
+                    return
+                if endpoint == '/api/datasets/load':
+                    self._send(200, json.dumps(dataset_service.load(payload), allow_nan=False).encode('utf-8'))
+                    return
                 validate_request(payload)
                 superseded = service.register_request(self.headers.get('X-Comparison-Session'),
                                                       self.headers.get('X-Comparison-Revision'))
@@ -404,13 +441,15 @@ def make_server(service, host='127.0.0.1', port=8000, root=ROOT):
                 self._error(503, str(error))
             except InterruptedError as error:
                 self._error(409, str(error))
+            except FileNotFoundError as error:
+                self._error(404, str(error))
             except (ValueError, KeyError, TypeError, UnicodeError, RecursionError) as error:
                 self._error(400, str(error))
             except (TimeoutError, ConnectionError):
                 self._error(408, 'Request body was not received in time.')
             except Exception:
                 traceback.print_exc()
-                self._error(500, 'Native inference failed. Check the server output; a new request can be retried.')
+                self._error(500, 'Server operation failed. Check the server output; a new request can be retried.')
 
     if ':' in host:
         class IPv6Server(ComparisonHTTPServer):

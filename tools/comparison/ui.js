@@ -78,7 +78,7 @@
     return state.decisionPolicy;
   }
   function cells(id,values){const parent=$(id);parent.replaceChildren();(values||Array(8).fill(0)).forEach((v,i)=>{const e=document.createElement('span');e.className='fd-cell';e.style.opacity=String(.12+Math.abs(v)*.8);e.style.background=v<0?'var(--viz-series-2)':'var(--viz-series-1)';e.setAttribute('aria-label','State '+(i+1)+': '+v.toFixed(3));e.setAttribute('data-tooltip','State '+(i+1)+': '+v.toFixed(3));parent.appendChild(e);});}
-  function row(parent,values){const tr=document.createElement('tr');values.forEach(v=>{const td=document.createElement('td');td.textContent=String(v);tr.appendChild(td);});parent.appendChild(tr);}
+  function row(parent,values){const tr=document.createElement('tr');values.forEach(v=>{const td=document.createElement('td');td.textContent=String(v);tr.appendChild(td);});parent.appendChild(tr);return tr;}
   function populateModels(){
     const selectedId=$('fd-model').value||model.id;
     model=models.find(m=>m.id===selectedId)||models.find(m=>m.id===bundle.default)||models[0];
@@ -293,31 +293,58 @@
       rows.push(['Prospective evaluation',prediction.evaluationEligible?(model.native_run.provenance.same_dataset?'Held-out transaction':'Evaluation transaction'):'Context only','']);rows.forEach(r=>row(parts,r));
     }else if(prediction){
       const rows=supervised?[['Fraud-risk score','1 − estimated legitimate probability',prediction.parts[0].toFixed(2)],['Estimated flagged-fraud probability',(100*prediction.probability).toFixed(1)+'%',''],['Causal feature vector',(prediction.features?.length||0)+' statistics','']]:model.family==='xgboost'?[['No-label rarity score','Causal feature rarity',prediction.parts[0].toFixed(2)],['Flagged-fraud probability','Not used in this mode',''],['Causal feature vector',prediction.features.length+' statistics','']]:[['Recipient',name(pending.v),prediction.parts[0].toFixed(2)],['Amount bin',money(pending.amount)+' · bin '+(prediction.buckets[1]+1),prediction.parts[1].toFixed(2)],['Sender activity gap',prediction.gap===null?'First observed activity':prediction.gap.toFixed(1)+' min',prediction.parts[2].toFixed(2)]];
-      rows.forEach(r=>row(parts,r));
+      rows.forEach(r=>{const tr=row(parts,r);if(r[0]==='Causal feature vector'&&model.family==='xgboost'&&globalThis.PaymentPipelineUI?.featureList){
+        const details=document.createElement('details'),summary=document.createElement('summary'),list=document.createElement('div');summary.textContent='Inspect checkpoint features';details.append(summary,list);tr.children[1].appendChild(details);
+        const definitions=globalThis.FraudXGBoost?.featureDefinitions||[];globalThis.PaymentPipelineUI?.featureList?.(list,definitions.map(definition=>definition.id),definitions);
+      }});
+    }
+    for(const tr of parts.children){
+      const label=tr.children[0]?.textContent,readout=globalThis.PaymentInfoMetadata?.readouts[label];
+      if(readout){
+        tr.children[0].dataset.infoReadout=label;
+        const categorical=label==='Amount bin'?[['Amount boundaries (EUR)',model.amount_bins],['Amount category (zero-based)',prediction.buckets[1]],['Displayed bin number',prediction.buckets[1]+1]]:label==='Sender activity gap'?[['Gap boundaries (minutes)',model.gap_bins],['Timing category (zero-based)',prediction.buckets[2]],['First-activity category',model.gap_bins.length+1],['Elapsed gap (minutes)',prediction.gap===null?'No earlier activity':prediction.gap]]:[];
+        globalThis.PaymentInfo?.attach(tr.children[0],{...readout,facts:[['Displayed value',tr.children[1]?.textContent],['Score contribution',tr.children[2]?.textContent||'Not separately reported'],...categorical]});
+      }
     }
     const body=$('fd-history').querySelector('tbody');body.replaceChildren();result.state.decisions.filter(r=>r.event.u===selected||r.event.v===selected).slice(-5).reverse().forEach(r=>row(body,[r.event.id+' · '+desc(r.event),r.decision,r.score.toFixed(1)+' / '+(r.tauBefore===null?'learning':r.tauBefore.toFixed(1))]));
     graph();chart();evaluate();root.dataset.count=String(count);root.dataset.decision=decision;
+  }
+  function datasetStatus(next){
+    $('fd-dataset-status').textContent=next?'Imported '+next.name+' · '+next.events.length+' events. Models use saved checkpoints; importing does not retrain them.':'Synthetic dataset. Models use their saved training histories.';
+    if(next){
+      const payments=next.events.filter(event=>event.kind==='payment').length,known=Object.keys(next.truth).length;
+      $('fd-dataset-status').textContent+=' '+known+' labeled payments; '+(payments-known)+' unknown.';
+      if(Number($('fd-warmup').value)>=payments){
+        const suggested=[1,4,8,16,32,64,128,256,512].filter(value=>value<=Math.max(1,payments/5)).pop();
+        $('fd-dataset-status').textContent+=payments>1?' Shared warm-up covers this dataset. In Threshold and replay settings, set shared warm-up to '+suggested+' to evaluate later payments.':'More than one payment is needed for evaluation after warm-up.';
+      }
+    }
   }
   function setDataset(document){
     const next=document===null?null:globalThis.FraudDatasets.load('payment_json',document);
     datasetImportVersion++;importedData=next;stop();
     for(const id of ['fd-scenario','fd-size','fd-seed','fd-forward','fd-delay'])$(id).disabled=!!next;
-    $('fd-dataset-status').textContent=next?'Imported '+next.name+' · '+next.events.length+' events. Models use saved checkpoints; importing does not retrain them.':'Synthetic dataset. Models use their saved training histories.';
-    return rebuild(false);
+    datasetStatus(next);return rebuild(false);
   }
+  function importDataset(read,message){
+    const revision=++datasetImportVersion;$('fd-dataset-status').textContent=message;
+    let activeRevision=revision;
+    const task=(async()=>{try{const document=await read();if(revision===datasetImportVersion){const update=setDataset(document);activeRevision=datasetImportVersion;await update;}}catch(error){if(activeRevision===datasetImportVersion)$('fd-dataset-status').textContent='Dataset not loaded: '+error.message;}})();
+    pendingImports.add(task);task.finally(()=>pendingImports.delete(task));return task;
+  }
+  const datasetControls=globalThis.FraudDatasetControls.mount(root,{importDataset,invalidate:()=>{datasetImportVersion++;}});
+  for(const [id,key]of Object.entries({'fd-scenario':'scenario','fd-size':'size','fd-seed':'seed','fd-model':'model','fd-model-head':'predictionHead','fd-training-mode':'trainingMode','fd-policy':'policyScope','fd-mode':'mode','fd-objective':'objective','fd-model-strategy':'decisionPolicy','fd-model-alpha':'alpha','fd-model-warmup':'warmup','fd-model-tau':'manualTau','fd-model-false-cost':'falseBlockCost','fd-model-missed-cost':'missedFraudCost','fd-model-objective':'objective','fd-alpha':'alpha','fd-warmup':'warmup','fd-forward':'forwardDelay','fd-delay':'reportDelay'}))globalThis.PaymentInfoMetadata?.attachControl(root,id,key);
+  pendingImports.add(datasetControls.ready);datasetControls.ready.finally(()=>pendingImports.delete(datasetControls.ready));
   $('fd-dataset-file').addEventListener('change',()=>{
     const file=$('fd-dataset-file').files[0];if(!file)return;
-    const revision=++datasetImportVersion;$('fd-dataset-status').textContent='Reading '+file.name+'…';
-    let activeRevision=revision;
-    const task=(async()=>{try{const document=await file.text();if(revision===datasetImportVersion){const update=setDataset(document);activeRevision=datasetImportVersion;await update;}}catch(error){if(activeRevision===datasetImportVersion)$('fd-dataset-status').textContent='Dataset not loaded: '+error.message;}})();
-    pendingImports.add(task);task.finally(()=>pendingImports.delete(task));return task;
+    datasetControls.cancel();return importDataset(()=>file.text(),'Reading '+file.name+'…');
   });
-  $('fd-dataset-reset').addEventListener('click',()=>{ $('fd-dataset-file').value='';return setDataset(null);});
+  $('fd-dataset-reset').addEventListener('click',()=>{datasetControls.cancel();$('fd-dataset-file').value='';return setDataset(null);});
   for(const id of['fd-scenario','fd-size','fd-seed'])$(id).addEventListener('change',()=>rebuild(false));
   $('fd-model').addEventListener('change',()=>{stop();model=models.find(m=>m.id===$('fd-model').value)||model;syncPolicyControls();return render(true);});
   $('fd-model-head').addEventListener('change',()=>{modelPolicies[model.id].predictionHead=$('fd-model-head').value;return rebuild(true);});
   $('fd-recompute').addEventListener('click',()=>rebuild(true));
-  for(const id of['fd-mode','fd-alpha','fd-warmup','fd-training-mode','fd-policy','fd-objective'])$(id).addEventListener('change',()=>rebuild(true));
+  for(const id of['fd-mode','fd-alpha','fd-warmup','fd-training-mode','fd-policy','fd-objective'])$(id).addEventListener('change',()=>{if(id==='fd-warmup')datasetStatus(importedData);return rebuild(true);});
   for(const id of['fd-model-strategy','fd-model-alpha','fd-model-warmup','fd-model-tau','fd-model-false-cost','fd-model-missed-cost','fd-model-objective'])$(id).addEventListener('change',()=>{readPolicyConfig();rebuild(true);});
   for(const id of['fd-delay','fd-forward'])$(id).addEventListener('change',()=>rebuild(false));
   $('fd-account').addEventListener('change',()=>{selected=Number($('fd-account').value);follow=false;return render(true);});

@@ -86,6 +86,21 @@ class ServiceTests(unittest.TestCase):
     def payload(self, **options):
         return {'model_id': 'dyg_tami_native', 'dataset': copy.deepcopy(DOCUMENT), 'options': options}
 
+    def test_dataset_catalog_loading_and_existing_request_protections(self):
+        status, _, body = self.request(path='/api/datasets')
+        self.assertEqual(status, 200)
+        self.assertIn('handbook-demo', [entry['id'] for entry in json.loads(body)['datasets']])
+        status, _, body = self.request('POST', '/api/datasets/load', {'id': 'handbook-demo'})
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(body)['summary']['events'], 48)
+        self.assertEqual(self.scorer.calls, 0)
+        for payload in ({'id': 'handbook-demo', 'path': '/etc/passwd'}, {'id': 'csv:ulb'}):
+            self.assertEqual(self.request('POST', '/api/datasets/load', payload)[0], 400)
+        self.assertEqual(self.request('POST', '/api/datasets/load', {'id': 'handbook-demo'},
+                                      headers={'Origin': 'http://untrusted.example'})[0], 403)
+        self.assertEqual(self.request('POST', '/api/datasets/load', body='{}',
+                                      headers={'Content-Type': 'text/plain'})[0], 415)
+
     def test_discovery_static_and_same_origin_json(self):
         status, _, body = self.request()
         model = json.loads(body)['models'][0]
