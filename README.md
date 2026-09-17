@@ -1,17 +1,51 @@
 # Payment model tools
 
-Start the full comparison with `python serve.py`, then open
-**http://127.0.0.1:8000/index.html**. Install `requirements-temporal.txt` first if
-PyTorch is unavailable. The shipped native checkpoint is ready to use.
+## Setup
 
-Choose a scenario or import payment JSON, then inspect a model in the ordinary
-model selector. All ten models, including trained DyGFormer + TAMI, use those
-same dataset and policy settings. Native inference runs locally in Python.
-**xgboost-analytics.html** provides the completed-scenario XGBoost dashboard.
+Install **Python 3.11+**, **Node.js**, and **Git**, then run these commands from the project
+folder after cloning or pulling it.
 
-Both HTML pages also work directly from disk with their bundled browser models;
-the native model is visibly unavailable until the local Python app is running.
-The comparison scores each proposed payment before committing the event.
+Create and activate an environment once (Linux, macOS, or WSL):
+
+```sh
+python3 -m venv ../payment-env
+source ../payment-env/bin/activate
+```
+
+On Windows PowerShell, use these instead:
+
+```powershell
+py -3 -m venv ..\payment-env
+..\payment-env\Scripts\Activate.ps1
+```
+
+Install dependencies and start the app:
+
+```sh
+python -m pip install -r requirements-models.txt -r requirements-temporal.txt
+python serve.py
+```
+
+Open **http://127.0.0.1:8000/data-lab.html**. Generate or import a dataset, open
+**Model trainer**, then compare saved runs in **Model comparison**. A small demo
+dataset is included. Saved data and runs stay in `artifacts/web-pipeline`.
+
+Next time, activate the same environment and run `python serve.py`. After pulling
+updates, rerun the dependency installation. Stop the server with **Ctrl+C**.
+
+**Optional TabFM:** install `python -m pip install -r requirements-tabfm.txt`
+in the same environment, then restart the server. Its first use downloads about
+6.1 GiB of weights and needs substantial RAM; the weights are for non-commercial,
+non-production use. See [TabFM setup](docs/tabfm.md#install-and-run) for the
+`serve-tabfm.sh` launcher.
+
+The HTML pages are already built. If you edit templates or JavaScript, run
+`python build.py` before restarting the server.
+
+For more detail: [web workflow](docs/pipeline.md), [datasets](docs/datasets.md),
+[graph features](docs/graph-features.md), and [parameter help](docs/info-windows.md).
+Bundled model replay is in `index.html`; XGBoost analytics is in
+`xgboost-analytics.html`.
 
 ## Model and dataset architecture
 
@@ -27,14 +61,30 @@ Implementations live separately from the runners and UI:
 | `models/implementations/dygformer.py`, `tami.py`, `dyg_tami.py` | Published DyGFormer backbone, TAMI LTE/TRC, and native fitted model |
 | `models/<model>.json` | Existing trained demo checkpoints, separate from code |
 | `datasets/registry.json` | Dataset loaders and their schemas |
-| `datasets/implementations/` | Separate numeric CSV, payment CSV, payment JSON and synthetic providers |
+| `datasets/implementations/` | Registered dataset loaders and view entry points |
+| `datasets/adapters.py`, `datasets/stream.py` | Source schemas, ordered storage and separate observable events/outcomes |
+| `datasets/views.py`, `datasets/replay.py` | Existing-model projections and causal prefix/suffix replay |
+| `datasets/features.py`, `datasets/payment_features.py`, `datasets/payment_features.js` | Extensible dataset feature recipes and shared payment feature calculations |
+| `datasets/graph_features.py` | Causal sparse PageRank, bounded personalized PageRank, and incremental component features |
+| `datasets/feature_info.py`, `shared/ui/info-windows.js` | Feature interpretation notes and shared parameter/feature information windows |
 | `framework/contracts.py` | Dataset and fitted-model interfaces |
 | `framework/experiments.py` | Shared chronological splitting, fitting, evaluation and artifact handling |
 | `prediction_heads/registry.json`, `prediction_heads/implementations/` | Independently swappable likelihood-to-fraud heads and their frozen state |
 | `framework/fraud_export.py` | Batch native inference and calibrated fraud-score export |
 | `framework/native_comparison.py` | Live native inference, shared policies, separate historical calibration and blocking histories |
 | `framework/comparison_service.py`, `serve.py` | Local model discovery and inference API serving the same tool pages |
+| `framework/pipeline_data.py` | Immutable saved dataset snapshots, generator schemas and previews |
+| `framework/pipeline_training.py`, `framework/pipeline_service.py` | Persistent training/comparison jobs, ready artifacts and shared held-out evaluation |
 | `examples/` | Editable dataset and experiment configurations |
+
+The [fraud dataset module](docs/datasets.md) adds Handbook, ULB credit-card,
+and PaySim CSV adapters, reusable ordered SQLite stores, and explicit numeric,
+graph, supervised fraud, and browser payment views. Inspect source capabilities
+with `python experiment.py inspect-data --config examples/datasets/handbook.config.json`.
+Run the included fixture with `python experiment.py train --config examples/handbook-experiment.json --output artifacts/handbook-logistic`.
+The fixture is invented for integration checks; supply the actual dataset release
+for benchmarking. The module also provides causal replay with a history prefix,
+fixed or growing graph history, and explicit label feedback timing.
 
 **The new `xgboost_native` uses the official XGBoost library.**
 `logistic_regression` uses scikit-learn with training-only standardization.
@@ -87,7 +137,8 @@ it. Incompatible model/dataset combinations fail explicitly.
 Native models run through the Python numeric-table or temporal-graph runner. The
 comparison submits its currently selected payment stream to the local native
 runner automatically. A raw native model file is not a browser checkpoint.
-Loaders currently operate in memory. Categorical
+Legacy loaders and fitted-model views operate in memory; the new transaction
+stream uses disk-backed preparation and repeatable batches. Categorical
 preprocessing and automatic causal feature generation remain separate extensions.
 
 ### Train DyGFormer + TAMI
@@ -259,6 +310,14 @@ amount, normalized using training payments. Its output is an estimated fraud
 probability; the comparison displays `softplus(fraud_logit) / ln(2)`. A fixed
 score threshold of **1** blocks probabilities above **0.5**. Shared alpha remains
 an unlabeled blocking budget. These estimated probabilities are not calibrated.
+
+The comparison shows a checkpoint column for every model and a selected-model
+panel with the loaded artifact path, full checkpoint hash, training mode and best
+epoch. **Custom artifact** identifies a non-default directory; **Default artifact
+location** identifies the standard model directory. Compare the hash with your
+output's `manifest.json` to verify the exact checkpoint. After training, restart
+`serve.py` with your artifact path and reload the page; an existing server keeps
+its loaded weights even if files on disk change.
 
 Reproduce training, or serve a different supervised checkpoint:
 
@@ -554,6 +613,8 @@ For the existing synthetic browser models, Python 3.10+ with NumPy and Node.js a
 python train.py --design all --steps 140 --fraud-flags 96 --warmup 128
 python build.py
 python tests/framework/test_framework.py
+python tests/framework/test_tabfm.py
+python tests/pipeline/test_tabfm.py
 python tests/framework/test_synthetic_contract.py
 python tests/heads/test_heads.py
 python tests/temporal/test_fraud_export.py
