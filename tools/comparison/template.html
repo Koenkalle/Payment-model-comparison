@@ -71,6 +71,11 @@
     #fraud-memory-demo .fd-request-edge {stroke:var(--viz-series-2);stroke-width:2;stroke-dasharray:5 4;fill:none}
     #fraud-memory-demo .fd-small-value {white-space:nowrap}
     #fraud-memory-demo #fd-work-status {min-height:1.5em}
+    #fraud-memory-demo .fd-checkpoint {border:1px solid var(--border);border-left:4px solid var(--viz-series-1);border-radius:6px;padding:12px 16px;margin:12px 0;overflow-wrap:anywhere}
+    #fraud-memory-demo .fd-checkpoint[data-source="custom"] {border-left-color:var(--viz-series-2)}
+    #fraud-memory-demo .fd-checkpoint .fd-line {margin:0 0 6px}
+    #fraud-memory-demo .fd-checkpoint-badge {border:1px solid var(--border);border-radius:4px;padding:2px 8px}
+    #fraud-memory-demo .fd-checkpoint code {white-space:normal;overflow-wrap:anywhere}
     @media(max-width:480px){#fraud-memory-demo .fd-inspect {grid-template-columns:1fr}}
   </style>
   <div class="fd-header"><h2>Bundled checkpoint replay</h2><span class="text-small text-muted">Native models, custom models and fixed-encoder prototypes</span></div>
@@ -117,6 +122,17 @@
     <label class="form-label" for="fd-mode">Comparison protocol<select class="form-select" id="fd-mode"><option value="shadow" selected>Same history · record decisions</option><option value="enforce">Each model applies its blocks</option></select></label>
   </div>
   <p class="text-small text-muted" id="fd-runtime-status" role="status"></p>
+  <section class="fd-checkpoint text-small" id="fd-checkpoint" aria-label="Selected model checkpoint" aria-live="polite">
+    <div class="fd-line"><strong id="fd-checkpoint-name">Selected model</strong><span class="fd-checkpoint-badge" id="fd-checkpoint-source"></span></div>
+    <p id="fd-checkpoint-status" role="status" hidden>Updating model identity…</p>
+    <div id="fd-checkpoint-details">
+      <div id="fd-checkpoint-training"></div>
+      <div>Source: <code id="fd-checkpoint-path"></code></div>
+      <div>Checkpoint: <code id="fd-checkpoint-id"></code></div>
+      <p class="text-muted" id="fd-checkpoint-help"></p>
+      <details id="fd-native-settings" hidden><summary>Native checkpoint settings</summary><div id="fd-native-parameters"></div></details>
+    </div>
+  </section>
   <div class="viz-controls" id="fd-auto-controls" hidden><label class="form-label" for="fd-objective">Auto-tune objective<select class="form-select" id="fd-objective"><option value="f1" selected>F1 · balanced precision/recall</option><option value="f2">F2 · favor recall</option><option value="balanced_accuracy">Balanced accuracy</option></select></label></div>
   <div class="viz-controls" id="fd-individual-controls" hidden>
     <label class="form-label" for="fd-model-strategy">Selected model strategy<select class="form-select" id="fd-model-strategy"><option value="shared">Unlabeled budget</option><option value="manual">Fixed τ</option><option value="tuned">Validation cost tune</option><option value="auto">Automatic objective</option></select></label>
@@ -140,7 +156,7 @@
   </div>
   <label class="sr-only" for="fd-step">Events processed</label><input class="form-range" type="range" id="fd-step" min="0" max="1000" step="1" value="0">
   <div class="fd-pending" aria-live="polite"><strong id="fd-event-label">Proposed request</strong><span id="fd-event"></span></div>
-  <div class="table-responsive"><table class="table table-sm" id="fd-compare"><thead><tr><th>Model</th><th>Policy</th><th>Pre-execution decision</th><th class="text-end">Score, bits</th><th class="text-end">τ</th><th class="text-end" id="fd-policy-rate-heading">Target α</th></tr></thead><tbody></tbody></table></div>
+  <div class="table-responsive"><table class="table table-sm" id="fd-compare"><thead><tr><th>Model</th><th>Checkpoint</th><th>Policy</th><th>Pre-execution decision</th><th class="text-end">Score, bits</th><th class="text-end">τ</th><th class="text-end" id="fd-policy-rate-heading">Target α</th></tr></thead><tbody></tbody></table></div>
   <div class="text-small text-muted" id="fd-score-explanation">No-label mode: bits = <em>−log₂ likelihood</em> of the observed recipient, amount bin, and timing bin; higher means less expected, not “probability of fraud”.</div>
   <div class="fd-line text-small"><span id="fd-settlement"></span><span id="fd-calibration"></span></div>
   <div class="fd-line"><span id="fd-selected" class="text-small"></span><label class="form-label fd-inline" for="fd-account">Inspect account<select class="form-select" id="fd-account"></select></label></div>
@@ -187,7 +203,7 @@
     <label class="form-check fd-space"><input class="form-check-input" type="checkbox" id="fd-truth"><span class="form-check-label">Show known outcomes for processed requests</span></label>
     <div id="fd-evaluation" hidden>
       <div id="fd-evaluation-protocol" class="text-small fd-space"></div>
-      <div class="table-responsive"><table class="table table-sm" id="fd-model-metrics"><thead><tr><th>Model</th><th>Fraud caught</th><th>False blocks</th><th>Precision</th><th>Block rate</th><th>Error cost</th><th>Recall at equal budget</th></tr></thead><tbody></tbody></table></div>
+      <div class="table-responsive"><table class="table table-sm" id="fd-model-metrics"><thead><tr><th>Model</th><th>Checkpoint</th><th>Fraud caught</th><th>False blocks</th><th>Precision</th><th>Block rate</th><th>Error cost</th><th>Recall at equal budget</th></tr></thead><tbody></tbody></table></div>
       <table class="table table-sm" id="fd-metrics"><tbody></tbody></table>
       <table class="table table-sm" id="fd-errors"><caption>Recent mistakes</caption><thead><tr><th>Request</th><th>Generated outcome</th><th>Decision</th></tr></thead><tbody></tbody></table>
     </div>

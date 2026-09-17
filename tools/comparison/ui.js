@@ -24,6 +24,39 @@
   const currentTrainingMode=()=>$('fd-training-mode').value==='supervised'?'supervised':'unsupervised';
   const nativeCapability=(id,mode=currentTrainingMode())=>globalThis.FraudNativeClient.modeCapabilities(nativeClient.models.find(m=>m.id===id),mode);
   const headLabel=id=>globalThis.FraudPredictionHeads.labels[id]||(id==='fraud_linear'?'Linear fraud classifier':id);
+  function checkpointIdentity(checkpoint){
+    const artifact=checkpoint.artifact,native=!!checkpoint.native_run;
+    const hash=artifact?.model_sha256||checkpoint.native_run?.provenance?.artifact_model_sha256||checkpoint.checkpoint_id?.split(':')[0]||'Unavailable';
+    const source=native?(artifact?.source||'unknown'):'browser';
+    const label={custom:'Custom artifact',default:'Default artifact location',browser:'Bundled browser checkpoint',unknown:'Artifact source unavailable'}[source]||'Artifact source unavailable';
+    return {hash,source,label,path:artifact?.path||(native?'Unavailable':checkpoint.implementation?.checkpoint||'Embedded in this page')};
+  }
+  function checkpointSummary(checkpoint){
+    const identity=checkpointIdentity(checkpoint),name=identity.path.split(/[\\/]/).pop();
+    return identity.label+(checkpoint.native_run&&checkpoint.artifact?' · '+name:'')+' · '+identity.hash.slice(0,12);
+  }
+  function showCheckpoint(checkpoint,trainingMode){
+    const identity=checkpointIdentity(checkpoint),artifact=checkpoint.artifact,parts=[trainingMode==='supervised'?'Fraud-label training':'No-label scoring'];
+    if(artifact?.encoder_training)parts.push(artifact.encoder_training==='finetune'?'Encoder fine-tuned':'Encoder frozen');
+    if(artifact?.best_epoch)parts.push('Best epoch '+artifact.best_epoch+' of '+artifact.epochs_completed+' completed');
+    if(artifact?.training_dataset)parts.push('Training data: '+artifact.training_dataset);
+    $('fd-checkpoint').dataset.source=identity.source;
+    $('fd-checkpoint-details').hidden=false;
+    $('fd-checkpoint-name').textContent='Selected model · '+checkpoint.label;
+    $('fd-checkpoint-source').textContent=identity.label;
+    $('fd-checkpoint-training').textContent=parts.join(' · ');
+    $('fd-checkpoint-path').textContent=identity.path;
+    $('fd-checkpoint-id').textContent=identity.hash;
+    $('fd-checkpoint-help').textContent=checkpoint.native_run?'This identifies the loaded weights used for these results. After retraining, restart serve.py with '+(trainingMode==='supervised'?'--supervised-artifact':'--artifact')+' pointing to your output directory, then reload this page.':'This checkpoint is embedded in the page at build time. Each comparison row shows its own checkpoint; select a model to inspect its full identity.';
+    const parameters=checkpoint.native_run?.provenance?.model_parameters||{};
+    $('fd-native-settings').hidden=!Object.keys(parameters).length;
+    $('fd-native-parameters').replaceChildren();
+    if(Object.keys(parameters).length){
+      const fields=[...Object.entries(globalThis.PaymentInfoMetadata?.nativeParameters||{}).map(([name,definition])=>({name,...definition})),...(globalThis.PaymentInfoMetadata?.modelFields('dyg_tami_native')||[])];
+      globalThis.PaymentPipelineUI?.parameterList?.($('fd-native-parameters'),parameters,fields);
+    }
+    globalThis.PaymentInfo?.attach($('fd-checkpoint-training'),{title:checkpoint.label+' · saved training',description:checkpoint.native_run?globalThis.PaymentInfoMetadata.explanations.native.text:'This browser checkpoint is embedded in the page. Replay settings select its saved scoring behavior without changing its trained weights.',facts:[['Training mode',trainingMode],['Trained parameters',checkpoint.parameters??'Unavailable'],['Checkpoint',identity.hash],...(checkpoint.learning_rate?[['Tree learning rate',checkpoint.learning_rate]]:[])]});
+  }
   function validNativeSettings(trainingMode){
     for(const definition of nativeDefinitions){
       const capability=nativeCapability(definition.id,trainingMode),p=modelPolicies[definition.id],heads=capability.prediction_heads||[];
@@ -200,7 +233,7 @@
     const comparisonBody=$('fd-model-metrics').querySelector('tbody');comparisonBody.replaceChildren();
     let budget=0;
     for(const entry of entries){const state=entry.result.state,m=compare.metrics(group.evaluationRecords(entry.model.id),data.truth,group.options.alpha,state.errorCosts);budget=m.budget;
-      row(comparisonBody,[entry.model.label,m.tp+' / '+(m.tp+m.fn),m.fp,percent(m.precision),percent(m.blockRate),state.decisionPolicy==='tuned'?Number(m.errorCost.toFixed(2)):'—',percent(m.recallAtBudget)]);
+      row(comparisonBody,[entry.model.label,checkpointSummary(entry.model),m.tp+' / '+(m.tp+m.fn),m.fp,percent(m.precision),percent(m.blockRate),state.decisionPolicy==='tuned'?Number(m.errorCost.toFixed(2)):'—',percent(m.recallAtBudget)]);
     }
     $('fd-evaluation-protocol').textContent=(result.state.mode==='shadow'?'Matched history':'Independent blocking histories')+' · all models use the same evaluation requests, excluding every model’s warm-up · ranking uses a common '+percent(group.options.alpha)+' budget ('+budget+' requests). Unknown outcomes are excluded from classification. Selected dataset outcomes do not tune the head or cutoff.';
     const body=$('fd-metrics').querySelector('tbody');body.replaceChildren();
@@ -211,6 +244,9 @@
   function setBusy(value,message='Updating results…'){
     busy=value;root.dataset.busy=String(value);$('fd-work-status').textContent=value?message:'';
     $('fd-compare').setAttribute('aria-busy',String(value));
+    $('fd-checkpoint').setAttribute('aria-busy',String(value));
+    $('fd-checkpoint-status').hidden=!value;
+    if(value){$('fd-checkpoint-details').hidden=true;$('fd-checkpoint-name').textContent='Updating selected model…';$('fd-checkpoint-source').textContent='Pending';}
     $('fd-back').disabled=value||count===0;$('fd-next').disabled=value||count>=data.events.length;$('fd-run').disabled=value||count>=data.events.length;
   }
   function render(viewOnly=false){
@@ -233,6 +269,7 @@
   async function whenIdle(){for(;;){const task=latestTask;await Promise.all([task,...pendingImports]);if(task===latestTask&&!pendingImports.size)return;}}
   function paint(){
     const active=entries.find(e=>e.model.id===model.id);result=active.result;pending=data.events[count]||null;prediction=active.prediction;
+    showCheckpoint(active.model,result.state.trainingMode);
     if(follow&&pending)selected=pending.v;$('fd-account').value=String(selected);
     const tau=result.state.tau,decision=prediction?(prediction.evaluationEligible===false?'CONTEXT':tau===null?'LEARNING':prediction.score>tau?'BLOCK':'ALLOW'):'—';
     $('fd-step').max=String(data.events.length);$('fd-step').value=String(count);$('fd-position').textContent=count.toLocaleString()+' / '+data.events.length.toLocaleString()+' events processed';
@@ -242,7 +279,9 @@
     const comparisonBody=$('fd-compare').querySelector('tbody');comparisonBody.replaceChildren();
     const scope=$('fd-policy').value,fit=result.state.policyFit;
     $('fd-policy-rate-heading').textContent=scope==='shared'?'Target α':'Validation / configured rate';
-    for(const entry of entries){const state=entry.result.state,rate=state.policyFit?state.policyFit.impliedAlpha:null;row(comparisonBody,[entry.model.label+(entry.model.id===model.id?' · selected':''),currentPolicyLabel(state),entry.decision||'—',entry.prediction?entry.prediction.score.toFixed(2):'—',state.tau===null?'Learning':state.tau.toFixed(2),percent(rate??(state.decisionPolicy==='shared'||state.predictionHead?state.alpha:null))]);}
+    for(const entry of entries){const state=entry.result.state,rate=state.policyFit?state.policyFit.impliedAlpha:null,tr=row(comparisonBody,[entry.model.label+(entry.model.id===model.id?' · selected':''),checkpointSummary(entry.model),currentPolicyLabel(state),entry.decision||'—',entry.prediction?entry.prediction.score.toFixed(2):'—',state.tau===null?'Learning':state.tau.toFixed(2),percent(rate??(state.decisionPolicy==='shared'||state.predictionHead?state.alpha:null))]);
+      for(const [index,key]of [[2,'decisionPolicy'],[5,'manualTau'],[6,'alpha']])globalThis.PaymentInfo?.attach(tr.children[index],{...globalThis.PaymentInfo.parameter(globalThis.PaymentInfoMetadata.parameters[key]),facts:[['Model',entry.model.label],['Policy',currentPolicyLabel(state)],['Current cutoff',state.tau??'Learning'],['Target α',state.alpha],...(rate===null?[]:[['Historical fitted block rate',percent(rate)]])]});
+    }
     if(scope==='shared')$('fd-policy-summary').textContent='Each model learns its own τ without outcome labels, targeting the same '+percent(group.options.alpha)+' budget.';
     else if(scope==='auto')$('fd-policy-summary').textContent='Every model is tuned independently for '+String($('fd-objective').value).toUpperCase()+' on held-out history. Each fitted τ and validation blocking rate is shown separately.';
     else {
@@ -333,6 +372,7 @@
     pendingImports.add(task);task.finally(()=>pendingImports.delete(task));return task;
   }
   const datasetControls=globalThis.FraudDatasetControls.mount(root,{importDataset,invalidate:()=>{datasetImportVersion++;}});
+  globalThis.addEventListener?.('payment-info-model-schemas',()=>{if(model&&!busy&&!preparingNative)showCheckpoint(model,currentTrainingMode());});
   for(const [id,key]of Object.entries({'fd-scenario':'scenario','fd-size':'size','fd-seed':'seed','fd-model':'model','fd-model-head':'predictionHead','fd-training-mode':'trainingMode','fd-policy':'policyScope','fd-mode':'mode','fd-objective':'objective','fd-model-strategy':'decisionPolicy','fd-model-alpha':'alpha','fd-model-warmup':'warmup','fd-model-tau':'manualTau','fd-model-false-cost':'falseBlockCost','fd-model-missed-cost':'missedFraudCost','fd-model-objective':'objective','fd-alpha':'alpha','fd-warmup':'warmup','fd-forward':'forwardDelay','fd-delay':'reportDelay'}))globalThis.PaymentInfoMetadata?.attachControl(root,id,key);
   pendingImports.add(datasetControls.ready);datasetControls.ready.finally(()=>pendingImports.delete(datasetControls.ready));
   $('fd-dataset-file').addEventListener('change',()=>{

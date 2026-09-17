@@ -31,13 +31,13 @@ async function run(){
 await elements['fraud-memory-demo'].demo.whenIdle();
 const get=()=>elements['fraud-memory-demo'].demo.getSnapshot();const start=get();assert.strictEqual(start.accounts,32);assert(start.events>450);assert(start.tau>0);assert.strictEqual(start.comparison.length,9);assert.strictEqual(start.warmup,128);assert.strictEqual(start.trainingMode,'unsupervised');
 assert(start.comparison.every(x=>JSON.stringify(x.payments)===JSON.stringify(start.comparison[0].payments)));
+assert.strictEqual(elements['fd-checkpoint-source'].textContent,'Bundled browser checkpoint');
+assert.strictEqual(elements['fd-checkpoint-id'].textContent,model.models.find(m=>m.id===start.model).checkpoint_id);
+assert(elements['fd-checkpoint-training'].textContent.includes('No-label'));
 
-
-
-
-elements['fd-model'].value='statistics';await elements['fd-model'].fire('change');assert.strictEqual(get().model,'statistics');assert(elements['fd-memory-panels'].hidden);assert.strictEqual(get().count,start.count);assert.notStrictEqual(get().score,start.score);
+elements['fd-model'].value='statistics';await elements['fd-model'].fire('change');assert.strictEqual(elements['fd-checkpoint-id'].textContent,model.models.find(m=>m.id==='statistics').checkpoint_id);assert.strictEqual(get().model,'statistics');assert(elements['fd-memory-panels'].hidden);assert.strictEqual(get().count,start.count);assert.notStrictEqual(get().score,start.score);
 elements['fd-model'].value='gru_attention';await elements['fd-model'].fire('change');assert.strictEqual(get().score,start.score);assert(!elements['fd-memory-panels'].hidden);
-elements['fd-training-mode'].value='supervised';await elements['fd-training-mode'].fire('change');assert.strictEqual(get().trainingMode,'supervised');assert(Number.isFinite(get().score));assert(elements['fd-method'].textContent.includes('Supervised fraud head'));const supervisedScore=get().score;
+elements['fd-training-mode'].value='supervised';await elements['fd-training-mode'].fire('change');assert(elements['fd-checkpoint-training'].textContent.includes('Fraud-label training'));assert.strictEqual(get().trainingMode,'supervised');assert(Number.isFinite(get().score));assert(elements['fd-method'].textContent.includes('Supervised fraud head'));const supervisedScore=get().score;
 elements['fd-training-mode'].value='unsupervised';await elements['fd-training-mode'].fire('change');assert.strictEqual(get().trainingMode,'unsupervised');assert(Number.isFinite(get().score));assert.notStrictEqual(get().score,supervisedScore);
 elements['fd-model'].value='xgboost';await elements['fd-model'].fire('change');assert.strictEqual(get().model,'xgboost');assert(elements['fd-memory-panels'].hidden);assert(Number.isFinite(get().score));assert(elements['fd-training-source'].textContent.includes('flags are ignored'));
 elements['fd-training-mode'].value='supervised';await elements['fd-training-mode'].fire('change');assert.strictEqual(get().trainingMode,'supervised');assert(Number.isFinite(get().score));assert(elements['fd-training-source'].textContent.includes('XGBoost checkpoint'));
@@ -83,7 +83,7 @@ console.log('PASS UI: per-model cost tuning, fixed cutoffs, independent auto obj
 const demo=elements['fraud-memory-demo'].demo,inspectionCalls=demo.getPerformance().inferenceCalls;
 elements['fd-model'].value='statistics';await elements['fd-model'].fire('change');
 elements['fd-account'].value='4';await elements['fd-account'].fire('change');assert.strictEqual(demo.getPerformance().inferenceCalls,inspectionCalls);
-elements['fd-size'].value='large';const outdated=elements['fd-size'].listeners.change();assert(get().busy);assert(!elements['fd-model'].disabled);assert(elements['fd-work-status'].textContent);
+elements['fd-size'].value='large';const outdated=elements['fd-size'].listeners.change();assert(elements['fd-checkpoint-details'].hidden);assert.strictEqual(elements['fd-checkpoint-source'].textContent,'Pending');assert(get().busy);assert(!elements['fd-model'].disabled);assert(elements['fd-work-status'].textContent);
 elements['fd-size'].value='small';elements['fd-seed'].value='928';const latest=elements['fd-seed'].listeners.change();
 await Promise.all([outdated,latest]);await demo.whenIdle();assert(!get().busy);assert.strictEqual(get().accounts,32);assert.strictEqual(elements['fd-work-status'].textContent,'');
 const expectedData=context.FraudScenarios.build(elements['fd-scenario'].value,'small',928,Number(elements['fd-delay'].value)*60,Number(elements['fd-forward'].value));

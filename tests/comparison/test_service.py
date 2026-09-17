@@ -266,6 +266,51 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(description['capabilities']['decision_policies'], ['shared', 'manual'])
         self.assertEqual(description['capabilities']['prediction_heads'], ['empirical_tail'])
 
+    def test_checkpoint_identity_follows_loaded_weights_and_location(self):
+        from framework.comparison_service import DEFAULT_ARTIFACT
+
+        class IdentifiedScorer(Scorer):
+            def __init__(self, path):
+                super().__init__()
+                self.description = {'checkpoint_id': 'loaded-weights', 'training_modes': ['unsupervised'],
+                                    'artifact': {'path': str(path), 'model_sha256': 'loaded-weights',
+                                                 'best_epoch': 7}}
+
+            def describe(self):
+                return self.description
+
+            def compare(self, *args, **kwargs):
+                result = super().compare(*args, **kwargs)
+                result['model'] = {'checkpoint_id': 'loaded-weights'}
+                return result
+
+        for path, source in [(DEFAULT_ARTIFACT, 'default'), (self.root / 'my-trained-model', 'custom')]:
+            with self.subTest(source=source):
+                scorer = IdentifiedScorer(path)
+                service = ComparisonService(path, scorer_factory=lambda *_: scorer, supervised_artifact=None)
+                catalog = service.models()['models'][0]['capabilities']['training_mode_capabilities']['unsupervised']
+                self.assertEqual(catalog['artifact']['source'], source)
+                self.assertEqual(catalog['artifact']['path'], str(path))
+                # Mutating discovery data or later scorer metadata cannot relabel
+                # predictions already bound to the service's loaded weights.
+                catalog['artifact']['model_sha256'] = 'edited-client-copy'
+                scorer.description['artifact']['model_sha256'] = 'new-file-on-disk'
+                result = service.compare(self.payload())
+                self.assertEqual(result['model']['artifact']['model_sha256'], 'loaded-weights')
+                self.assertEqual(result['model']['artifact']['best_epoch'], 7)
+                self.assertEqual(result['model']['artifact']['source'], source)
+                self.assertEqual(service.compare(self.payload()), result)
+                # A scorer that unexpectedly changes weights must not be shown
+                # under the old identity, even when the requested inputs change.
+                original = scorer.compare
+                def wrong_identity(*args, **kwargs):
+                    response = original(*args, **kwargs)
+                    response['model']['checkpoint_id'] = 'unexpected-new-weights'
+                    return response
+                scorer.compare = wrong_identity
+                with self.assertRaisesRegex(ValueError, 'checkpoint differs'):
+                    service.compare(self.payload(alpha=.1))
+
     def test_supervised_mode_routes_to_separate_artifact_and_head(self):
         supervised = Scorer()
         supervised.describe = lambda: {

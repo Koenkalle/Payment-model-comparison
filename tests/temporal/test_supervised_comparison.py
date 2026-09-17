@@ -82,6 +82,24 @@ class SupervisedComparisonTests(unittest.TestCase):
             self.assertNotIn('tail_probability', row['evidence'])
             self.assertEqual(row['decision'] == 'BLOCK', row['evidence']['fraud_probability'] > .5)
 
+    def test_identity_describes_loaded_checkpoint_even_if_disk_changes(self):
+        path = self.base / 'artifact' / 'manifest.json'
+        saved = path.read_text()
+        metadata = json.loads(saved)
+        metadata['model_sha256'] = 'replaced-on-disk'
+        metadata['best_epoch'] = 999
+        try:
+            path.write_text(json.dumps(metadata))
+            identity = self.scorer.describe()['artifact']
+            self.assertEqual(identity['model_sha256'], json.loads(saved)['model_sha256'])
+            self.assertEqual(identity['path'], str(self.base / 'artifact'))
+            self.assertEqual(identity['training_mode'], 'supervised')
+            self.assertEqual(identity['best_epoch'], 1)
+            self.assertEqual(identity['epochs_completed'], 1)
+            self.assertEqual(identity['training_dataset'], 'payments.json')
+        finally:
+            path.write_text(saved)
+
     def test_target_labels_do_not_change_weights_scores_or_any_policy(self):
         changed = copy.deepcopy(self.target)
         changed['truth'] = {identifier: not label for identifier, label in changed['truth'].items()}

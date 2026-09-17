@@ -47,9 +47,9 @@ function verify(snapshot,state,run){
   for(const metric of snapshot.metrics)assert.deepEqual(metric.evaluation_ids,cohort,'Every model uses the same evaluated requests.');
 }
 
-async function startServer(){
-  if(process.env.NATIVE_BASE_URL)return {url:process.env.NATIVE_BASE_URL,stop(){}};
-  const child=spawn(process.env.PYTHON_BINARY||'python',['serve.py','--port','0'],{cwd:ROOT,stdio:['ignore','pipe','pipe']});
+async function startServer(extraArgs=[]){
+  if(process.env.NATIVE_BASE_URL&&!extraArgs.length)return {url:process.env.NATIVE_BASE_URL,stop(){}};
+  const child=spawn(process.env.PYTHON_BINARY||'python',['serve.py','--port','0',...extraArgs],{cwd:ROOT,stdio:['ignore','pipe','pipe']});
   let output='';
   const url=await new Promise((resolve,reject)=>{
     const timeout=setTimeout(()=>reject(Error('Native service did not start: '+output)),60000);

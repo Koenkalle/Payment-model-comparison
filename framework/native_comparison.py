@@ -237,6 +237,15 @@ class NativeComparison:
         return {
             'id': self.descriptor['id'], 'label': 'DyGFormer + TAMI · native',
             'checkpoint_id': self.metadata['model_sha256'],
+            'artifact': {
+                'path': str(self.artifact),
+                'model_sha256': self.metadata['model_sha256'],
+                'training_mode': self.training_mode,
+                'encoder_training': self.metadata.get('encoder_training'),
+                'best_epoch': self.metadata.get('best_epoch'),
+                'epochs_completed': len(self.metadata.get('training_history', [])),
+                'training_dataset': self.metadata.get('dataset', {}).get('source_name'),
+            },
             'feature_contract': (self.metadata.get('feature_schema') if self.training_mode == 'supervised'
                                  else self.metadata.get('features')),
             'execution': 'python', 'training_modes': [self.training_mode],

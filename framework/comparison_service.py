@@ -5,6 +5,7 @@ serializes stateful Torch work, and caches complete results for an exact dataset
 and settings. HTTP clients can submit data, never server-side paths or code.
 """
 from collections import OrderedDict
+import copy
 import hashlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import ipaddress
@@ -161,6 +162,14 @@ class ComparisonService:
                 description = scorer.describe() if hasattr(scorer, 'describe') else {}
                 if training_mode not in description.get('training_modes', [training_mode]):
                     raise ValueError('The configured artifact does not support ' + training_mode + ' training.')
+                # Snapshot identity from the verified, loaded scorer. Do not read
+                # files again: training may replace them while this process serves
+                # the previous weights from memory.
+                description = copy.deepcopy(description)
+                if description.get('artifact'):
+                    artifact = description['artifact']
+                    default = DEFAULT_ARTIFACT if training_mode == 'unsupervised' else DEFAULT_SUPERVISED_ARTIFACT
+                    artifact['source'] = 'default' if Path(artifact['path']).resolve() == default.resolve() else 'custom'
                 self._scorers[training_mode] = scorer
                 self._descriptions[training_mode] = description
             except (ImportError, OSError, ValueError, RuntimeError, KeyError, TypeError) as error:
@@ -185,6 +194,7 @@ class ComparisonService:
                 mode_capabilities[mode] = {
                     'available': error is None, 'error': error,
                     'checkpoint_id': description.get('checkpoint_id'),
+                    'artifact': copy.deepcopy(description.get('artifact')),
                     'feature_contract': description.get('feature_contract'),
                     'modes': list(description.get('supported_modes', CAPABILITIES['modes'])),
                     'prediction_heads': [head['id'] for head in description.get('prediction_heads', [])]
@@ -256,6 +266,10 @@ class ComparisonService:
                 return self._cache[key]
             result = scorer.compare(document, options, cancelled=cancelled)
             check_cancelled()
+            if description.get('artifact'):
+                if result.get('model', {}).get('checkpoint_id') != description.get('checkpoint_id'):
+                    raise ValueError('Prediction checkpoint differs from the loaded model identity.')
+                result['model']['artifact'] = copy.deepcopy(description['artifact'])
             serialized = json.dumps(result, separators=(',', ':'), allow_nan=False).encode('utf-8')
             if self._cache_entries and len(serialized) <= self._max_cache_bytes:
                 self._cache[key] = serialized
