@@ -19,9 +19,10 @@ import numpy as np
 from framework.contracts import NumericDataset
 from .configuration import resolved_config
 from .payment_features import AMOUNT_BINS, FEATURE_SPECS, _log1p
+from .graph_features import GRAPH_FEATURE_SPECS, GraphFeatureState
 
 
-RECIPE_VERSION = 'payment-features/v1'
+RECIPE_VERSION = 'payment-features/v2'
 HISTORY_POLICY = 'strictly-earlier-timestamps; observed payment attempts; deposits activity only; reports ignored'
 WINDOW_SECONDS = 60 * 60
 
@@ -152,7 +153,8 @@ def _graph_recipe(spec):
 
 
 # This is the extension point; a new recipe can use any observable context field.
-FEATURE_RECIPES = [_payment_recipe(spec) for spec in FEATURE_SPECS]
+FEATURE_RECIPES = ([_payment_recipe(spec) for spec in FEATURE_SPECS]
+                   + [_graph_recipe(spec) for spec in GRAPH_FEATURE_SPECS])
 
 
 def _definitions(names, currency, capabilities):
@@ -197,7 +199,8 @@ def _materialize(numeric, events, currency, capabilities):
     index = {identifier: row for row, identifier in enumerate(numeric.ids)}
     history = PaymentHistory()
     # Optional providers do no work for sources that lack their capabilities.
-    graph_history = None
+    graph_history = GraphFeatureState() if any(recipe.definition.get('group') == 'graph'
+                                               for recipe in recipes) else None
     produced = 0
     for time, group in groupby(events, key=lambda event: event.time):
         simultaneous = list(group)

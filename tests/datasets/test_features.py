@@ -119,6 +119,7 @@ class FeatureTests(unittest.TestCase):
         self.assertEqual(dataset.feature_names[-2:], ('log_amount', 'amount_bin'))
         unavailable = [item for item in definitions if not item['available']]
         self.assertEqual(len([item for item in unavailable if item['group'] != 'graph']), 25)
+        self.assertTrue(any(item['group'] == 'graph' for item in unavailable))
         self.assertTrue(all('identities' in item['unavailable_reason'] for item in unavailable))
         self.assertFalse(set(item['id'] for item in unavailable) & set(dataset.feature_names))
         np.testing.assert_array_equal(dataset.labels, [1, 0])
