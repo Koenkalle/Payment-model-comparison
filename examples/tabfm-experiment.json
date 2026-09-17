@@ -1,0 +1,18 @@
+{
+  "model": "tabfm",
+  "dataset": {
+    "loader": "fraud_dataset",
+    "dataset": "handbook",
+    "release": "invented-smoke-v1",
+    "name": "Invented Handbook smoke fixture",
+    "path": "datasets/fixtures/handbook.csv",
+    "view": "numeric"
+  },
+  "parameters": {
+    "max_context_rows": 100,
+    "n_estimators": 1,
+    "inference_batch_size": 128,
+    "seed": 42
+  },
+  "split": {"train": 0.6, "validation": 0.2}
+}

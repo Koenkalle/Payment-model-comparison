@@ -1,0 +1,8 @@
+{
+  "loader": "fraud_dataset",
+  "dataset": "handbook",
+  "release": "invented-smoke-v1",
+  "name": "Invented Handbook smoke fixture",
+  "path": "datasets/fixtures/handbook.csv",
+  "view": "numeric"
+}

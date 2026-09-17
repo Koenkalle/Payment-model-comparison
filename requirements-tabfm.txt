@@ -1,0 +1,6 @@
+# Optional TabFM inference; use Python 3.11 or newer.
+# Install alongside requirements-models.txt in the server's Python environment.
+# Source pinned to upstream 1.0.1 (includes the PyTorch-only import fix).
+# Pretrained weights have a separate non-commercial, non-production license.
+tabfm[pytorch] @ git+https://github.com/google-research/tabfm.git@fbb665569425fd2f490c6576b3af967876fe11ff
+safetensors>=0.4

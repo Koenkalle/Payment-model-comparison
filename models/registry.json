@@ -18,81 +18,20 @@
       "python_module": "models.implementations.dyg_tami",
       "browser": null,
       "checkpoint": null,
-      "inputs": [
-        "temporal-graph/v1"
-      ],
-      "execution": [
-        "python"
-      ],
-      "comparison": {
-        "runtime": "python",
-        "artifact": "models/native-dyg-tami",
-        "artifacts": {
-          "unsupervised": "models/native-dyg-tami",
-          "supervised": "models/native-dyg-tami-fraud"
-        },
-        "prediction_heads": [
-          "empirical_tail",
-          "fixed_likelihood",
-          "fraud_linear"
-        ],
-        "modes": [
-          "shadow",
-          "enforce"
-        ],
-        "training_modes": [
-          "unsupervised",
-          "supervised"
-        ],
-        "decision_policies": [
-          "shared",
-          "manual",
-          "tuned",
-          "auto"
-        ]
-      },
+      "inputs": ["temporal-graph/v1"],
+      "execution": ["python"],
+      "comparison": {"runtime": "python", "artifact": "models/native-dyg-tami", "artifacts": {"unsupervised": "models/native-dyg-tami", "supervised": "models/native-dyg-tami-fraud"}, "prediction_heads": ["empirical_tail", "fixed_likelihood", "fraud_linear"], "modes": ["shadow", "enforce"], "training_modes": ["unsupervised", "supervised"], "decision_policies": ["shared", "manual", "tuned", "auto"]},
       "tasks": {
         "temporal-fraud-classification": {
           "python_module": "models.implementations.dyg_tami_fraud",
-          "inputs": [
-            "labeled-temporal-graph/v1"
-          ],
-          "implementation_sources": [
-            "models/implementations/dyg_tami_fraud.py",
-            "models/implementations/dyg_tami.py",
-            "models/implementations/dygformer.py",
-            "models/implementations/tami.py",
-            "models/implementations/temporal_history.py",
-            "framework/temporal_sampling.py",
-            "prediction_heads/implementations/fraud_linear.py",
-            "prediction_heads/registry.py",
-            "prediction_heads/registry.json",
-            "framework/temporal_fraud_data.py",
-            "framework/temporal_fraud_experiments.py",
-            "datasets/implementations/payment_graph.py",
-            "datasets/implementations/payment_json.py",
-            "datasets/implementations/payment_csv.py",
-            "datasets/implementations/temporal_csv.py",
-            "datasets/implementations/_validation.py"
-          ]
+          "inputs": ["labeled-temporal-graph/v1"],
+          "implementation_sources": ["models/implementations/dyg_tami_fraud.py", "models/implementations/dyg_tami.py", "models/implementations/dygformer.py", "models/implementations/tami.py", "models/implementations/temporal_history.py", "framework/temporal_sampling.py", "prediction_heads/implementations/fraud_linear.py", "prediction_heads/registry.py", "prediction_heads/registry.json", "framework/temporal_fraud_data.py", "framework/temporal_fraud_experiments.py", "datasets/implementations/payment_graph.py", "datasets/implementations/payment_json.py", "datasets/implementations/payment_csv.py", "datasets/implementations/temporal_csv.py", "datasets/implementations/_validation.py"]
         }
       },
-      "training": {
-        "encoder": "end-to-end DyGFormer with TAMI LTE",
-        "decoder": "trainable TAMI TRC historical decoder"
-      },
-      "capabilities": {
-        "explanations": false,
-        "task": "dynamic-link-prediction"
-      },
+      "training": {"encoder": "end-to-end DyGFormer with TAMI LTE", "decoder": "trainable TAMI TRC historical decoder"},
+      "capabilities": {"explanations": false, "task": "dynamic-link-prediction"},
       "dependency": "torch",
-      "implementation_sources": [
-        "models/implementations/dyg_tami.py",
-        "models/implementations/dygformer.py",
-        "models/implementations/tami.py",
-        "models/implementations/temporal_history.py",
-        "framework/temporal_sampling.py"
-      ]
+      "implementation_sources": ["models/implementations/dyg_tami.py", "models/implementations/dygformer.py", "models/implementations/tami.py", "models/implementations/temporal_history.py", "framework/temporal_sampling.py"]
     },
     {
       "id": "statistics",
@@ -348,6 +287,26 @@
         ]
       },
       "dependency": "xgboost"
+    },
+    {
+      "id": "tabfm",
+      "label": "TabFM · Google tabular foundation model",
+      "status": "pretrained-foundation-model",
+      "python_module": "models.implementations.tabfm",
+      "browser": null,
+      "checkpoint": null,
+      "inputs": ["numeric-table/v1"],
+      "execution": ["python"],
+      "training": {"method": "in-context learning", "weights": "frozen pretrained weights"},
+      "capabilities": {
+        "explanations": false,
+        "task": "fraud-classification",
+        "modes": ["supervised"]
+      },
+      "dependency": "tabfm[pytorch]",
+      "source": "https://github.com/google-research/tabfm",
+      "weights": "https://huggingface.co/google/tabfm-1.0.0-pytorch",
+      "weights_license": "tabfm-non-commercial-v1.0"
     },
     {
       "id": "logistic_regression",

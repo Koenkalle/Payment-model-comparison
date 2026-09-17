@@ -84,6 +84,8 @@ def train_experiment(config,output,base_dir=None):
     results['partition']='test';results['training_rows_in_evaluation']=0
     implementation=ROOT/(descriptor['python_module'].replace('.','/')+'.py')
     metadata={'version':1,'model_id':descriptor['id'],'input_schema':dataset.schema,'feature_names':list(dataset.feature_names),'implementation':descriptor,'implementation_sha256':digest(implementation),'library_version':getattr(model,'library_version',None),'parameters':parameters,'dataset':dataset.provenance,'split':{name:[dataset.ids[i] for i in indices] for name,indices in splits.items()},'threshold':float(threshold),'threshold_source':'validation_f1' if config.get('decision_threshold') is None else 'configured','validation_metrics':metrics(dataset.labels[splits['validation']],validation.probabilities,threshold)}
+    if getattr(model,'provenance',None) is not None:
+        metadata['model_provenance']=model.provenance
     output.parent.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='.payment-experiment-',dir=output.parent) as temporary:
         stage=Path(temporary);model.save(stage/'model.json');metadata['model_sha256']=digest(stage/'model.json')
