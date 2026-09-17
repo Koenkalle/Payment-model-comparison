@@ -2202,6 +2202,585 @@ if(typeof module!=='undefined')module.exports=adapter;
 </script>
 
 <script>
+/* Shared, nonmodal extended help. Metadata is plain text, never executable HTML.
+ * attach(host, infoOrResolver, {button, buttonParent, placement, hoverDelay})
+ * returns a detach function. Delegated events and weak references allow hosts to
+ * be discarded by a renderer without an explicit disposal pass.
+ */
+(function (global) {
+  'use strict';
+  if (global.PaymentInfo) return;
+  const doc = global.document;
+  if (!doc?.head || typeof doc.addEventListener !== 'function') return;
+  const hosts = new WeakMap(), buttons = new WeakMap();
+  const popupId = 'payment-extended-info';
+  let active = null, pending = null, popup = null, pinned = false;
+  let pendingPoint = null, activePoint = null;
+  let openTimer = null, closeTimer = null, cleanupPosition = null, observer = null;
+  let positionRevision = 0;
+  const human = value => String(value ?? '').replace(/_/g, ' ').replace(/^./, char => char.toUpperCase());
+  const present = value => value !== undefined && value !== null && value !== '';
+  const display = value => typeof value === 'object' ? JSON.stringify(value) : String(value);
+  const section = (title, text) => present(text) ? {title, text: display(text)} : null;
+  const fact = (title, value) => present(value) ? [title, display(value)] : null;
+  const statistic = value => typeof value === 'number' && Number.isFinite(value)
+    ? (value !== 0 && Math.abs(value) < 1e-5 ? value.toExponential(3) : value.toLocaleString(undefined, {maximumFractionDigits: 5}))
+    : '—';
+
+  function mergeInfo(base, extra) {
+    if (typeof extra === 'string') extra = {description: extra};
+    extra = extra || {};
+    const sections = new Map((base.sections || []).filter(Boolean).map(item => [item.title, item]));
+    for (const item of extra.sections || []) if (item && present(item.text)) sections.set(item.title, item);
+    const facts = new Map((base.facts || []).filter(Boolean));
+    for (const item of extra.facts || []) if (Array.isArray(item) && item.length > 1) facts.set(item[0], item[1]);
+    return {...base, ...extra, sections: [...sections.values()], facts: [...facts.entries()]};
+  }
+
+  function feature(value = {}) {
+    if (typeof value === 'string') value = {id: value};
+    const id = value.id || value.name;
+    const generic = text => !present(text) || /^(?:Numeric input supplied to the model from this dataset|A stored numeric model input|Numeric model input|Original numeric dataset column, preserved without modification|An original numeric column preserved from the dataset)\.?$/i.test(String(text).trim());
+    const extra = typeof value.info === 'string' ? {description:value.info} : {...value.info};
+    if (generic(extra.description)) delete extra.description;
+    // Recover the meaning of a known recipe when an older view only supplies
+    // its ID. Never borrow a calculation, history contract, or source meaning.
+    const known = value.kind !== 'source' && (global.FraudPaymentFeatures?.featureDefinitions || []).find(item => item.id === id);
+    const description = [value.description,value.help].find(text => !generic(text))
+      || (known ? `This column describes ${known.label.toLowerCase()}. Its saved definition is needed to confirm the calculation and history used for these values.` : '')
+      || `The dataset column “${id || value.label || 'unnamed'}” has no recorded definition of what its values measure. Consult the source schema for its meaning.`;
+    const stats = value.statistics;
+    return mergeInfo({
+      title: value.label || human(value.id || value.name),
+      description,
+      sections: [
+        section('Calculation', value.method), section('Reading the value', value.readout),
+        section('Approximation and limits', value.approximation),
+        section('Availability', value.unavailable_reason),
+      ],
+      facts: [
+        fact('Feature ID', value.id || value.name), fact('Group', value.group), fact('Source', value.source),
+        fact('Units', value.unit || value.units), fact('Transform', value.transform),
+        fact('History window', value.window || value.history), fact('Graph orientation', value.orientation),
+        fact('Calculation parameters', value.parameters && Object.keys(value.parameters).length ? value.parameters : null),
+        fact('Required data', value.requirements?.length ? value.requirements.join(', ') : null),
+        fact('Bucket boundaries', value.amount_bins), fact('Recipe version', value.version),
+        ...(stats ? [['Observed values', statistic(stats.count)], ['Missing values', statistic(stats.missing)],
+          ['Minimum', statistic(stats.min)], ['Maximum', statistic(stats.max)],
+          ['Mean', statistic(stats.mean)], ['Standard deviation', statistic(stats.std)]] : []),
+      ],
+    }, extra);
+  }
+
+  function parameter(value = {}) {
+    const options = value.options?.map(option => option !== null && typeof option === 'object'
+      ? (option.label ? option.label + ' (' + display(option.value) + ')' : display(option.value))
+      : option === null ? 'None' : display(option));
+    return mergeInfo({
+      title: value.label || human(value.name || value.id),
+      description: value.description || value.help || 'Configuration value used when preparing or running this model.',
+      sections: [section('How to choose', value.guidance)],
+      facts: [
+        fact('Parameter', value.name || value.id), fact('Type', value.type),
+        Object.hasOwn(value, 'default') ? ['Default', value.default_label || (value.default === null ? 'Automatic / not explicitly set' : display(value.default))] : null,
+        fact('Minimum', value.min), fact('Maximum', value.max), fact('Step', value.step),
+        fact('Options', options?.join(', ')), value.nullable ? ['Optional', 'An empty value uses no explicit setting.'] : null,
+      ],
+    }, value.info);
+  }
+
+  function node(tag, parent, text, className) {
+    const element = doc.createElement(tag);
+    if (present(text)) element.textContent = display(text);
+    if (className) element.className = className;
+    if (parent) parent.appendChild(element);
+    return element;
+  }
+
+  const styles = node('style', doc.head);
+  styles.textContent = `
+    [data-payment-info] { cursor: help; }
+    [data-payment-info]:is(label,summary,button,a,input,select) { cursor: inherit; }
+    button.payment-info-trigger, .pl-root button.payment-info-trigger, #xgboost-analytics button.payment-info-trigger {
+      display:inline-flex; align-items:center; justify-content:center; flex:none;
+      position:relative; box-sizing:border-box; width:16px; height:16px; min-width:16px; min-height:16px;
+      padding:0; margin:0 0 0 4px; border:0; border-radius:50%;
+      background:transparent; color:var(--pl-quiet,var(--muted-foreground,#62706d));
+      font:600 12px/1 system-ui,sans-serif; vertical-align:middle; cursor:help;
+      text-transform:none; letter-spacing:normal;
+    }
+    button.payment-info-trigger::before {
+      content:''; position:absolute; box-sizing:border-box; width:14px; height:14px;
+      border:1px solid currentColor; border-radius:50%; background:transparent;
+    }
+    button.payment-info-trigger:hover, button.payment-info-trigger[aria-expanded=true],
+    #xgboost-analytics button.payment-info-trigger:is(:hover,[aria-expanded=true]) {
+      color:var(--pl-accent,var(--foreground,#166b5d)); background:transparent;
+    }
+    button.payment-info-trigger:hover::before, button.payment-info-trigger[aria-expanded=true]::before {
+      background:color-mix(in srgb,currentColor 10%,transparent);
+    }
+    button.payment-info-trigger svg { position:relative; display:block; width:10px; height:10px; flex:none; margin:0; }
+    .payment-info-trigger:focus-visible, [data-payment-info]:focus-visible,
+    .payment-info-window:focus-visible, .payment-info-close:focus-visible {
+      outline:2px solid var(--pl-accent,#168373); outline-offset:3px;
+    }
+    .payment-info-window {
+      box-sizing:border-box; position:fixed; inset:0 auto auto 0; z-index:2147483000;
+      width:390px; max-width:calc(100vw - 16px); max-height:calc(100dvh - 16px);
+      overflow:auto; overscroll-behavior:contain; scrollbar-width:thin;
+      padding:18px; border:1px solid light-dark(#cfdbd6,#4d5c59); border-radius:12px;
+      background:light-dark(#fff,#202a27); color:light-dark(#23342d,#e6eeea);
+      box-shadow:0 10px 36px #0003; text-align:left; white-space:normal;
+      font:400 13px/1.55 var(--font-sans,system-ui,sans-serif); overflow-wrap:anywhere;
+    }
+    .payment-info-window * { box-sizing:border-box; }
+    .payment-info-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+    .payment-info-title { margin:0; font-size:15px; font-weight:650; line-height:1.4; }
+    .payment-info-description { margin:10px 0 0; }
+    .payment-info-section { margin-top:13px; }
+    .payment-info-section h3 { margin:0 0 3px; font-size:12px; font-weight:650; }
+    .payment-info-section p { margin:0; white-space:pre-line; }
+    .payment-info-facts { display:grid; grid-template-columns:minmax(90px,.7fr) minmax(0,1.3fr); gap:7px 13px; margin:15px 0 0; font-size:11px; }
+    .payment-info-facts dt { color:light-dark(#62706b,#b1c2b9); }
+    .payment-info-facts dd { margin:0; min-width:0; white-space:pre-line; }
+    .payment-info-close {
+      display:inline-flex; align-items:center; justify-content:center; flex:none;
+      width:26px; height:26px; margin:-4px -5px 0 0; padding:0; border:0; border-radius:5px;
+      background:transparent; color:inherit; cursor:pointer; font:400 21px/1 system-ui,sans-serif;
+    }
+    .payment-info-close:hover { background:light-dark(#eef3ef,#35443c); }
+    @media(pointer:coarse) {
+      button.payment-info-trigger, .pl-root button.payment-info-trigger, #xgboost-analytics button.payment-info-trigger { width:24px; height:24px; min-width:24px; min-height:24px; }
+      .payment-info-close { width:36px; height:36px; }
+    }
+  `;
+
+  function owner(target) {
+    if (target?.nodeType !== 1) return null;
+    const match = target.closest('[data-payment-info-button],[data-payment-info]');
+    return match ? buttons.get(match) || hosts.get(match) || null : null;
+  }
+  function contains(record, target) {
+    return !!target?.nodeType && (record.host.contains(target) || record.button?.contains(target));
+  }
+  function describedBy(element, enabled) {
+    const ids = new Set((element.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean));
+    if (enabled) ids.add(popupId); else ids.delete(popupId);
+    if (ids.size) element.setAttribute('aria-describedby', [...ids].join(' '));
+    else element.removeAttribute('aria-describedby');
+  }
+  function cancelOpen() {
+    clearTimeout(openTimer); openTimer = null; pending = null; pendingPoint = null;
+  }
+  function cancelClose() {
+    clearTimeout(closeTimer); closeTimer = null;
+  }
+  function close(restoreFocus = false) {
+    const previous = active, focusWasInside = popup?.contains(doc.activeElement);
+    cancelOpen(); cancelClose(); positionRevision++;
+    cleanupPosition?.(); cleanupPosition = null;
+    observer?.disconnect(); observer = null;
+    if (previous) {
+      describedBy(previous.host, false);
+      if (previous.button) {
+        describedBy(previous.button, false);
+        previous.button.setAttribute('aria-expanded', 'false');
+      }
+    }
+    active = null; pinned = false; activePoint = null;
+    popup?.remove(); popup = null;
+    if (restoreFocus && focusWasInside && previous?.host.isConnected) {
+      (previous.button || previous.host).focus({preventScroll: true});
+      // Restoring focus must not immediately reopen the window.
+      cancelOpen();
+    }
+  }
+  function resolve(record) {
+    const value = typeof record.info === 'function' ? record.info() : record.info;
+    return typeof value === 'string' ? {title: 'More information', description: value} : value || {};
+  }
+  function geometry(record) {
+    const view = global.visualViewport;
+    const width = view?.width || global.innerWidth, height = view?.height || global.innerHeight;
+    const left = view?.offsetLeft || 0, top = view?.offsetTop || 0;
+    const rect = activePoint ? {x:activePoint.x,y:activePoint.y,left:activePoint.x,right:activePoint.x,
+      top:activePoint.y,bottom:activePoint.y,width:0,height:0} : record.host.getBoundingClientRect();
+    const gap = activePoint ? 32 : 14, cross = activePoint ? 12 : 0, desired = Math.min(390, width - 16);
+    const rightRoom = left + width - 8 - rect.right - gap, leftRoom = rect.left - left - 8 - gap;
+    // Preserve a useful reading width. Only narrow viewports fall back above
+    // or below the anchor; otherwise keep a clear horizontal strip by it.
+    const side = rightRoom >= desired ? 'right' : leftRoom >= desired ? 'left'
+      : Math.max(rightRoom, leftRoom) >= 240 ? (rightRoom >= leftRoom ? 'right' : 'left')
+      : top + height - rect.bottom >= rect.top - top ? 'bottom' : 'top';
+    return {rect,width,height,left,top,gap,cross,side,placement:record.options.placement || side+'-start'};
+  }
+  function fallbackPosition(record, floating, layout = geometry(record)) {
+    const {rect,width,height,left,top,gap,cross,side} = layout;
+    const horizontal = side === 'left' || side === 'right';
+    const room = side === 'right' ? left+width-8-rect.right-gap : side === 'left' ? rect.left-left-8-gap
+      : side === 'bottom' ? top+height-8-rect.bottom-gap : rect.top-top-8-gap;
+    floating.style.maxWidth = Math.max(1, horizontal ? Math.min(width-16, room) : width-16) + 'px';
+    floating.style.maxHeight = Math.max(1, horizontal ? height-16 : Math.min(height-16, room)) + 'px';
+    const bounds = floating.getBoundingClientRect();
+    const requestedX = side === 'right' ? rect.right+gap : side === 'left' ? rect.left-gap-bounds.width : rect.left+cross;
+    const requestedY = side === 'bottom' ? rect.bottom+gap : side === 'top' ? rect.top-gap-bounds.height : rect.top+cross;
+    const x = Math.max(left+8, Math.min(requestedX, left+width-bounds.width-8));
+    const y = Math.max(top+8, Math.min(requestedY, top+height-bounds.height-8));
+    floating.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+    floating.style.visibility = 'visible';
+  }
+  function position(record, floating) {
+    // The vendor scripts can load after tools; resolve them when first opened.
+    const api = global.FloatingUIDOM;
+    const update = () => {
+      if (!record.host.isConnected) { close(); return; }
+      let layout = geometry(record);
+      if (activePoint && (activePoint.x < layout.left || activePoint.x > layout.left+layout.width
+          || activePoint.y < layout.top || activePoint.y > layout.top+layout.height)) {
+        if (!pinned) { close(); return; }
+        // A frozen mouse position can leave a resized or zoomed viewport.
+        // Keep pinned help readable by returning to its actual field.
+        activePoint = null; layout = geometry(record);
+      }
+      const {rect,gap,cross,placement} = layout;
+      const hostRect = record.host.getBoundingClientRect();
+      if (activePoint && !pinned && (hostRect.bottom < layout.top || hostRect.top > layout.top+layout.height
+          || hostRect.right < layout.left || hostRect.left > layout.left+layout.width)) { close(); return; }
+      fallbackPosition(record, floating, layout);
+      if (!api) return;
+      const revision = ++positionRevision;
+      const reference = activePoint ? {contextElement:record.host,getBoundingClientRect:()=>rect} : record.host;
+      void api.computePosition(reference, floating, {
+        placement, strategy: 'fixed',
+        middleware: [api.offset({mainAxis:gap,crossAxis:cross}), api.shift({padding: 8}),
+          api.size({padding: 8, apply({availableWidth, availableHeight, elements}) {
+            elements.floating.style.maxWidth = Math.max(0, availableWidth) + 'px';
+            elements.floating.style.maxHeight = Math.max(0, availableHeight) + 'px';
+          }})],
+      }).then(({x, y}) => {
+        if (active !== record || revision !== positionRevision) return;
+        floating.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+      }).catch(() => { if (active === record) fallbackPosition(record, floating); });
+    };
+    if (api?.autoUpdate) cleanupPosition = api.autoUpdate(record.host, floating, update);
+    else {
+      update(); global.addEventListener('resize', update); doc.addEventListener('scroll', update, true);
+      global.visualViewport?.addEventListener('resize', update); global.visualViewport?.addEventListener('scroll', update);
+      cleanupPosition = () => {
+        global.removeEventListener('resize', update); doc.removeEventListener('scroll', update, true);
+        global.visualViewport?.removeEventListener('resize', update); global.visualViewport?.removeEventListener('scroll', update);
+      };
+    }
+  }
+  function open(record, pin = false, focus = false, point = null) {
+    if (!record.host.isConnected) return;
+    cancelOpen(); cancelClose();
+    if (active === record) {
+      pinned = pinned || pin;
+      if (!!activePoint !== !!point) {
+        activePoint = point; cleanupPosition?.(); cleanupPosition = null; position(record, popup);
+      }
+      if (focus) popup.focus({preventScroll: true});
+      return;
+    }
+    close(); active = record; pinned = pin; activePoint = point;
+    const info = resolve(record);
+    popup = node('aside', doc.body, null, 'payment-info-window');
+    popup.id = popupId; popup.tabIndex = -1;
+    popup.setAttribute('role', 'dialog'); popup.setAttribute('aria-modal', 'false');
+    popup.setAttribute('aria-labelledby', popupId + '-title');
+    const header = node('div', popup, null, 'payment-info-header');
+    node('h2', header, info.title || 'More information', 'payment-info-title').id = popupId + '-title';
+    const dismiss = node('button', header, '×', 'payment-info-close');
+    dismiss.type = 'button'; dismiss.setAttribute('aria-label', 'Close information');
+    dismiss.addEventListener('click', () => close(true));
+    if (present(info.description)) node('p', popup, info.description, 'payment-info-description');
+    for (const item of info.sections || []) {
+      if (!item || !present(item.text)) continue;
+      const block = node('section', popup, null, 'payment-info-section');
+      if (present(item.title)) node('h3', block, item.title);
+      node('p', block, item.text);
+    }
+    const entries = (info.facts || []).filter(item => Array.isArray(item) && present(item[1]));
+    if (entries.length) {
+      const list = node('dl', popup, null, 'payment-info-facts');
+      for (const [label, value] of entries) { node('dt', list, label); node('dd', list, value); }
+    }
+    describedBy(record.host, true);
+    if (record.button) { describedBy(record.button, true); record.button.setAttribute('aria-expanded', 'true'); }
+    position(record, popup);
+    observer = new MutationObserver(() => { if (active && !active.host.isConnected) close(); });
+    observer.observe(doc.body, {childList: true, subtree: true});
+    if (focus) popup.focus({preventScroll: true});
+  }
+  function requestOpen(record, immediate = false, point = null) {
+    cancelClose();
+    if (active === record) { if (immediate) open(record, false, false); return; }
+    if (pinned || (pending === record && !immediate)) return;
+    cancelOpen(); pending = record; pendingPoint = point;
+    openTimer = setTimeout(() => {
+      const point = pendingPoint; pending = null; pendingPoint = null; openTimer = null;
+      if (point && owner(doc.elementFromPoint(point.x,point.y)) !== record) return;
+      open(record, false, false, point);
+    }, immediate ? 0 : record.options.hoverDelay ?? 350);
+  }
+  function requestClose() {
+    cancelOpen();
+    if (!active || pinned) return;
+    cancelClose();
+    closeTimer = setTimeout(() => {
+      if (!active || pinned || contains(active, doc.activeElement) || popup?.contains(doc.activeElement)) return;
+      close();
+    }, 220);
+  }
+
+  function placeButton(record) {
+    const {host, button, options} = record;
+    if (!button) return;
+    button.setAttribute('aria-label', 'More about ' + (resolve(record).title || 'this value'));
+    const requested = options.buttonParent || options.buttonContainer;
+    const container = requested?.appendChild && (requested.isConnected || host.contains(requested)) ? requested : null;
+    if (container) {
+      if (button.parentNode !== container) container.appendChild(button);
+    } else if (host.matches('input,select,textarea,button,a')) {
+      if (host.nextSibling !== button) host.after(button);
+    } else if (button.parentNode !== host) host.appendChild(button);
+  }
+
+  function suppressSvgTitles(record) {
+    const {host} = record;
+    if (host.namespaceURI !== 'http://www.w3.org/2000/svg') return;
+    record.svgTitles = (record.svgTitles || []).filter(item => item.placeholder.parentNode === host);
+    const titles = [...host.children].filter(child => child.localName === 'title');
+    if (!titles.length) return;
+    // SVG <title> has its own browser tooltip. A nonrendered <desc> preserves
+    // its text and any aria-labelledby reference while rich help is attached.
+    const name = titles.map(title => title.textContent.trim()).filter(Boolean).join(' ');
+    if (name && !host.hasAttribute('aria-label') && !host.hasAttribute('aria-labelledby')) host.setAttribute('aria-label', name);
+    for (const title of titles) {
+      const placeholder = doc.createElementNS(host.namespaceURI, 'desc');
+      placeholder.textContent = title.textContent;
+      if (title.hasAttribute('id')) placeholder.id = title.id;
+      host.replaceChild(placeholder, title);
+      record.svgTitles.push({title, placeholder});
+    }
+  }
+
+  function attach(host, info, options = {}) {
+    if (!host || host.nodeType !== 1) return () => {};
+    const existing = hosts.get(host);
+    if (existing) {
+      existing.info = info; existing.options = {...existing.options, ...options};
+      placeButton(existing);
+      suppressSvgTitles(existing);
+      if (active === existing) { const wasPinned = pinned, point = activePoint; close(); open(existing, wasPinned, false, point); }
+      return existing.detach;
+    }
+    const record = {host, info, options, button: null};
+    const original = Object.fromEntries(['title', 'data-tooltip', 'data-payment-info', 'tabindex', 'aria-label'].map(name => [name, host.getAttribute(name)]));
+    host.removeAttribute('title');
+    // An empty nearest data-tooltip masks the shell's brief legacy tooltip.
+    host.setAttribute('data-tooltip', ''); host.setAttribute('data-payment-info', '');
+    const svg = host.namespaceURI === 'http://www.w3.org/2000/svg';
+    suppressSvgTitles(record);
+    if (options.button !== false && !svg) {
+      const button = node('button', null, null, 'payment-info-trigger');
+      const icon = doc.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('viewBox', '0 0 16 16'); icon.setAttribute('aria-hidden', 'true');
+      const mark = doc.createElementNS(icon.namespaceURI, 'path');
+      mark.setAttribute('d', 'M8 7v5M8 4v.2'); mark.setAttribute('stroke', 'currentColor');
+      mark.setAttribute('stroke-width', '1.8'); mark.setAttribute('stroke-linecap', 'round');
+      icon.appendChild(mark); button.appendChild(icon);
+      button.type = 'button'; button.setAttribute('data-payment-info-button', '');
+      button.setAttribute('aria-haspopup', 'dialog'); button.setAttribute('aria-expanded', 'false');
+      button.setAttribute('aria-controls', popupId); button.setAttribute('data-tooltip', '');
+      record.button = button; buttons.set(button, record);
+      placeButton(record);
+    } else if (!host.matches('a[href],button,input,select,textarea,summary,[tabindex]') && !host.querySelector('a[href],button,input,select,textarea,summary,[tabindex]')) {
+      host.tabIndex = 0;
+    }
+    record.detach = () => {
+      if (active === record) close();
+      if (pending === record) cancelOpen();
+      record.button?.remove(); hosts.delete(host);
+      for (const {title, placeholder} of record.svgTitles || []) {
+        if (placeholder.parentNode === host) host.replaceChild(title, placeholder);
+      }
+      for (const [name, value] of Object.entries(original)) {
+        if (value === null) host.removeAttribute(name); else host.setAttribute(name, value);
+      }
+    };
+    hosts.set(host, record);
+    return record.detach;
+  }
+
+  doc.addEventListener('pointerover', event => {
+    if (event.pointerType === 'touch') return;
+    if (popup?.contains(event.target)) { cancelOpen(); cancelClose(); return; }
+    const record = owner(event.target);
+    if (record && !contains(record, event.relatedTarget)) requestOpen(record, false, {x:event.clientX,y:event.clientY});
+  });
+  doc.addEventListener('pointermove', event => {
+    if (event.pointerType !== 'touch' && pendingPoint && pending && owner(event.target) === pending)
+      pendingPoint = {x:event.clientX,y:event.clientY};
+  });
+  doc.addEventListener('pointerout', event => {
+    if (event.pointerType === 'touch') return;
+    if (popup?.contains(event.relatedTarget)) { cancelOpen(); cancelClose(); return; }
+    const record = owner(event.target);
+    if (record && contains(record, event.relatedTarget)) return;
+    if (active && contains(active, event.relatedTarget)) { cancelClose(); return; }
+    if (record || popup?.contains(event.target)) requestClose();
+  });
+  doc.addEventListener('focusin', event => {
+    if (popup?.contains(event.target)) { cancelOpen(); cancelClose(); return; }
+    const record = owner(event.target);
+    if (active && active !== record) close();
+    if (record && event.target.matches(':focus-visible')) requestOpen(record, true);
+  });
+  doc.addEventListener('focusout', event => {
+    if (active && (contains(active, event.relatedTarget) || popup?.contains(event.relatedTarget))) return;
+    if (owner(event.target) || popup?.contains(event.target)) requestClose();
+  });
+  doc.addEventListener('pointerdown', event => {
+    if (active && !contains(active, event.target) && !popup?.contains(event.target)) close();
+  }, true);
+  // Capture prevents a nested info button from toggling its label, summary,
+  // sortable header, or a parent control's application click handler.
+  doc.addEventListener('click', event => {
+    const button = event.target.closest?.('[data-payment-info-button]');
+    const record = button && buttons.get(button);
+    if (!record) return;
+    event.preventDefault(); event.stopPropagation();
+    if (active === record && pinned) close();
+    else open(record, true, event.detail === 0, event.detail > 0 && event.pointerType !== 'touch'
+      ? {x:event.clientX,y:event.clientY} : null);
+  }, true);
+  doc.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && (active || pending)) {
+      event.preventDefault(); event.stopPropagation(); close(true);
+    } else if (event.key === 'ArrowDown' && owner(event.target)?.button === event.target) {
+      event.preventDefault(); open(owner(event.target), true, true);
+    }
+  }, true);
+  global.addEventListener('pagehide', () => close());
+  global.PaymentInfo = {attach, feature, parameter, close};
+})(globalThis);
+
+</script>
+
+<script>
+/* Presentation definitions shared by comparison and checkpoint analytics. */
+(function(global){
+  'use strict';
+  const field=(label,description,behavior,limits)=>({label,description,info:{sections:[{title:'How it is used',text:behavior},...(limits?[{title:'Interpretation',text:limits}]:[])]}});
+  const parameters={
+    scenario:field('Scenario','The synthetic payment pattern to generate.','The same generated events are supplied to every compared model. Changing the scenario starts a new replay; it does not train model weights.','Imported payment datasets retain their own events and disable this generator setting.'),
+    size:field('Network size','The synthetic account population and approximate event count.','Larger networks create more accounts and payment activity, increasing replay and analysis work.','This controls generated data rather than a model’s hidden dimension.'),
+    seed:field('Dataset seed','The random seed used to generate a reproducible synthetic dataset.','The same scenario, size, delays, and seed reproduce the same generated events.','Model weights and historical training data remain fixed.'),
+    decisionPolicy:field('Decision policy','The method that converts a model score into a block or allow decision.','Unlabeled budget learns a cutoff from warm-up scores; fixed threshold uses the supplied cutoff; cost and objective tuning select a cutoff using saved historical validation outcomes.','Policies select thresholds independently of model weights. Historical tuning requires a compatible validation sample.'),
+    alpha:field('Target block rate α','The target fraction of assessed payments placed in the high-score tail.','A shared-budget policy learns a separate cutoff for each model and adapts it toward this target. The comparison also uses α as its ranking evaluation budget.','This is a target rather than a guaranteed realized block rate. It is not an individual payment’s fraud probability.'),
+    warmup:field('Warm-up payments','The number of initial payment scores used to initialize an unlabeled cutoff.','Warm-up payments are allowed and excluded from assessed policy metrics. Once enough scores have arrived, the upper-tail quantile sets the first cutoff.','A warm-up longer than the dataset can leave no assessed payments. Fixed and historically fitted cutoffs do not use this warm-up.'),
+    manualTau:field('Fixed threshold τ','A cutoff expressed in the selected model’s displayed score units.','Payments with score strictly greater than τ are blocked; scores equal to τ are allowed. The fixed policy keeps this cutoff unchanged throughout replay.','For supervised probability scoring, bits = −log₂(1 − p), so τ = 1 corresponds to p = 0.5. Scores from other heads can have different meanings.'),
+    falseBlockCost:field('False-block cost','The relative penalty assigned to blocking a legitimate labeled payment.','Cost tuning minimizes false-block cost × false positives + missed-fraud cost × false negatives on saved historical validation outcomes.','Only the ratio between the two costs affects the selected cutoff. These are relative penalties, not automatically currency amounts.'),
+    missedFraudCost:field('Missed-fraud cost','The relative penalty assigned to allowing a fraudulent labeled payment.','Increasing this relative to false-block cost puts more weight on catching fraud when selecting the historical cutoff.','The fitted cutoff is frozen during evaluation; evaluation outcomes do not retune it.'),
+    objective:field('Historical objective','The validation metric maximized when selecting an automatic cutoff.','F1 balances precision and recall. F2 gives more weight to recall. Balanced accuracy averages fraud recall and legitimate-payment specificity. Ties prefer fewer blocks.','The metric is evaluated on saved historical validation outcomes, not the currently inspected payment.'),
+    policyScope:field('Policy scope','Whether policy settings are shared or configured per model.','Shared unlabeled budget uses one target rate with separately learned cutoffs. Individual settings preserve each model’s policy. Auto-tune fits every model to the selected historical objective.','Sharing a target rate does not force identical numerical thresholds.'),
+    trainingMode:field('Model training mode','The saved scoring mode used by the selected checkpoint.','No-label mode scores unusual payment activity without fraud labels. Fraud-label mode uses a historically trained fraud classifier.','Changing this control selects saved scoring behavior; it does not train on the current dataset.'),
+    mode:field('Comparison protocol','Which payment history each model observes after policy decisions.','Same-history mode records decisions while allowing payments to remain in the common observed history. Enforced mode removes blocked transfers from that model’s subsequent settled history.','With enforcement, models can develop different later histories because their earlier decisions differ.'),
+    predictionHead:field('Prediction head','The scoring rule applied to a native model’s representation or logit.','A historical empirical-tail head ranks link likelihood against frozen reference transactions; likelihood scoring uses the native link likelihood; the fraud head produces a supervised fraud estimate.','Available heads depend on the loaded checkpoint and training mode. A likelihood or rarity score is not a fraud probability.'),
+    model:field('Inspected model','The checkpoint whose details, state, and per-model settings are displayed.','All available models continue to participate in the comparison. Selecting one changes the inspector and, under individual settings, the policy controls.','Checkpoint identity identifies the actual saved weights used for results.'),
+    forwardDelay:field('Relay interval','Minutes between successive synthetic forwarding payments.','Short intervals create faster relay behavior and change the earlier history available at each request.','This is a synthetic scenario timing parameter; it is disabled for imported events.'),
+    reportDelay:field('Report delay','Hours between a synthetic fraud event and its delayed confirmation.','Changing the delay changes when reports become visible during scenario replay.','The original event outcome remains separate from the time its confirmation appears.'),
+    partition:field('Evaluation data','The population used to compare saved training runs.','Common held-out test uses the intersection of the selected runs’ test rows. All rows evaluates a separate dataset only after checks exclude training or validation overlap.','Every model is compared on the same transaction IDs; unknown outcomes do not contribute to outcome metrics.'),
+    dataset:field('Saved dataset','The stored dataset version supplying comparison transactions.','Saved feature datasets include their selected numeric feature columns. Each trained model must receive its required columns.','Selecting a different dataset does not retrain the saved models.'),
+    tree:field('Inspected tree','The individual boosted tree whose path is shown for this payment.','Each split compares a transformed model input with its stored threshold. The reached leaf is multiplied by the checkpoint learning rate before contributing to the raw margin.','Tree selection changes the explanation display, not the ensemble prediction.'),
+    learning_rate:field('Tree learning rate','The multiplier applied to each tree’s leaf contribution.','The checkpoint raw margin combines its intercept with the sum of learning-rate-weighted tree outputs.','This is a saved training parameter; the analytics page does not modify it.'),
+    probability_threshold:field('Saved probability cutoff','The frozen fraud-probability threshold selected for this training run.','Predictions above this threshold are blocked during the saved comparison.','It is displayed on the probability scale even when the underlying model stores a bit-score cutoff.'),
+  };
+  const explanations={
+    attribution:{title:'Feature attribution',text:'SHAP contributions are measured in raw model margin (log-odds). A positive contribution raises this payment’s output relative to the fixed historical reference; a negative contribution lowers it. Reference margin plus all contributions equals the raw margin. Contributions describe this checkpoint’s behavior and are not causal effects.'},
+    population:{title:'Displayed population',text:'Statistics use every payment in the current filtered population. Mean absolute SHAP measures contribution magnitude, while signed mean SHAP retains direction. Plot samples are deterministic and do not change the statistics.'},
+    split:{title:'Tree split',text:'The threshold is compared with the transformed model input, not the readable raw value. Inputs less than or equal to the threshold follow the left branch; larger inputs follow the right branch.'},
+    native:{title:'Native checkpoint',text:'These saved model and scoring settings describe the Python checkpoint used for the current comparison. Changing the selected evaluation dataset does not refit its weights or training normalization.'},
+  };
+  // Native persisted settings: meanings follow dyg_tami.DEFAULTS and
+  // dyg_tami_fraud.FRAUD_DEFAULTS; public training schemas can enrich these.
+  const nativeParameters={
+    time_feat_dim:field('Time encoding dimension','The number of learned components used to encode elapsed interaction time.','Time encodings are one input channel of the temporal transformer. Larger dimensions increase representation size and work.'),
+    channel_embedding_dim:field('Channel embedding dimension','The width of each projected node, edge, time, and neighbor-co-occurrence channel.','The four channels are concatenated for attention. Four times this dimension must be divisible by the number of attention heads.'),
+    patch_size:field('History patch size','The number of neighboring sequence entries combined into one transformer patch.','Larger patches reduce the number of attention tokens. The maximum sequence length must be divisible by the patch size.','Changing this value changes the checkpoint architecture and requires retraining.'),
+    num_layers:field('Transformer layers','The number of temporal transformer encoder layers.','Additional layers increase model depth, parameter count, and inference work.'),
+    num_heads:field('Attention heads','The number of parallel attention heads in each temporal transformer layer.','Heads attend to different learned parts of the combined channel representation. Four times the channel embedding dimension must be divisible by this value.'),
+    dropout:field('Training dropout','The fraction of activations randomly omitted by dropout while training.','Dropout regularizes training. The saved model uses evaluation mode, so this random omission is disabled during comparison.'),
+    max_input_sequence_length:field('Maximum temporal sequence length','The padded maximum number of sequence entries supplied for each endpoint.','One entry represents the current endpoint; up to this value minus one earlier interactions are retained by the neighbor sampler. Longer histories increase attention work.','Only strictly earlier interactions are eligible. The sequence length must be at least two and divisible by patch size.'),
+    gamma:field('Current-state mixing weight γ','The weight assigned to the current interaction embedding when combining it with historical pair memory.','The combination is γ × current embedding + (1 − γ) × historical embedding. Larger values emphasize the current representation.'),
+    epochs:field('Maximum training epochs','The maximum number of passes over the training history.','Training can stop before this limit when validation fails to improve for the configured patience. Saved weights come from the best validation epoch.'),
+    batch_size:field('Training batch size','The target number of transaction examples accumulated for an optimizer update.','Timestamp groups remain intact to preserve temporal causality, so actual groups can exceed the target.','This controls training updates rather than the comparison page’s rendering batches.'),
+    learning_rate:field('Optimizer learning rate','The step size used by the Adam optimizer during native model training.','Larger values make larger weight updates; smaller values may require more training passes.','This is an optimizer setting, distinct from the shrinkage multiplier used by boosted trees.'),
+    weight_decay:field('Optimizer weight decay','The nonnegative weight penalty passed to Adam during training.','A positive value regularizes model weights; zero disables this penalty. Saved comparison predictions do not update the weights.'),
+    patience:field('Early-stopping patience','The number of consecutive training epochs without improved validation loss before stopping.','The checkpoint restores the epoch with the lowest validation loss. Increasing patience permits more attempts to improve, up to the epoch limit.'),
+    seed:field('Model training seed','The random seed for native weight initialization and historical training sampling.','It records the stochastic training setup. It is independent of the comparison’s synthetic dataset seed.','Reproducibility also depends on model implementation, runtime, and device.'),
+    device:field('Native model device','The computation device used by the stored model configuration, such as cpu or cuda.','Tensor operations and model weights are placed on this device when loaded. The comparison service reports its actual inference device separately.'),
+    num_threads:field('CPU thread count','The number of PyTorch CPU threads configured for model operations.','More threads may increase throughput for sufficiently large operations but also add scheduling overhead. This does not change the feature definitions.'),
+    encoder_training:field('Encoder training mode','Whether supervised fraud fitting updates the temporal encoder.','Finetune updates the encoder and fraud head. Frozen keeps the temporal encoder fixed while fitting the fraud head.','Both modes use historical supervised outcomes only in training losses, not as transaction inputs.'),
+    prediction_head:field('Saved fraud-head specification','The registered supervised prediction head and its optional parameter configuration.','The head maps the temporal transaction representation to a fraud logit. The current built-in fraud_linear head uses a learned linear classifier.'),
+    class_weight:field('Fraud-class loss weight','The positive-class multiplier used in the supervised binary cross-entropy loss.','None uses a weight of one. Balanced uses the ratio of known legitimate to fraud training outcomes. A positive number supplies an explicit fraud weight.','This changes the fitting loss; the decision policy’s false-block and missed-fraud costs select a cutoff separately.'),
+    training_label_cutoff:field('Training label availability cutoff','The latest availability time, in dataset seconds, at which a known outcome can enter supervised training.','An empty value uses the last training transaction time. Earlier transactions with unavailable outcomes can remain temporal context without contributing to the supervised loss.','Retrospective outcomes without recorded availability time follow the dataset’s retrospective-label convention.'),
+    validation_label_cutoff:field('Validation label availability cutoff','The latest availability time, in dataset seconds, at which a known outcome can enter validation loss.','An empty value uses the last validation transaction time. Validation labels arriving after the cutoff are excluded from that validation loss.','This controls label availability, not which prior interactions can be used as temporal context.'),
+  };
+  const readouts={
+    'Native fraud logit':{title:'Native fraud logit',description:'The supervised classifier’s raw signed output before the sigmoid converts it to an estimated fraud probability.',sections:[{title:'Scale',text:'A logit of zero maps to probability 0.5. Larger logits produce larger fraud estimates. The estimate is not claimed to be calibrated.'}]},
+    'Estimated fraud probability':{title:'Estimated fraud probability',description:'The sigmoid of the historically trained fraud classifier’s logit. It is separate from the policy threshold and the observed outcome.'},
+    'Estimated flagged-fraud probability':{title:'Estimated flagged-fraud probability',description:'The saved supervised classifier’s estimate for the proposed payment, using the available earlier history. A model estimate is distinct from the eventual known label.'},
+    'Fraud score':{title:'Fraud score',description:'The supervised probability mapped to bits by −log₂(1 − p). Higher values indicate a larger estimated fraud probability.'},
+    'Fraud-risk score':{title:'Fraud-risk score',description:'The supervised probability mapped to bits by −log₂(1 − p). The decision policy compares this score with its current cutoff.'},
+    'Native link logit':{title:'Native link logit',description:'The frozen temporal model’s raw compatibility score for the proposed source and destination given earlier interaction history.',sections:[{title:'Interpretation',text:'This is an observed-link likelihood signal. It is not a fraud logit and does not use the payment’s outcome.'}]},
+    'Native link likelihood':{title:'Native link likelihood',description:'The sigmoid of the native link logit. It describes compatibility with historical interactions rather than fraud probability.'},
+    'Likelihood / historical rank':{title:'Likelihood or historical rank',description:'The selected no-label prediction head converts native link likelihood into its displayed probability-like quantity and score.',sections:[{title:'Historical reference',text:'The empirical-tail head compares against frozen reference transactions. Low likelihood or rank means unusual payment activity rather than confirmed fraud.'}]},
+    'Head reference':{title:'Prediction-head reference',description:'The number of frozen historical transactions used by the selected scoring head. The current evaluation dataset does not refit this reference.'},
+    'Prediction head':parameters.predictionHead.info,
+    'Prospective evaluation':{title:'Prospective evaluation membership',description:'Whether this transaction belongs to the model’s evaluated population or supplies earlier context only. Context transactions can update temporal history without contributing to comparison metrics.'},
+    'Causal feature vector':{title:'Checkpoint feature inputs',description:'The numeric inputs presented to this saved checkpoint for the proposed payment.',sections:[{title:'History convention',text:'Bundled browser checkpoint features retain their original settled-payment history contract. Dataset-owned materialized features have their own recorded definitions and strictly earlier observed-attempt history.'}]},
+    'No-label rarity score':{title:'No-label feature rarity',description:'A score measuring how unusual causal payment features appear against the checkpoint’s historical feature distributions. The supervised fraud probability is not used in this mode.'},
+    'Recipient':{title:'Recipient input',description:'The proposed recipient identity is scored against the sender’s earlier interaction context. This categorical input is available before the payment settles.'},
+    'Amount bin':{title:'Checkpoint amount category',description:'The categorical amount outcome scored by this checkpoint’s likelihood head.',sections:[{title:'Category calculation',text:'The zero-based integer category counts saved amount boundaries less than or equal to the requested EUR amount. The displayed bin number is that category plus one. The category is not divided by the number of boundaries.'},{title:'Score contribution',text:'The amount head assigns a probability to each category. This row contributes −log₂ of the selected category’s probability to the no-label anomaly score.'}]},
+    'Sender activity gap':{title:'Checkpoint timing category',description:'The categorical timing outcome scored by this checkpoint’s likelihood head, based on minutes since the sender’s last observed payment or deposit.',sections:[{title:'Category calculation',text:'For a sender with earlier activity, the zero-based integer category counts saved gap boundaries less than or equal to the nonnegative elapsed minutes. It uses the raw gap in minutes, without a logarithmic transform.'},{title:'First activity',text:'A sender without earlier activity has no measured gap (null). The timing head uses a separate first-activity category at index number of gap boundaries plus one; it is distinct from a measured gap of zero minutes. Outcome reports do not reset the gap.'},{title:'Score contribution',text:'This row contributes −log₂ of the timing head’s probability for the selected category to the no-label anomaly score.'}]},
+  };
+  readouts['Prediction head']={title:parameters.predictionHead.label,description:parameters.predictionHead.description,...parameters.predictionHead.info};
+  function attachControl(root,id,key,overrides={}){
+    const control=root.querySelector('#'+id),definition=parameters[key],info=global.PaymentInfo;
+    if(!control||!definition||!info)return;
+    const host=control.closest('label')||control;
+    let heading=host.querySelector('.payment-info-control-heading');
+    if(host!==control&&!heading){
+      heading=global.document.createElement('span');heading.className='payment-info-control-heading';
+      while(host.firstChild&&host.firstChild!==control)heading.appendChild(host.firstChild);
+      host.insertBefore(heading,control);
+    }
+    host.dataset.infoParameter=key;
+    info.attach(host,()=>{
+      const value=control.tagName==='SELECT'?control.selectedOptions[0]?.textContent:control.value;
+      const constraints=Object.fromEntries(['min','max','step'].filter(name=>control.getAttribute(name)!==null).map(name=>[name,control.getAttribute(name)]));
+      const options=control.tagName==='SELECT'?Array.from(control.options,option=>({value:option.value,label:option.textContent})):undefined;
+      const result=info.parameter({name:key,type:options?'select':control.type,...constraints,...(control.defaultValue?{default:control.defaultValue}:{}),...(options?{options}:{}),...definition,...overrides});
+      return {...result,facts:[...(result.facts||[]),['Displayed value',value??''],...(control.disabled?[['Availability','Inactive under the current settings']]:[])]};
+    },heading?{buttonParent:heading}:{});
+  }
+  function feature(definition,facts=[],context){
+    const result=global.PaymentInfo.feature(definition),section=explanations[context];
+    return {...result,facts:[...(result.facts||[]),...facts],sections:[...(result.sections||[]),...(section?[section]:[])]};
+  }
+  let modelSchemas=[];
+  function setModelSchemas(schemas){modelSchemas=schemas||[];global.dispatchEvent?.(new CustomEvent('payment-info-model-schemas'));}
+  function modelFields(id){return modelSchemas.find(model=>model.id===id)?.parameters||[];}
+  global.PaymentInfoMetadata={parameters,nativeParameters,explanations,readouts,attachControl,feature,setModelSchemas,modelFields};
+})(typeof globalThis!=='undefined'?globalThis:window);
+
+</script>
+
+<script>
 /* Shared request stream; independent model state and threshold policies. */
 (function(global){
   'use strict';

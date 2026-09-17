@@ -1,6 +1,9 @@
 {
   "version": 1,
-  "ui_scripts": ["shared/vendor/floating-ui.core.min.js", "shared/vendor/floating-ui.dom.min.js"],
+  "ui_scripts": [
+    "shared/vendor/floating-ui.core.min.js",
+    "shared/vendor/floating-ui.dom.min.js"
+  ],
   "shared_scripts": [
     "shared/vendor/d3.min.js",
     "shared/runtime/xgboost.js",
@@ -8,15 +11,24 @@
     "shared/runtime/policy.js",
     "shared/runtime/model.js",
     "shared/runtime/scenarios.js",
-    "shared/runtime/metrics.js"
+    "shared/runtime/metrics.js",
+    "shared/ui/info-windows.js",
+    "shared/runtime/info-metadata.js"
   ],
   "tools": [
     {
       "id": "comparison",
       "label": "Model comparison",
       "template": "tools/comparison/template.html",
-      "scripts": ["tools/comparison/comparison.js", "tools/comparison/native-run.js", "tools/comparison/native-client.js", "tools/comparison/ui.js"],
-      "native_models": ["dyg_tami_native"],
+      "scripts": [
+        "tools/comparison/comparison.js",
+        "tools/comparison/native-run.js",
+        "tools/comparison/native-client.js",
+        "tools/comparison/ui.js"
+      ],
+      "native_models": [
+        "dyg_tami_native"
+      ],
       "model_ids": "all",
       "model_data_id": "fd-model-data",
       "output": "index.html",
@@ -26,8 +38,13 @@
       "id": "xgboost-analytics",
       "label": "XGBoost analytics",
       "template": "tools/xgboost-analytics/template.html",
-      "scripts": ["tools/xgboost-analytics/analytics.js", "tools/xgboost-analytics/ui.js"],
-      "model_ids": ["xgboost"],
+      "scripts": [
+        "tools/xgboost-analytics/analytics.js",
+        "tools/xgboost-analytics/ui.js"
+      ],
+      "model_ids": [
+        "xgboost"
+      ],
       "model_data_id": "xa-model-data",
       "explanation": "models/xgboost-explanations.json",
       "output": "xgboost-analytics.html"

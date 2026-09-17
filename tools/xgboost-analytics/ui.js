@@ -47,6 +47,7 @@
     const button=element('button',null,'',{type:'button',class:'xa-link'});
     element('span',button,definitions[index].label,{class:'xa-feature-name'});
     if(withId)element('span',button,definitions[index].id,{class:'xa-feature-id'});
+    globalThis.PaymentInfo?.attach(button,()=>globalThis.PaymentInfoMetadata.feature(definitions[index],[],'attribution'),{button:false});
     button.addEventListener('click',()=>{featureIndex=index;$('feature').value=String(index);renderFeatures();setTab('features');});
     return button;
   }
@@ -180,15 +181,18 @@
       const nameCell=element('td',tr);nameCell.appendChild(featureButton(f.index));
       const importance=element('div',element('td',tr),'',{class:'xa-importance'}),bar=element('div',importance,'',{class:'xa-bar'});element('span',bar).style.width=(100*f.meanAbs/max)+'%';element('span',importance,n?fmt(f.meanAbs,4):'—',{class:'xa-mono'});
       const distribution=svgNode('svg',element('td',tr),{viewBox:'0 0 220 34',class:'xa-beeswarm',role:'img','aria-label':definitions[f.index].label+' SHAP range '+fmt(f.min,4)+' to '+fmt(f.max,4)+' log-odds'});
+      globalThis.PaymentInfo?.attach(importance,globalThis.PaymentInfoMetadata.feature(definitions[f.index],[['Payments',n],['Mean absolute SHAP',fmt(f.meanAbs,6)+' log-odds'],['Mean signed SHAP',fmt(f.mean,6)+' log-odds']],'population'));
       svgNode('line',distribution,{x1:110,y1:2,x2:110,y2:32,stroke:'var(--xa-line)'});
       const x=scale([-contributionMax,contributionMax],[6,214]);
-      sampled.forEach((r,i)=>{const value=r.explanation.contributions[f.index],dot=svgNode('circle',distribution,{cx:x(value),cy:17+((i*37)%23-11),r:2.2,fill:valueColor(r.readableValues[f.index],f.minValue,f.maxValue),'fill-opacity':.7});svgNode('title',dot,{},r.event.id+': '+signed(value)+' log-odds; '+featureValue(r.readableValues[f.index],f.index));});
+      sampled.forEach((r,i)=>{const value=r.explanation.contributions[f.index],dot=svgNode('circle',distribution,{cx:x(value),cy:17+((i*37)%23-11),r:2.2,fill:valueColor(r.readableValues[f.index],f.minValue,f.maxValue),'fill-opacity':.7,tabindex:-1});svgNode('title',dot,{},r.event.id+': '+signed(value)+' log-odds; '+featureValue(r.readableValues[f.index],f.index));globalThis.PaymentInfo?.attach(dot,()=>globalThis.PaymentInfoMetadata.feature(definitions[f.index],[['Payment',r.event.id],['Readable value',featureValue(r.readableValues[f.index],f.index)],['Model input',fmt(r.features[f.index],7)],['SHAP contribution',signed(value)+' log-odds']],'attribution'));});
       element('td',tr,featureValue(median(records.map(r=>r.readableValues[f.index])),f.index),{class:'xa-right'});
     }
     $('feature-empty').hidden=visible.length>0;renderFeatureDetail();
   }
   function renderFeatureDetail(){
     const def=definitions[featureIndex],stats=summary.featureStats[featureIndex];text('definition-title',def.label);text('definition-description',def.description);text('dependence-title',def.label);
+    globalThis.PaymentInfo?.attach($('definition-title'),globalThis.PaymentInfoMetadata.feature(def,[],'attribution'));
+    globalThis.PaymentInfo?.attach($('dependence-title'),globalThis.PaymentInfoMetadata.feature(def,[],'population'));
     const definition=$('definition');definition.replaceChildren();const dl=element('dl',definition);
     for(const [key,value]of [['Feature ID',def.id],['Unit',def.unit||'Model units'],['Source',def.source||'Observed history before this payment'],['Window',def.window||'All prior observed history'],['Transform',def.transform||'Identity']]){element('dt',dl,key);element('dd',dl,value);}
     const holder=$('feature-stats');holder.replaceChildren();const table=element('table',holder),body=element('tbody',table);
@@ -198,7 +202,7 @@
     const svg=initChart('dependence-chart',560,290,def.label+' versus contribution',sampled.length+' of '+records.length+' displayed payments. Horizontal axis shows readable feature values; vertical axis shows raw-margin SHAP contribution.');
     axis(svg,x,y,dx,dy,box,'Readable value ('+(def.unit||'unitless')+')','SHAP, log-odds');
     if(dy[0]<=0&&dy[1]>=0)svgNode('line',svg,{x1:box.left,x2:box.right,y1:y(0),y2:y(0),stroke:'var(--xa-quiet)','stroke-dasharray':'3 4'});
-    for(const r of sampled){const v=r.readableValues[featureIndex],phi=r.explanation.contributions[featureIndex];const dot=svgNode('circle',svg,{cx:x(v),cy:y(phi),r:r.event.id===selectedId?4.5:2.8,fill:valueColor(v,stats.minValue,stats.maxValue),'fill-opacity':.68,stroke:r.event.id===selectedId?'var(--foreground)':'none','stroke-width':1.3});svgNode('title',dot,{},r.event.id+' · '+featureValue(v,featureIndex)+' · '+signed(phi)+' log-odds');dot.addEventListener('click',()=>selectPayment(r.event.id));}
+    for(const r of sampled){const v=r.readableValues[featureIndex],phi=r.explanation.contributions[featureIndex];const dot=svgNode('circle',svg,{cx:x(v),cy:y(phi),r:r.event.id===selectedId?4.5:2.8,fill:valueColor(v,stats.minValue,stats.maxValue),'fill-opacity':.68,stroke:r.event.id===selectedId?'var(--foreground)':'none','stroke-width':1.3,tabindex:-1});svgNode('title',dot,{},r.event.id+' · '+featureValue(v,featureIndex)+' · '+signed(phi)+' log-odds');globalThis.PaymentInfo?.attach(dot,()=>globalThis.PaymentInfoMetadata.feature(def,[['Payment',r.event.id],['Readable value',featureValue(v,featureIndex)],['Model input',fmt(r.features[featureIndex],7)],['SHAP contribution',signed(phi)+' log-odds']],'attribution'));dot.addEventListener('click',()=>selectPayment(r.event.id));}
     if(!records.length)svgNode('text',svg,{x:300,y:135,'text-anchor':'middle'},'No payments in this population');
     text('dependence-note',fmt(sampled.length,0)+' / '+fmt(records.length,0)+' payments plotted. Statistics use the entire displayed population. Readable values are shown here; the model’s transformed input is available in each payment inspector.');
   }
@@ -222,7 +226,7 @@
     text('original-decision',record.decision==='LEARNING'?'This payment was allowed during warm-up, before a threshold was available.':'Original decision: '+fmt(record.score,6)+(record.decision==='BLOCK'?' > ':' ≤ ')+fmt(record.tauBefore,6)+' bits → '+(record.decision==='BLOCK'?'blocked':'allowed')+'. All transfers continue in observed-history mode.');
     renderWaterfall(record);
     const body=$('values-table').querySelector('tbody');body.replaceChildren();
-    definitions.forEach((def,i)=>{const tr=row(body,[featureButton(i),featureValue(record.readableValues[i],i),fmt(record.features[i],7),signed(record.explanation.contributions[i])]);Array.from(tr.children).slice(1).forEach(td=>td.classList.add('xa-right'));tr.lastChild.classList.add(record.explanation.contributions[i]>0?'xa-high':record.explanation.contributions[i]<0?'xa-good':'xa-muted');tr.setAttribute('data-feature',def.id);});
+    definitions.forEach((def,i)=>{const tr=row(body,[featureButton(i),featureValue(record.readableValues[i],i),fmt(record.features[i],7),signed(record.explanation.contributions[i])]);Array.from(tr.children).slice(1).forEach(td=>td.classList.add('xa-right'));tr.lastChild.classList.add(record.explanation.contributions[i]>0?'xa-high':record.explanation.contributions[i]<0?'xa-good':'xa-muted');tr.setAttribute('data-feature',def.id);const info=globalThis.PaymentInfoMetadata?.feature(def,[['Payment',record.event.id],['Readable value',featureValue(record.readableValues[i],i)],['Model input',fmt(record.features[i],7)],['SHAP contribution',signed(record.explanation.contributions[i])+' log-odds']],'attribution');for(const td of Array.from(tr.children).slice(1))globalThis.PaymentInfo?.attach(td,info);});
     renderTree(record);
   }
   function renderWaterfall(record){
@@ -234,8 +238,10 @@
     const pad=Math.max(.1,(hi-lo)*.1),dx=[lo-pad,hi+pad],x=scale(dx,[260,854]);
     const svg=initChart('waterfall',width,h,'Payment '+record.event.id+' contribution waterfall','Reference margin '+fmt(explanation.baseline,6)+' plus all feature contributions equals '+fmt(record.rawMargin,6)+'. Exact contributions for all features are in the following table.');
     svgNode('line',svg,{x1:x(0),y1:14,x2:x(0),y2:h-34,stroke:'var(--xa-line)','stroke-dasharray':'3 4'});
-    bars.forEach((b,i)=>{const y=14+i*28;svgNode('text',svg,{x:248,y:y+14,'text-anchor':'end',class:'xa-chart-label'},b.label);const color=b.total?'var(--xa-quiet)':b.value>=0?'var(--xa-red)':'var(--xa-teal)';
+    bars.forEach((b,i)=>{const y=14+i*28,label=svgNode('text',svg,{x:248,y:y+14,'text-anchor':'end',class:'xa-chart-label'},b.label);const color=b.total?'var(--xa-quiet)':b.value>=0?'var(--xa-red)':'var(--xa-teal)';
       const rect=svgNode('rect',svg,{x:Math.min(x(b.start),x(b.end)),y,width:Math.max(1,Math.abs(x(b.end)-x(b.start))),height:20,fill:color,rx:2});svgNode('title',rect,{},b.label+': '+(b.total?fmt(b.end,6):signed(b.value))+' log-odds');
+      const info=Number.isInteger(b.index)?globalThis.PaymentInfoMetadata?.feature(definitions[b.index],[['Payment',record.event.id],['Readable value',featureValue(record.readableValues[b.index],b.index)],['SHAP contribution',signed(b.value)+' log-odds']],'attribution'):{title:b.label,description:globalThis.PaymentInfoMetadata?.explanations.attribution.text,facts:[['Margin / contribution',fmt(b.total?b.end:b.value,7)+' log-odds']],sections:!b.total?[{title:'Included features',text:rest.map(f=>f.label+': '+signed(f.value)).join('\n')}]:[]};
+      globalThis.PaymentInfo?.attach(label,info);globalThis.PaymentInfo?.attach(rect,info);
       svgNode('text',svg,{x:866,y:y+14,fill:color},b.total?fmt(b.end,5):signed(b.value));
       if(i>0&&!b.total)svgNode('line',svg,{x1:x(b.start),x2:x(b.start),y1:y-8,y2:y,stroke:'var(--xa-quiet)','stroke-dasharray':'2 2'});
     });
@@ -245,7 +251,7 @@
   }
   function renderTree(record){
     if(!record)return;const treeIndex=Number($('tree').value)||0,tree=model.trees[treeIndex],path=xgb.treePath(model,record.features,treeIndex),active=new Set(path.steps.map(s=>s.path));active.add(path.leafPath);
-    const list=$('tree-path');list.replaceChildren();for(const step of path.steps)element('li',list,definitions[step.feature].label+': model input '+fmt(step.value,7)+(step.direction==='left'?' ≤ ':' > ')+fmt(step.threshold,7)+' → '+step.direction+' branch.');element('li',list,'Reached leaf '+fmt(path.leaf,7)+' × learning rate '+fmt(model.learning_rate,4)+' = '+signed(path.weightedLeaf)+' log-odds.');
+    const list=$('tree-path');list.replaceChildren();for(const step of path.steps){const item=element('li',list,definitions[step.feature].label+': model input '+fmt(step.value,7)+(step.direction==='left'?' ≤ ':' > ')+fmt(step.threshold,7)+' → '+step.direction+' branch.');globalThis.PaymentInfo?.attach(item,globalThis.PaymentInfoMetadata.feature(definitions[step.feature],[['Model input',fmt(step.value,7)],['Threshold',fmt(step.threshold,7)],['Branch',step.direction]],'split'));}const leaf=element('li',list,'Reached leaf '+fmt(path.leaf,7)+' × learning rate '+fmt(model.learning_rate,4)+' = '+signed(path.weightedLeaf)+' log-odds.');globalThis.PaymentInfo?.attach(leaf,{...globalThis.PaymentInfo.parameter(globalThis.PaymentInfoMetadata.parameters.learning_rate),facts:[['Learning rate',model.learning_rate],['Leaf value',path.leaf],['Weighted leaf',path.weightedLeaf]]});
     text('tree-summary','Tree '+(treeIndex+1)+' / '+model.trees.length+' · weighted leaf '+signed(path.weightedLeaf)+' log-odds');
     const nodes=[];let depthMax=0;
     function collect(node,key='root',depth=0,lo=0,hi=1020){const item={node,key,depth,x:(lo+hi)/2,y:32+depth*86};nodes.push(item);depthMax=Math.max(depthMax,depth);if(node.leaf===undefined){collect(node.left,key==='root'?'L':key+'L',depth+1,lo,item.x);collect(node.right,key==='root'?'R':key+'R',depth+1,item.x,hi);}return item;}
@@ -255,6 +261,8 @@
     for(const item of nodes){const isLeaf=item.node.leaf!==undefined,onPath=active.has(item.key),group=svgNode('g',svg);svgNode('rect',group,{x:item.x-58,y:item.y-20,width:116,height:42,rx:5,fill:onPath?'color-mix(in srgb,var(--xa-teal) 12%,var(--xa-panel))':'var(--xa-panel)',stroke:onPath?'var(--xa-teal)':'var(--xa-line)','stroke-width':onPath?1.8:1});
       const full=isLeaf?'Leaf '+fmt(item.node.leaf,5):definitions[item.node.feature].label;
       const label=full.length>18?full.slice(0,17)+'…':full;svgNode('text',group,{x:item.x,y:item.y-2,'text-anchor':'middle',class:onPath?'xa-chart-label':''},label);svgNode('text',group,{x:item.x,y:item.y+13,'text-anchor':'middle'},isLeaf?'× '+fmt(model.learning_rate,3)+' = '+fmt(item.node.leaf*model.learning_rate,4):'≤ '+fmt(item.node.threshold,6));svgNode('title',group,{},full+(isLeaf?'':'; model input ≤ '+item.node.threshold)+(onPath?'; payment path':''));
+      group.dataset.infoTreeNode=item.key;
+      globalThis.PaymentInfo?.attach(group,isLeaf?{title:'Tree leaf',description:globalThis.PaymentInfoMetadata.parameters.learning_rate.description,sections:globalThis.PaymentInfoMetadata.parameters.learning_rate.info.sections,facts:[['Leaf value',item.node.leaf],['Learning rate',model.learning_rate],['Weighted contribution',item.node.leaf*model.learning_rate+' log-odds'],['Selected payment path',onPath?'Yes':'No']]}:globalThis.PaymentInfoMetadata.feature(definitions[item.node.feature],[['Split threshold',item.node.threshold],['Selected payment input',record.features[item.node.feature]],['Selected payment path',onPath?'Yes':'No']],'split'));
     }
   }
   function download(kind){
@@ -268,6 +276,9 @@
     text('checkpoint',model.trees.length+' trees · '+definitions.length+' features');
     definitions.forEach((f,i)=>option($('feature'),i,f.label));model.trees.forEach((tree,i)=>option($('tree'),i,'Tree '+(i+1)));
     if(bundle.policy?.warmup)$('warmup').value=String(bundle.policy.warmup);
+    for(const [id,key]of Object.entries({scenario:'scenario',size:'size',seed:'seed',policy:'decisionPolicy',alpha:'alpha',warmup:'warmup',tau:'manualTau','false-cost':'falseBlockCost','missed-cost':'missedFraudCost',objective:'objective',tree:'tree'}))globalThis.PaymentInfoMetadata?.attachControl(root,'xa-'+id,key);
+    globalThis.PaymentInfo?.attach($('feature').closest('label'),()=>globalThis.PaymentInfoMetadata.feature(definitions[Number($('feature').value)||0],[],'attribution'));
+    globalThis.PaymentInfo?.attach($('checkpoint'),{title:'Saved XGBoost checkpoint',description:'The fixed boosted-tree ensemble used for this report. Scenario and policy controls do not change its trained weights.',facts:[['Trees',model.trees.length],['Features',definitions.length],['Learning rate',model.learning_rate],['Checkpoint',model.checkpoint_id||model.id]]});
     if(!model.policy_validation?.supervised){for(const name of ['tuned','auto']){const el=$('policy').querySelector('option[value="'+name+'"]');el.disabled=true;el.textContent+=' · validation unavailable';}}
     updatePolicyControls();
     $('config-form').addEventListener('submit',e=>{e.preventDefault();run();});
