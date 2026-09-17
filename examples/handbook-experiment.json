@@ -1,0 +1,13 @@
+{
+  "model": "logistic_regression",
+  "dataset": {
+    "loader": "fraud_dataset",
+    "dataset": "handbook",
+    "release": "invented-smoke-v1",
+    "name": "Invented Handbook smoke fixture",
+    "path": "datasets/fixtures/handbook.csv",
+    "view": "numeric"
+  },
+  "parameters": {"C": 1.0, "max_iter": 500, "random_state": 42},
+  "split": {"train": 0.6, "validation": 0.2}
+}

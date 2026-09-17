@@ -1,0 +1,5 @@
+{
+  "loader": "prepared_fraud",
+  "path": "../../artifacts/handbook.sqlite",
+  "view": "numeric"
+}

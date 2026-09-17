@@ -1,13 +1,94 @@
 {
   "version": 1,
-  "browser_support": ["shared/runtime/dataset-registry.js"],
+  "browser_support": [
+    "shared/runtime/dataset-registry.js"
+  ],
   "datasets": [
-    {"id":"payment_episodes","label":"Independent chronological payment episodes","schema":"payment-events/v1","python_module":"datasets.implementations.payment_episodes","browser":null,"origin":"configured"},
-    {"id":"temporal_csv","label":"Temporal links / DyGLib CSV","schema":"temporal-graph/v1","python_module":"datasets.implementations.temporal_csv","browser":null,"origin":"user-supplied"},
-    {"id":"payment_graph","label":"Payment events as temporal links","schema":"temporal-graph/v1","python_module":"datasets.implementations.payment_graph","browser":null,"origin":"user-supplied"},
-    {"id":"synthetic_payments","label":"Synthetic payment scenarios","schema":"payment-events/v1","python_module":"datasets.implementations.synthetic_payments","browser":"datasets/implementations/synthetic_payments.js","origin":"synthetic"},
-    {"id":"payment_json","label":"Payment event JSON","schema":"payment-events/v1","python_module":"datasets.implementations.payment_json","browser":"datasets/implementations/payment_json.js","origin":"user-supplied"},
-    {"id":"payment_csv","label":"Mapped payment event CSV","schema":"payment-events/v1","python_module":"datasets.implementations.payment_csv","browser":null,"origin":"user-supplied"},
-    {"id":"numeric_csv","label":"Numeric feature CSV","schema":"numeric-table/v1","python_module":"datasets.implementations.numeric_csv","browser":null,"origin":"user-supplied"}
+    {
+      "id": "fraud_dataset",
+      "label": "Payment fraud benchmark sources (Handbook, ULB, PaySim)",
+      "schema": "transaction-stream/v1",
+      "views": {
+        "stream": "transaction-stream/v1",
+        "numeric": "numeric-table/v1",
+        "graph": "temporal-graph/v1",
+        "labeled_graph": "labeled-temporal-graph/v1",
+        "payments": "payment-events/v1"
+      },
+      "python_module": "datasets.implementations.fraud_dataset",
+      "browser": null,
+      "origin": "user-supplied"
+    },
+    {
+      "id": "prepared_fraud",
+      "label": "Prepared ordered payment fraud dataset",
+      "schema": "transaction-stream/v1",
+      "views": {
+        "stream": "transaction-stream/v1",
+        "numeric": "numeric-table/v1",
+        "graph": "temporal-graph/v1",
+        "labeled_graph": "labeled-temporal-graph/v1",
+        "payments": "payment-events/v1"
+      },
+      "python_module": "datasets.implementations.prepared_fraud",
+      "browser": null,
+      "origin": "user-supplied"
+    },
+    {
+      "id": "payment_episodes",
+      "label": "Independent chronological payment episodes",
+      "schema": "payment-events/v1",
+      "python_module": "datasets.implementations.payment_episodes",
+      "browser": null,
+      "origin": "configured"
+    },
+    {
+      "id": "temporal_csv",
+      "label": "Temporal links / DyGLib CSV",
+      "schema": "temporal-graph/v1",
+      "python_module": "datasets.implementations.temporal_csv",
+      "browser": null,
+      "origin": "user-supplied"
+    },
+    {
+      "id": "payment_graph",
+      "label": "Payment events as temporal links",
+      "schema": "temporal-graph/v1",
+      "python_module": "datasets.implementations.payment_graph",
+      "browser": null,
+      "origin": "user-supplied"
+    },
+    {
+      "id": "synthetic_payments",
+      "label": "Synthetic payment scenarios",
+      "schema": "payment-events/v1",
+      "python_module": "datasets.implementations.synthetic_payments",
+      "browser": "datasets/implementations/synthetic_payments.js",
+      "origin": "synthetic"
+    },
+    {
+      "id": "payment_json",
+      "label": "Payment event JSON",
+      "schema": "payment-events/v1",
+      "python_module": "datasets.implementations.payment_json",
+      "browser": "datasets/implementations/payment_json.js",
+      "origin": "user-supplied"
+    },
+    {
+      "id": "payment_csv",
+      "label": "Mapped payment event CSV",
+      "schema": "payment-events/v1",
+      "python_module": "datasets.implementations.payment_csv",
+      "browser": null,
+      "origin": "user-supplied"
+    },
+    {
+      "id": "numeric_csv",
+      "label": "Numeric feature CSV",
+      "schema": "numeric-table/v1",
+      "python_module": "datasets.implementations.numeric_csv",
+      "browser": null,
+      "origin": "user-supplied"
+    }
   ]
 }

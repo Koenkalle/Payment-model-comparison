@@ -41,8 +41,13 @@ def create_model(identifier,input_schema,task=None):
 
 def load_dataset(config,base_dir=None):
     descriptor=dataset_entry(config['loader'])
+    expected=descriptor['schema']
+    if descriptor.get('views'):
+        view=config.get('view',descriptor.get('default_view','stream'))
+        if view not in descriptor['views']:raise ValueError('Unsupported dataset view: '+str(view))
+        expected=descriptor['views'][view]
     dataset=load_module(descriptor['python_module']).load(config,Path(base_dir or '.').resolve())
-    if dataset.schema!=descriptor['schema']:raise ValueError('Dataset implementation returned the wrong schema.')
+    if dataset.schema!=expected:raise ValueError('Dataset implementation returned the wrong schema.')
     return dataset
 
 def browser_scripts():

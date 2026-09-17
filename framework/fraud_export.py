@@ -158,10 +158,10 @@ def export_fraud(config, base_dir=None):
     parts = _partitions(metadata, original)
     calibration = _calibration_prefix(original, parts['test'], calibration_config.get('max_rows', 100))
     target_config = config['dataset']
-    if target_config.get('loader') not in ('payment_json', 'payment_csv', 'synthetic_payments'):
-        raise ValueError('Comparison export requires a payment-event dataset.')
     target = load_dataset(target_config, base)
     if not isinstance(target, EventDataset):
+        if hasattr(target, 'close'):
+            target.close()
         raise ValueError('Comparison export requires payment-events/v1 input.')
     if len(target.document['accounts']) > BROWSER_MAX_ACCOUNTS or len(target.document['events']) > BROWSER_MAX_EVENTS:
         raise ValueError('The browser comparison supports at most 256 accounts and 20,000 events; export a bounded dataset.')

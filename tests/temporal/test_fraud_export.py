@@ -62,6 +62,17 @@ class FraudExportTests(unittest.TestCase):
         (self.base / name).write_text(json.dumps(document))
         return {**self.config, 'dataset': {'loader': 'payment_json', 'path': name}}
 
+    def test_registered_benchmark_payment_view_exports(self):
+        (self.base / 'handbook.csv').write_text(
+            'TRANSACTION_ID,TX_TIME_SECONDS,CUSTOMER_ID,TERMINAL_ID,TX_AMOUNT,TX_FRAUD\n'
+            'source-a,60,1,1,12,0\nsource-b,120,2,1,25,1\nsource-c,180,1,2,40,\n')
+        target = {'loader': 'fraud_dataset', 'dataset': 'handbook', 'path': 'handbook.csv',
+                  'view': 'payments', 'amount_to_eur': 1.}
+        result = export_fraud({**self.config, 'dataset': target}, self.base)
+        self.assertEqual([row['id'] for row in result['predictions']], ['source-a', 'source-b', 'source-c'])
+        self.assertEqual(result['dataset']['truth'], {'source-a': False, 'source-b': True})
+        self.assertEqual(result['evaluation_ids'], ['source-a', 'source-b', 'source-c'])
+
     def test_native_scores_heads_and_complete_time_group_calibration(self):
         result = export_fraud(self.config, self.base)
         self.assertEqual(result['schema'], 'native-fraud-comparison/v1')

@@ -63,6 +63,8 @@ def _path_config(config, base, relative_to=None):
         path = Path(result['path'])
         path = (path if path.is_absolute() else base / path).resolve()
         result['path'] = os.path.relpath(path, relative_to) if relative_to is not None else str(path)
+    if 'paths' in result:
+        result['paths'] = [_path_config({'path': path}, base, relative_to)['path'] for path in result['paths']]
     if 'episodes' in result:
         result['episodes'] = [_path_config(episode, base, relative_to) for episode in result['episodes']]
     return result

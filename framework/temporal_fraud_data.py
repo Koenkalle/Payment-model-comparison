@@ -36,7 +36,29 @@ def labeled_payments(events, graph_config=None):
 
 
 def load_labeled_dataset(config, base_dir=None, graph_config=None):
-    return labeled_payments(load_dataset(config, base_dir), graph_config)
+    effective = config
+    if config.get('view') == 'labeled_graph' and graph_config:
+        if set(graph_config) - {'node_feature_dim'}:
+            raise ValueError('Unknown fraud graph conversion option.')
+        if 'node_feature_dim' in graph_config:
+            if 'node_feature_dim' in config and config['node_feature_dim'] != graph_config['node_feature_dim']:
+                raise ValueError('Conflicting dataset and graph node_feature_dim settings.')
+            effective = {**config, **graph_config}
+    dataset = load_dataset(effective, base_dir)
+    if isinstance(dataset, LabeledTemporalGraphDataset):
+        if graph_config:
+            if (set(graph_config) - {'node_feature_dim'} or
+                    graph_config.get('node_feature_dim', dataset.graph.node_features.shape[1])
+                    != dataset.graph.node_features.shape[1]):
+                raise ValueError('Configure node_feature_dim in the labeled_graph dataset view.')
+        return dataset
+    if dataset.schema == 'transaction-stream/v1':
+        from datasets.views import payments_view
+        try:
+            return labeled_payments(payments_view(dataset, config), graph_config)
+        finally:
+            dataset.close()
+    return labeled_payments(dataset, graph_config)
 
 
 def available_labels(dataset, cutoff=None):

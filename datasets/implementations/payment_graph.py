@@ -8,14 +8,14 @@ import numpy as np
 
 def load(config, base):
     nested = config['dataset']
-    if nested.get('loader') not in ('payment_csv', 'payment_json', 'synthetic_payments'):
-        raise ValueError('payment_graph requires a payment event provider.')
     dataset = load_dataset(nested, base)
     if not isinstance(dataset, EventDataset):
+        if hasattr(dataset, 'close'):
+            dataset.close()
         raise ValueError('payment_graph requires payment events.')
     metadata = dict(dataset.provenance)
     # Equivalent configs in different directories should identify the same file.
-    if 'path' in nested:
+    if 'path' in nested and nested.get('loader') in ('payment_csv', 'payment_json'):
         from pathlib import Path
         path = Path(nested['path'])
         path = path if path.is_absolute() else base / path

@@ -59,6 +59,9 @@ def train_experiment(config,output,base_dir=None):
     if config.get('task') not in (None,'dynamic-link-prediction'):
         raise ValueError('Unsupported experiment task: '+str(config['task']))
     dataset=load_dataset(config['dataset'],base_dir)
+    if dataset.schema=='transaction-stream/v1':
+        dataset.close()
+        raise ValueError('Choose dataset view="numeric" for tabular models or view="graph" for link models; use the replay API for streams.')
     if config.get('task')=='dynamic-link-prediction' and not isinstance(dataset,TemporalGraphDataset):
         raise ValueError('Dynamic link prediction requires temporal graph input.')
     if isinstance(dataset,TemporalGraphDataset):
@@ -104,13 +107,15 @@ def evaluate_artifact(artifact,dataset_config,base_dir=None,partition='all'):
     if list(dataset.feature_names)!=metadata['feature_names']:raise ValueError('Dataset feature names or order differ from the fitted model.')
     implementation=ROOT/(descriptor['python_module'].replace('.','/')+'.py')
     if digest(implementation)!=metadata['implementation_sha256']:raise ValueError('Model implementation changed since this artifact was created.')
-    model.load(artifact/'model.json',dataset.feature_names)
     if partition=='all':indices=np.arange(len(dataset.ids))
     elif partition in metadata['split']:
-        if any(dataset.provenance[key]!=metadata['dataset'][key] for key in ('source_sha256','configuration_sha256')):raise ValueError('Saved split membership applies only to the original dataset.')
+        identity_keys=['source_sha256','configuration_sha256']
+        if 'prepared_sha256' in dataset.provenance or 'prepared_sha256' in metadata['dataset']:identity_keys.append('prepared_sha256')
+        if any(dataset.provenance.get(key)!=metadata['dataset'].get(key) for key in identity_keys):raise ValueError('Saved split membership applies only to the original dataset.')
         wanted=set(metadata['split'][partition]);indices=np.asarray([i for i,value in enumerate(dataset.ids) if value in wanted])
         if len(indices)!=len(wanted):raise ValueError('Saved partition IDs are missing from this dataset.')
     else:raise ValueError('Unknown evaluation partition.')
+    model.load(artifact/'model.json',dataset.feature_names)
     result=report(model,dataset,indices,metadata['threshold'],bool(descriptor['capabilities'].get('explanations')))
     result['partition']=partition
     same_source=dataset.provenance['source_sha256']==metadata['dataset']['source_sha256']

@@ -1,0 +1,34 @@
+{
+  "model": "dyg_tami_native",
+  "task": "temporal-fraud-classification",
+  "dataset": {
+    "loader": "fraud_dataset",
+    "dataset": "handbook",
+    "release": "invented-smoke-v1",
+    "name": "Invented Handbook smoke fixture",
+    "path": "datasets/fixtures/handbook.csv",
+    "view": "labeled_graph",
+    "amount_to_eur": 1.0
+  },
+  "graph": {"node_feature_dim": 8},
+  "initialization": {"method": "random"},
+  "encoder_training": "finetune",
+  "prediction_head": {"id": "fraud_linear"},
+  "split": {"train": 0.5, "model_validation": 0.2, "policy_validation": 0.15},
+  "parameters": {
+    "epochs": 2,
+    "patience": 2,
+    "batch_size": 16,
+    "learning_rate": 0.001,
+    "time_feat_dim": 8,
+    "channel_embedding_dim": 8,
+    "num_layers": 1,
+    "num_heads": 2,
+    "dropout": 0.0,
+    "patch_size": 1,
+    "max_input_sequence_length": 16,
+    "seed": 42,
+    "device": "cpu",
+    "num_threads": 2
+  }
+}

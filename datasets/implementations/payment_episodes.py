@@ -23,9 +23,13 @@ def load(config, base):
                 'accounts': [], 'events': [], 'truth': {}, 'label_available_at': {}}
     offset, sources, boundaries = 0., [], []
     for index, provider in enumerate(episodes):
-        if not isinstance(provider, dict) or provider.get('loader') not in ('payment_json', 'payment_csv', 'synthetic_payments'):
-            raise ValueError('Each episode requires an ordinary payment JSON, CSV or synthetic provider.')
+        if not isinstance(provider, dict):
+            raise ValueError('Each episode requires a payment-event provider configuration.')
         dataset = load_dataset(provider, base)
+        if not isinstance(dataset, EventDataset):
+            if hasattr(dataset, 'close'):
+                dataset.close()
+            raise ValueError('Each episode requires a payment-events/v1 provider; choose view="payments" for fraud datasets.')
         episode = normalize(dataset.document, dataset.provenance)
         prefix = f'episode-{index + 1}:'
         first = min(event['t'] for event in episode['events'])
