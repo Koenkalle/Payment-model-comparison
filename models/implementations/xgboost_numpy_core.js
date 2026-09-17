@@ -3,52 +3,10 @@
  * All attributions are in raw margin (log-odds) units. */
 (function(global){
   'use strict';
-  const SCHEMA_VERSION=1, DEFAULT_AMOUNT_BINS=[15,35,75,150,300,650,1500,4000,10000];
-  const featureLog=(x,scale=1)=>Math.log1p(Math.max(0,Number(x)||0))/scale;
-  const specs=[
-    ['log_amount','Payment amount','currency units',8,'Current requested payment amount.','payment','current payment'],
-    ['amount_bin','Amount bucket','bucket',null,'Zero-based bucket: number of checkpoint amount-bin edges less than or equal to the requested amount.','payment','current payment'],
-    ['sender_out_count','Sender outgoing payments','payments',6,'Number of earlier settled outgoing payments.','sender','all preceding history'],
-    ['sender_in_count','Sender incoming payments','payments',6,'Number of earlier settled incoming payments.','sender','all preceding history'],
-    ['recipient_out_count','Recipient outgoing payments','payments',6,'Number of earlier settled outgoing payments.','recipient','all preceding history'],
-    ['recipient_in_count','Recipient incoming payments','payments',6,'Number of earlier settled incoming payments.','recipient','all preceding history'],
-    ['sender_out_value','Sender outgoing amount','currency units',10,'Sum of earlier settled outgoing payment amounts.','sender','all preceding history'],
-    ['sender_in_value','Sender incoming amount','currency units',10,'Sum of earlier settled incoming payment amounts.','sender','all preceding history'],
-    ['recipient_out_value','Recipient outgoing amount','currency units',10,'Sum of earlier settled outgoing payment amounts.','recipient','all preceding history'],
-    ['recipient_in_value','Recipient incoming amount','currency units',10,'Sum of earlier settled incoming payment amounts.','recipient','all preceding history'],
-    ['sender_seen','Sender observed activities','activities',6,'Number of earlier observed payments and deposits. Unsettled payment attempts count as activity; outcome reports do not.','sender','all preceding history'],
-    ['recipient_seen','Recipient observed activities','activities',6,'Number of earlier observed payments and deposits. Unsettled payment attempts count as activity; outcome reports do not.','recipient','all preceding history'],
-    ['sender_gap','Sender activity gap','minutes',6,'Nonnegative minutes since the last observed payment or deposit; outcome reports do not reset the gap. Zero for first activity.','sender','last observed activity'],
-    ['recipient_gap','Recipient activity gap','minutes',6,'Nonnegative minutes since the last observed payment or deposit; outcome reports do not reset the gap. Zero for first activity.','recipient','last observed activity'],
-    ['pair_out_count','Prior payments to recipient','payments',3,'Earlier settled payments from this sender to this recipient.','account pair','all preceding history'],
-    ['pair_total_count','Prior payments in either direction','payments',3,'Earlier settled payment count summed across both directions of this account pair.','account pair','all preceding history'],
-    ['prior_contact','Prior payment contact','boolean',null,'One if this pair has an earlier settled payment in either direction; zero otherwise.','account pair','all preceding history'],
-    ['sender_recent_in_count','Sender recent incoming payments','payments',4,'Earlier settled incoming payments during the preceding 60 minutes, including the window boundary.','sender','preceding 60 minutes'],
-    ['sender_recent_out_count','Sender recent outgoing payments','payments',4,'Earlier settled outgoing payments during the preceding 60 minutes, including the window boundary.','sender','preceding 60 minutes'],
-    ['recipient_recent_in_count','Recipient recent incoming payments','payments',4,'Earlier settled incoming payments during the preceding 60 minutes, including the window boundary.','recipient','preceding 60 minutes'],
-    ['recipient_recent_out_count','Recipient recent outgoing payments','payments',4,'Earlier settled outgoing payments during the preceding 60 minutes, including the window boundary.','recipient','preceding 60 minutes'],
-    ['sender_recent_in_value','Sender recent incoming amount','currency units',10,'Sum of earlier settled incoming payment amounts during the preceding 60 minutes, including the window boundary.','sender','preceding 60 minutes'],
-    ['sender_recent_out_value','Sender recent outgoing amount','currency units',10,'Sum of earlier settled outgoing payment amounts during the preceding 60 minutes, including the window boundary.','sender','preceding 60 minutes'],
-    ['recipient_recent_in_value','Recipient recent incoming amount','currency units',10,'Sum of earlier settled incoming payment amounts during the preceding 60 minutes, including the window boundary.','recipient','preceding 60 minutes'],
-    ['recipient_recent_out_value','Recipient recent outgoing amount','currency units',10,'Sum of earlier settled outgoing payment amounts during the preceding 60 minutes, including the window boundary.','recipient','preceding 60 minutes'],
-    ['amount_vs_sender_out_mean','Amount / sender outgoing mean','ratio',8,'Requested amount divided by the sender historical settled outgoing mean. Count and mean denominators are floored at one; without history this equals the amount.','payment and sender','all preceding history'],
-    ['amount_vs_recipient_in_mean','Amount / recipient incoming mean','ratio',8,'Requested amount divided by the recipient historical settled incoming mean. Count and mean denominators are floored at one; without history this equals the amount.','payment and recipient','all preceding history']
-  ];
-  const featureDefinitions=Object.freeze(specs.map(([id,label,unit,scale,description,source,window],index)=>Object.freeze({id,label,unit,description,source,window,index,transform:scale?'log1p(max(0, value)) / '+scale:id==='amount_bin'?'bucket index / number of amount-bin edges':'identity',scale})));
-  function recent(s,n,role,t){const events=s.incidents[n].filter(x=>t-x.t<=60&&x.role===role);return [events.length,events.reduce((sum,x)=>sum+x.amount,0)];}
-  function describe(model,s,e){
-    const u=e.u,v=e.v,t=e.t,amount=e.amount,si=recent(s,u,1,t),so=recent(s,u,-1,t),ri=recent(s,v,1,t),ro=recent(s,v,-1,t);
-    const senderMean=s.outValue[u]/Math.max(1,s.outCount[u]),recipientMean=s.inValue[v]/Math.max(1,s.inCount[v]);
-    const gapU=s.seen[u]?Math.max(0,t-s.last[u]):0,gapV=s.seen[v]?Math.max(0,t-s.last[v]):0;
-    const amountBins=model.amount_bins||DEFAULT_AMOUNT_BINS;
-    const readableValues=[amount,amountBins.reduce((n,edge)=>n+(amount>=edge),0),
-      s.outCount[u],s.inCount[u],s.outCount[v],s.inCount[v],s.outValue[u],s.inValue[u],s.outValue[v],s.inValue[v],
-      s.seen[u],s.seen[v],gapU,gapV,s.pairs[u][v],s.pairs[u][v]+s.pairs[v][u],s.pairs[u][v]+s.pairs[v][u]>0?1:0,
-      si[0],so[0],ri[0],ro[0],si[1],so[1],ri[1],ro[1],amount/Math.max(1,senderMean),amount/Math.max(1,recipientMean)];
-    const values=readableValues.map((value,i)=>i===1?value/amountBins.length:specs[i][3]?featureLog(value,specs[i][3]):value);
-    return {values,readableValues};
-  }
-  const features=(model,s,e)=>describe(model,s,e).values;
+  const SCHEMA_VERSION=1;
+  const paymentFeatures=typeof module!=='undefined'?require('../../datasets/payment_features'):global.FraudPaymentFeatures;
+  if(!paymentFeatures)throw Error('Dataset payment feature definitions must load before XGBoost.');
+  const {DEFAULT_AMOUNT_BINS,featureDefinitions,features,describe}=paymentFeatures;
   function treeValue(tree,row){let node=tree;while(node.leaf===undefined)node=row[node.feature]<=node.threshold?node.left:node.right;return node.leaf;}
   function raw(model,row){return model.base_score+model.learning_rate*model.trees.reduce((sum,tree)=>sum+treeValue(tree,row),0);}
   const probability=margin=>1/(1+Math.exp(-Math.max(-50,Math.min(50,margin))));

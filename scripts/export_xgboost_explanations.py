@@ -19,6 +19,7 @@ SOURCE_PATHS = (
     'scripts/export_xgboost_explanations.py',
     'models/implementations/_common.py', 'models/implementations/xgboost_numpy.py',
     'models/implementations/xgboost_numpy_core.js',
+    'datasets/payment_features.py', 'datasets/payment_features.js',
 )
 OUTPUT = ROOT / 'models/xgboost-explanations.json'
 

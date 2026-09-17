@@ -4,47 +4,9 @@ from ._common import *
 def state_memory(state):
     return [[] for _ in range(len(state["last"]))]
 
-def _log1p(x,scale=1.0):
-    return math.log1p(max(0.0,float(x)))/scale
-
-def xgb_state(n):
-    return {'last':np.zeros(n),'seen':np.zeros(n),'oc':np.zeros(n),'ic':np.zeros(n),
-            'ov':np.zeros(n),'iv':np.zeros(n),'pairs':np.zeros((n,n)),
-            'incidents':[[] for _ in range(n)],'now':0.0}
-
-def xgb_feature_row(state,e):
-    u,v,t,amount=int(e['u']),int(e['v']),float(e['t']),float(e['amount'])
-    assert u>=0 and v>=0
-    def recent(n,role,window=60.0):
-        events=[x for x in state['incidents'][n] if t-x[1]<=window and x[3]==role]
-        return len(events),sum(x[2] for x in events)
-    si,so=recent(u,1),recent(u,-1);ri,ro=recent(v,1),recent(v,-1)
-    sender_mean=state['ov'][u]/max(1.0,state['oc'][u]);recipient_mean=state['iv'][v]/max(1.0,state['ic'][v])
-    gap_u=max(0.0,t-state['last'][u]) if state['seen'][u] else 0.0
-    gap_v=max(0.0,t-state['last'][v]) if state['seen'][v] else 0.0
-    return np.array([
-        _log1p(amount,8),np.searchsorted(AMOUNT,amount,side='right')/len(AMOUNT),
-        _log1p(state['oc'][u],6),_log1p(state['ic'][u],6),
-        _log1p(state['oc'][v],6),_log1p(state['ic'][v],6),
-        _log1p(state['ov'][u],10),_log1p(state['iv'][u],10),
-        _log1p(state['ov'][v],10),_log1p(state['iv'][v],10),
-        _log1p(state['seen'][u],6),_log1p(state['seen'][v],6),
-        _log1p(gap_u,6),_log1p(gap_v,6),
-        _log1p(state['pairs'][u,v],3),_log1p(state['pairs'][u,v]+state['pairs'][v,u],3),
-        float(state['pairs'][u,v]+state['pairs'][v,u]>0),
-        _log1p(si[0],4),_log1p(so[0],4),_log1p(ri[0],4),_log1p(ro[0],4),
-        _log1p(si[1],10),_log1p(so[1],10),_log1p(ri[1],10),_log1p(ro[1],10),
-        _log1p(amount/max(1.0,sender_mean),8),_log1p(amount/max(1.0,recipient_mean),8)
-    ],dtype=float)
-
-def xgb_apply(state,e):
-    t=float(e['t']);u,v=int(e['u']),int(e['v']);settled=e.get('settled',True) is not False
-    for n in ([v,u] if u>=0 else [v]):
-        state['last'][n]=t;state['seen'][n]+=1
-    if e['kind']=='payment' and u>=0 and settled:
-        amount=float(e['amount']);state['incidents'][u].append((v,t,amount,-1));state['incidents'][v].append((u,t,amount,1))
-        state['oc'][u]+=1;state['ic'][v]+=1;state['ov'][u]+=amount;state['iv'][v]+=amount;state['pairs'][u,v]+=1
-    state['now']=t
+# Existing checkpoint imports retain their historical feature order and semantics.
+from datasets.payment_features import (legacy_state as xgb_state,
+    legacy_feature_row as xgb_feature_row, legacy_apply as xgb_apply)
 
 def xgb_rows(dataset):
     rows=[];labels=[];episodes=[]

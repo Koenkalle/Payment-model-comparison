@@ -6,18 +6,7 @@ ROOT=Path(__file__).resolve().parents[2]
 H,K=8,5
 AMOUNT=[15,35,75,150,300,650,1500,4000,10000]
 GAP=[1,5,20,60,180,720,2880]
-XGB_FEATURES=[
-    'log_amount','amount_bin','sender_out_count','sender_in_count',
-    'recipient_out_count','recipient_in_count','sender_out_value',
-    'sender_in_value','recipient_out_value','recipient_in_value',
-    'sender_seen','recipient_seen','sender_gap','recipient_gap',
-    'pair_out_count','pair_total_count','prior_contact',
-    'sender_recent_in_count','sender_recent_out_count',
-    'recipient_recent_in_count','recipient_recent_out_count',
-    'sender_recent_in_value','sender_recent_out_value',
-    'recipient_recent_in_value','recipient_recent_out_value',
-    'amount_vs_sender_out_mean','amount_vs_recipient_in_mean'
-]
+from datasets.payment_features import FEATURE_NAMES as XGB_FEATURES
 CATALOG=json.loads((ROOT/'designs.json').read_text())
 DESIGNS={d['id']:d for d in CATALOG['designs']}
 SEQ_VARIANTS={
