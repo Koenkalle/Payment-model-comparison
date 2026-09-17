@@ -76,7 +76,7 @@ class Model(LinkModel):
             settings.update(overrides)
         return settings
 
-    def _initialize_fraud(self, graph, parameters, pretrained_model=None):
+    def _initialize_fraud(self, graph, parameters, pretrained_model=None, *, stored_features=None):
         unknown = set(parameters) - set(DEFAULTS) - set(FRAUD_DEFAULTS)
         if unknown:
             raise ValueError('Unknown fraud-training parameters: ' + ', '.join(sorted(unknown)))
@@ -109,14 +109,25 @@ class Model(LinkModel):
         self.parameters.update(settings)
         self.head_id = head['id']
         dim = self.network[1].fc1.out_features
-        self.network.append(create_learned_head(self.head_id, 2 * dim + 1, head.get('parameters')).to(self.parameters['device']))
-        self.head_input_schema = {
-            'contract': 'tami-payment-representation/v1',
-            'features': ['current_interaction_' + str(i) for i in range(dim)]
-                        + ['previous_pair_memory_' + str(i) for i in range(dim)]
-                        + ['normalized_candidate_log1p_amount'],
-            'amount_unit': 'EUR', 'amount_feature': 'log1p_amount',
-        }
+        self.uses_dataset_features = bool(graph.provenance.get('features_stored')) if stored_features is None else stored_features
+        candidate_count = len(graph.edge_feature_names) if self.uses_dataset_features else 1
+        self.network.append(create_learned_head(self.head_id, 2 * dim + candidate_count, head.get('parameters')).to(self.parameters['device']))
+        representation_features = (['current_interaction_' + str(i) for i in range(dim)]
+                                   + ['previous_pair_memory_' + str(i) for i in range(dim)])
+        if self.uses_dataset_features:
+            self.head.input_contract = 'tami-payment-representation/v2'
+            self.head_input_schema = {
+                'contract': self.head.input_contract,
+                'features': representation_features + ['normalized_candidate_' + name for name in graph.edge_feature_names],
+                'candidate_features': list(graph.edge_feature_names),
+                'normalization': 'per-column standardization fitted on training rows only',
+            }
+        else:
+            self.head_input_schema = {
+                'contract': 'tami-payment-representation/v1',
+                'features': representation_features + ['normalized_candidate_log1p_amount'],
+                'amount_unit': 'EUR', 'amount_feature': 'log1p_amount',
+            }
         self.initialization = {'method': 'pretrained-link-model' if pretrained_model is not None else 'random'}
         # The link decoder's output layer is retained solely for compatibility
         # with link initialization; its scalar likelihood is not a fraud input.
@@ -125,7 +136,8 @@ class Model(LinkModel):
         if self.encoder_training == 'frozen':
             for module in self.network[:2]:
                 module.requires_grad_(False)
-        self._amount_column(graph)
+        if not self.uses_dataset_features:
+            self._amount_column(graph)
 
     @property
     def head(self):
@@ -143,12 +155,18 @@ class Model(LinkModel):
         decoder = self.network[1]
         current = decoder.act(decoder.fc1(torch.cat([source, destination], dim=1)))
         previous = torch.stack(self.memory.get_memories(zip(u, v)))
-        amounts = graph.edge_features[np.asarray(group) + 1, self._amount_column(graph)]
-        normalized = (amounts - self.amount_normalization['mean']) / self.amount_normalization['scale']
-        amount = torch.as_tensor(normalized, dtype=current.dtype, device=current.device).reshape(-1, 1)
-        if not torch.isfinite(amount).all():
-            raise ValueError('Candidate amount representation must be finite.')
-        return TransactionRepresentation(torch.cat([current, previous, amount], dim=1),
+        if self.uses_dataset_features:
+            values = graph.edge_features[np.asarray(group) + 1]
+            normalization = self.feature_normalization
+            normalized = (values - np.asarray(normalization['mean'])) / np.asarray(normalization['scale'])
+            candidates = torch.as_tensor(normalized, dtype=current.dtype, device=current.device)
+        else:
+            amounts = graph.edge_features[np.asarray(group) + 1, self._amount_column(graph)]
+            normalized = (amounts - self.amount_normalization['mean']) / self.amount_normalization['scale']
+            candidates = torch.as_tensor(normalized, dtype=current.dtype, device=current.device).reshape(-1, 1)
+        if not torch.isfinite(candidates).all():
+            raise ValueError('Candidate feature representation must be finite.')
+        return TransactionRepresentation(torch.cat([current, previous, candidates], dim=1),
                                          decoder.aggregate_hist_emb(current, previous))
 
     def score_group(self, dataset, group, negative_destinations=None):
@@ -182,11 +200,20 @@ class Model(LinkModel):
         self._initialize_fraud(graph, parameters, pretrained_model)
         p = self.parameters
         self.label_cutoffs = cutoffs
-        amounts = np.asarray(graph.edge_features[training + 1, self._amount_column(graph)], dtype=np.float64)
-        if not np.isfinite(amounts).all():
-            raise ValueError('Training payment amounts must be finite.')
-        self.amount_normalization = {'feature': 'log1p_amount', 'mean': float(amounts.mean()),
-                                     'scale': max(float(amounts.std()), 1e-6), 'fitted_rows': len(training)}
+        if self.uses_dataset_features:
+            values = np.asarray(graph.edge_features[training + 1], dtype=np.float64)
+            if not np.isfinite(values).all():
+                raise ValueError('Training candidate features must be finite.')
+            self.feature_normalization = {'features': list(graph.edge_feature_names),
+                                          'mean': values.mean(axis=0).tolist(),
+                                          'scale': np.maximum(values.std(axis=0), 1e-6).tolist(),
+                                          'fitted_rows': len(training)}
+        else:
+            amounts = np.asarray(graph.edge_features[training + 1, self._amount_column(graph)], dtype=np.float64)
+            if not np.isfinite(amounts).all():
+                raise ValueError('Training payment amounts must be finite.')
+            self.amount_normalization = {'feature': 'log1p_amount', 'mean': float(amounts.mean()),
+                                         'scale': max(float(amounts.std()), 1e-6), 'fitted_rows': len(training)}
         known_labels = np.asarray(dataset.labels)[training][masks['training']]
         weight = p['class_weight']
         if weight == 'balanced':
@@ -298,13 +325,18 @@ class Model(LinkModel):
         experiment_metadata = getattr(self, 'experiment_metadata', None)
         if experiment_metadata is not None and not isinstance(experiment_metadata, dict):
             raise ValueError('Fraud experiment metadata must be an object or null.')
-        metadata = {'version': 1, 'task': 'temporal-fraud-classification', 'parameters': self.parameters,
+        metadata = {'version': 2 if self.uses_dataset_features else 1,
+                    'task': 'temporal-fraud-classification', 'parameters': self.parameters,
                     'features': self.feature_schema, 'head': self.head.descriptor(),
-                    'head_input_schema': self.head_input_schema, 'amount_normalization': self.amount_normalization,
+                    'head_input_schema': self.head_input_schema,
                     'initialization': self.initialization, 'label_cutoffs': self.label_cutoffs,
                     'label_counts': self.label_counts, 'positive_class_weight': self.positive_class_weight,
                     'history': self.training_history, 'best_epoch': self.best_epoch,
                     'experiment_metadata': experiment_metadata}
+        if self.uses_dataset_features:
+            metadata['feature_normalization'] = self.feature_normalization
+        else:
+            metadata['amount_normalization'] = self.amount_normalization
         weights = {key: value.detach().cpu().numpy() for key, value in self.network.state_dict().items()}
         weights['metadata'] = np.asarray(json.dumps(metadata, allow_nan=False))
         with open(path, 'wb') as stream:
@@ -314,15 +346,17 @@ class Model(LinkModel):
         graph = _graph(dataset)
         with np.load(path, allow_pickle=False) as saved:
             metadata = json.loads(str(saved['metadata']))
+            stored_features = metadata.get('version') == 2
+            normalization_key = 'feature_normalization' if stored_features else 'amount_normalization'
             required = {'version', 'task', 'parameters', 'features', 'head', 'head_input_schema',
-                        'amount_normalization', 'initialization', 'label_cutoffs', 'label_counts',
+                        normalization_key, 'initialization', 'label_cutoffs', 'label_counts',
                         'positive_class_weight', 'history', 'best_epoch', 'experiment_metadata'}
-            if set(metadata) != required or type(metadata['version']) is not int or metadata['version'] != 1 or metadata['task'] != 'temporal-fraud-classification':
+            if set(metadata) != required or type(metadata['version']) is not int or metadata['version'] not in (1, 2) or metadata['task'] != 'temporal-fraud-classification':
                 raise ValueError('Unsupported or incomplete fraud checkpoint metadata.')
             schema = {'node': list(graph.node_feature_names), 'edge': list(graph.edge_feature_names)}
             if schema != metadata['features']:
                 raise ValueError('Graph feature names or order differ from the fitted fraud model.')
-            self._initialize_fraud(graph, {**metadata['parameters'], 'device': 'cpu'})
+            self._initialize_fraud(graph, {**metadata['parameters'], 'device': 'cpu'}, stored_features=stored_features)
             experiment_metadata = metadata['experiment_metadata']
             if experiment_metadata is not None and not isinstance(experiment_metadata, dict):
                 raise ValueError('Fraud experiment metadata must be an object or null.')
@@ -345,14 +379,18 @@ class Model(LinkModel):
                 self.network.load_state_dict(weights, strict=True)
             except RuntimeError as error:
                 raise ValueError('Fraud checkpoint tensor dimensions are incompatible.') from error
-            normalization = metadata['amount_normalization']
-            if (not isinstance(normalization, dict) or set(normalization) != {'feature', 'mean', 'scale', 'fitted_rows'}
-                    or normalization['feature'] != 'log1p_amount'
-                    or any(type(normalization[key]) not in (int, float) or not np.isfinite(normalization[key]) for key in ('mean', 'scale'))
-                    or normalization['scale'] <= 0
-                    or type(normalization['fitted_rows']) is not int or normalization['fitted_rows'] < 1):
-                raise ValueError('Fraud checkpoint amount normalization is invalid.')
-            self.amount_normalization = normalization
+            normalization = metadata[normalization_key]
+            if stored_features:
+                self._validate_feature_normalization(normalization, graph)
+                self.feature_normalization = normalization
+            else:
+                if (not isinstance(normalization, dict) or set(normalization) != {'feature', 'mean', 'scale', 'fitted_rows'}
+                        or normalization['feature'] != 'log1p_amount'
+                        or any(type(normalization[key]) not in (int, float) or not np.isfinite(normalization[key]) for key in ('mean', 'scale'))
+                        or normalization['scale'] <= 0
+                        or type(normalization['fitted_rows']) is not int or normalization['fitted_rows'] < 1):
+                    raise ValueError('Fraud checkpoint amount normalization is invalid.')
+                self.amount_normalization = normalization
             self.initialization = metadata['initialization']
             self.label_cutoffs = metadata['label_cutoffs']
             self.label_counts = metadata['label_counts']
@@ -362,6 +400,20 @@ class Model(LinkModel):
             self.experiment_metadata = experiment_metadata
             self.network.eval()
             self.memory.reset_memory()
+
+    @staticmethod
+    def _validate_feature_normalization(normalization, graph):
+        if (not isinstance(normalization, dict)
+                or set(normalization) != {'features', 'mean', 'scale', 'fitted_rows'}
+                or normalization['features'] != list(graph.edge_feature_names)
+                or type(normalization['fitted_rows']) is not int or normalization['fitted_rows'] < 1):
+            raise ValueError('Fraud checkpoint feature normalization is invalid.')
+        for key in ('mean', 'scale'):
+            values = normalization[key]
+            if (not isinstance(values, list) or len(values) != len(graph.edge_feature_names)
+                    or any(type(value) not in (int, float) or not np.isfinite(value) for value in values)
+                    or (key == 'scale' and any(value <= 0 for value in values))):
+                raise ValueError('Fraud checkpoint feature normalization is invalid.')
 
     def load_graph(self, path, dataset):
         """Common native-service loading interface; this still requires fraud weights."""

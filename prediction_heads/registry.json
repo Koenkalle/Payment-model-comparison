@@ -23,10 +23,11 @@
       "id": "fraud_linear",
       "kind": "transaction-representation",
       "input_contract": "tami-payment-representation/v1",
+      "input_contracts": ["tami-payment-representation/v1", "tami-payment-representation/v2"],
       "output_contract": "fraud-logit/v1",
       "label": "Fraud-label-trained linear classifier",
       "python_module": "prediction_heads.implementations.fraud_linear",
-      "description": "Learn a fraud logit from the current TAMI interaction, prior directed-pair memory, and training-normalized candidate amount."
+      "description": "Learn a fraud logit from the current TAMI interaction, prior directed-pair memory, and training-normalized candidate inputs: canonical amount for existing checkpoints, or all selected stored dataset features."
     }
   ]
 }

@@ -205,7 +205,9 @@ def train(config, output, base_dir=None):
                 'parameters': model.parameters, 'encoder_training': parameters['encoder_training'],
                 'prediction_head': model.parameters['prediction_head'], 'initialization': lineage,
                 'feature_schema': model.feature_schema, 'graph': graph_config,
-                'head_input_schema': model.head_input_schema, 'amount_normalization': model.amount_normalization,
+                'head_input_schema': model.head_input_schema,
+                **({'feature_normalization': model.feature_normalization} if model.uses_dataset_features
+                   else {'amount_normalization': model.amount_normalization}),
                 'positive_class_weight': model.positive_class_weight,
                 'dataset': dataset.provenance, 'dataset_config': _path_config(config['dataset'], base),
                 'dataset_fingerprint': fingerprint(dataset), 'graph_fingerprint': fingerprint(dataset, include_labels=False),
