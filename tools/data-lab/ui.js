@@ -2,6 +2,7 @@
   'use strict';
   const root=document.getElementById('data-lab');if(!root)return;
   const U=globalThis.PaymentPipelineUI,$=id=>root.querySelector('#dl-'+id),e=U.element;
+  const graph=new globalThis.DatasetGraphExplorer($('graph-panel'),{closeId:'dl-graph-close',onClose:()=>{$('graph-open').setAttribute('aria-expanded','false');$('graph-open').focus();}});
   let catalog={datasets:[],sources:[],generators:[],limits:{}},selected=null,detail=null,pending=0,selectionVersion=0,lastError=null,idleWaiters=[];
   let featureCatalog=null,featureSelection=new Set(),featureRevision=0,featureLoading=false,featureSaving=false,featureError=null;
   const initialId=new URLSearchParams(location.search).get('dataset')||U.recall('dataset');
@@ -118,6 +119,9 @@
     $('inspector-empty').hidden=true;$('inspector').hidden=false;$('preview').hidden=false;$('inspector-title').textContent=dataset.name;
     $('train').href=U.link('trainer.html',{dataset:dataset.id});U.datasetStats($('stats'),dataset);$('views').replaceChildren();
     for(const view of dataset.views||[])e('span',$('views'),U.human(view)+' view',{class:'pl-badge'});
+    const supportsGraph=(dataset.views||[]).some(view=>view==='graph'||view==='labeled_graph');
+    $('graph-open').disabled=!supportsGraph;$('graph-reason').textContent=supportsGraph?'Explore a bounded slice and expand connections.':'Graph view unavailable: this dataset has no stable relational identities.';
+    graph.setDataset(dataset);$('graph-open').setAttribute('aria-expanded','false');
     U.facts($('facts'),[['Source',U.human(dataset.source||dataset.generator)],['Stored',U.date(dataset.created_at)],['Time range',dataset.time_range?U.number(dataset.time_range.start,3)+'–'+U.number(dataset.time_range.end,3)+' '+(dataset.time_range.unit||'seconds'):'—'],['Dataset ID',dataset.id]]);
     if(dataset.parent_dataset_id){e('dt',$('facts'),'Derived from');e('a',e('dd',$('facts')),catalog.datasets.find(item=>item.id===dataset.parent_dataset_id)?.name||dataset.parent_dataset_id,{href:U.link('data-lab.html',{dataset:dataset.parent_dataset_id}),class:'pl-text-link'});}
     if(dataset.source_dataset_id&&dataset.source_dataset_id!==dataset.id){e('dt',$('facts'),'Original source');const origin=e('dd',$('facts'));e('a',origin,catalog.datasets.find(item=>item.id===dataset.source_dataset_id)?.name||dataset.source_dataset_id,{href:U.link('data-lab.html',{dataset:dataset.source_dataset_id}),class:'pl-text-link'});e('div',origin,'Open the source to create a dataset using the latest available feature definitions.',{class:'pl-help'});}
@@ -142,6 +146,7 @@
     const revision=++selectionVersion;selected=id;detail=null;U.remember('dataset',id);renderLibrary();error(null);status('Loading dataset preview…');
     featureRevision++;featureCatalog=null;featureSelection=new Set();featureLoading=false;featureSaving=false;featureError=null;
     $('features').hidden=true;$('feature-fields').hidden=true;$('feature-update').hidden=true;$('feature-list').replaceChildren();$('feature-search').value='';$('feature-filter').value='all';$('feature-name').value='';updateFeatureState();
+    graph.setDataset(null);$('graph-open').setAttribute('aria-expanded','false');
     $('inspector').hidden=true;$('preview').hidden=true;$('inspector-empty').hidden=false;$('inspector-empty').textContent='Loading dataset settings and records…';
     try{const result=await U.request('/datasets/'+encodeURIComponent(id));if(revision!==selectionVersion)return;detail=result;renderDetail();$('features').hidden=false;history.replaceState(null,'',U.link('data-lab.html',{dataset:id}));status('Dataset ready. Inspect its shared features or continue to model training.');await loadFeatures(id,revision);}
     catch(cause){if(revision!==selectionVersion)return;$('inspector-empty').textContent='The preview could not be loaded. Select the dataset or refresh to try again.';throw cause;}
@@ -182,6 +187,7 @@
   $('feature-reset').addEventListener('click',()=>{featureSelection=new Set(featureCatalog.enabled_features);featureError=null;$('feature-error').hidden=true;renderFeatureList();});
   $('feature-save').addEventListener('click',()=>track(saveFeatures));$('feature-retry').addEventListener('click',()=>track(()=>loadFeatures()));
   $('train').addEventListener('click',event=>{if(featureDirty()||featureSaving)event.preventDefault();});
-  root.demo={whenIdle,getSnapshot:()=>({busy:pending>0,error:lastError,selectedDatasetId:selected,datasets:catalog.datasets.map(item=>({id:item.id,name:item.name,rows:item.rows,kind:item.kind})),detail:detail?.dataset||null,features:{datasetId:featureCatalog?.dataset_id||null,selected:featureIds(),saved:featureCatalog?.enabled_features||[],dirty:featureDirty(),loading:featureLoading,saving:featureSaving,error:featureError,catalog:featureCatalog?.features||[]}}),refresh:()=>track(()=>refresh()),selectDataset:id=>track(()=>inspect(id))};
+  $('graph-open').addEventListener('click',()=>{graph.open();$('graph-open').setAttribute('aria-expanded','true');$('graph-panel').scrollIntoView({behavior:'smooth',block:'start'});});
+  root.demo={whenIdle:async()=>{await whenIdle();await graph.whenIdle();},graph,getSnapshot:()=>({busy:pending>0,error:lastError,selectedDatasetId:selected,datasets:catalog.datasets.map(item=>({id:item.id,name:item.name,rows:item.rows,kind:item.kind})),detail:detail?.dataset||null,features:{datasetId:featureCatalog?.dataset_id||null,selected:featureIds(),saved:featureCatalog?.enabled_features||[],dirty:featureDirty(),loading:featureLoading,saving:featureSaving,error:featureError,catalog:featureCatalog?.features||[]}}),refresh:()=>track(()=>refresh()),selectDataset:id=>track(()=>inspect(id))};
   track(()=>refresh());
 })();

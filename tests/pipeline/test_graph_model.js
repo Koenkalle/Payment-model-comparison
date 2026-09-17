@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {mergeGraph,structure}=require('../../shared/graph/model.js');
+const node=id=>({id}),edge=(id,source,target)=>({id,source,target});
+const current={nodes:['a','b'].map(node),edges:[edge('ab','a','b')]};
+const incoming={nodes:['b','c','d'].map(node),edges:[edge('ab','a','b'),edge('bc','b','c'),edge('cd','c','d')]};
+const result=mergeGraph(current,incoming,{nodes:3,edges:2});
+assert.deepEqual(result.nodes.map(n=>n.id),['a','b','c']);
+assert.deepEqual(result.edges.map(e=>e.id),['ab','bc']);
+assert.equal(current.nodes.length,2,'History snapshots must not be mutated by expansion.');
+assert.deepEqual(structure({nodes:['a','b','c','d'].map(node),edges:[edge('ab','a','b'),edge('ba','b','a'),edge('cc','c','c')]}),{components:3,isolated:1,selfLoops:1});
+assert.deepEqual(structure({nodes:[],edges:[]}),{components:0,isolated:0,selfLoops:0});
+console.log('PASS graph model: bounded deduplication, endpoint closure, immutable history, weak components, isolates and self-loops.');

@@ -50,6 +50,7 @@
         <div class="pl-line"><div><div class="pl-eyebrow">Dataset inspector</div><h2 id="dl-inspector-title" class="pl-gap"></h2></div><a id="dl-train" class="pl-button pl-primary" href="trainer.html">Train on this dataset <span aria-hidden="true">↗</span></a></div>
         <div id="dl-stats" class="pl-stats"></div>
         <div id="dl-views" class="pl-actions"></div>
+        <div class="pl-actions pl-space"><button id="dl-graph-open" type="button" aria-controls="dl-graph-panel" aria-expanded="false" disabled>Open graph explorer</button><span id="dl-graph-reason" class="pl-muted pl-small"></span></div>
         <dl id="dl-facts" class="pl-facts"></dl>
         <details open><summary>Dataset settings</summary><dl id="dl-settings" class="pl-facts"></dl><p id="dl-no-settings" class="pl-muted pl-small pl-gap" hidden>This is a fixed dataset. Source records are preserved in the stored copy.</p></details>
         <details><summary>Source and reproducibility</summary><pre id="dl-provenance"></pre></details>
@@ -79,5 +80,6 @@
       <section id="dl-preview" class="pl-panel" aria-labelledby="dl-preview-title" hidden><div class="pl-line"><h2 id="dl-preview-title">Record preview</h2><span id="dl-preview-count" class="pl-muted pl-small"></span></div><p class="pl-muted pl-small pl-gap">Preview of the saved dataset. Rows are ordered by time. Labels describe known outcomes and are kept separate from model input features.</p><div class="pl-table-wrap pl-space"><table class="pl-sample" aria-label="Dataset record preview"><thead id="dl-sample-head"></thead><tbody id="dl-sample-body"></tbody></table></div></section>
     </div>
   </div>
+  <section id="dl-graph-panel" class="pl-panel" aria-label="Dataset graph explorer" hidden></section>
   <footer class="pl-footer">One stored dataset can feed many training runs. The model trainer keeps training, validation, and test records in chronological order.</footer>
 </main>

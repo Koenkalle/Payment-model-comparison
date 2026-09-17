@@ -7,6 +7,7 @@ from pathlib import Path
 from urllib.parse import parse_qs
 
 from .pipeline_data import DatasetStore
+from .dataset_graph import DatasetGraphService
 from .pipeline_training import TrainingService
 
 
@@ -17,6 +18,7 @@ class PipelineService:
     def __init__(self, root=DEFAULT_PIPELINE_DIR, config_paths=()):
         self.root = Path(root).resolve()
         self.store = DatasetStore(self.root, config_paths=config_paths)
+        self.graph = DatasetGraphService(self.store)
         self.training = TrainingService(self.store, self.root)
 
     def close(self):
@@ -43,6 +45,16 @@ class PipelineService:
             return self.store.document(parts[1])
         if len(parts) == 3 and parts[0] == 'datasets' and parts[2] == 'features':
             return self.store.features(parts[1])
+        if len(parts) == 3 and parts[0] == 'datasets' and parts[2] == 'graph':
+            return self.graph.summary(parts[1])
+        if len(parts) == 4 and parts[0] == 'datasets' and parts[2:] == ['graph', 'search']:
+            params = parse_qs(query, max_num_fields=2, keep_blank_values=True)
+            if set(params) - {'q', 'limit'} or any(len(values) != 1 for values in params.values()):
+                raise ValueError('Graph search accepts only q and limit.')
+            raw_limit = params.get('limit', ['20'])[0]
+            if not raw_limit.isascii() or not raw_limit.isdecimal():
+                raise ValueError('limit must be an integer from 1 to 50.')
+            return self.graph.search(parts[1], params.get('q', [''])[0], int(raw_limit))
         raise FileNotFoundError('Unknown pipeline endpoint.')
 
     def post(self, path, payload):
@@ -59,4 +71,6 @@ class PipelineService:
         parts = path.removeprefix('/api/pipeline/').split('/')
         if len(parts) == 3 and parts[0] == 'datasets' and parts[2] == 'features':
             return 201, {'dataset': self.store.save_features(parts[1], payload)}
+        if len(parts) == 4 and parts[0] == 'datasets' and parts[2:] == ['graph', 'query']:
+            return 200, self.graph.query(parts[1], payload)
         raise FileNotFoundError('Unknown pipeline endpoint.')
