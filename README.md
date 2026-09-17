@@ -319,7 +319,8 @@ output's `manifest.json` to verify the exact checkpoint. After training, restart
 `serve.py` with your artifact path and reload the page; an existing server keeps
 its loaded weights even if files on disk change.
 
-Reproduce training, or serve a different supervised checkpoint:
+To reproduce the bundled CPU demo, use `examples/native-fraud-demo-training.json`.
+For the larger training configuration, or to serve a different checkpoint:
 
 ```sh
 python experiment.py train --config examples/native-fraud-training.json --output artifacts/my-fraud-model
