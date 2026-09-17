@@ -1,0 +1,83 @@
+<style>
+  #data-lab .dl-feature-toolbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,.55fr);gap:12px;margin-top:18px}
+  #data-lab .dl-feature-list{margin-top:16px;max-height:600px;overflow-y:auto;scrollbar-width:thin;border-block:1px solid var(--pl-line)}
+  #data-lab .dl-feature{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;padding:13px 2px;border-bottom:1px solid var(--pl-line)}
+  #data-lab .dl-feature:last-child{border-bottom:0}#data-lab .dl-feature>input{margin:4px 0 0}#data-lab .dl-feature details{margin:0;min-width:0}#data-lab .dl-feature summary{overflow-wrap:anywhere;line-height:1.7}#data-lab .dl-feature summary::marker{color:var(--pl-quiet)}
+  #data-lab .dl-feature-heading{display:inline}#data-lab .dl-feature-heading .pl-badge{margin-left:7px;font-weight:500}#data-lab .dl-feature-name{display:block;margin-left:14px;line-height:1.5}#data-lab .dl-feature[data-enabled="false"] .dl-feature-heading{color:var(--pl-quiet)}
+  #data-lab .dl-feature-details{padding:12px 0 2px}#data-lab .dl-feature-details .pl-facts{margin-top:12px;grid-template-columns:90px minmax(0,1fr)}#data-lab .dl-feature-unavailable{display:block;margin-top:7px;font-size:11px;color:var(--pl-quiet)}
+  #data-lab .dl-feature-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 10px;margin:14px 0}#data-lab .dl-feature-metrics div{min-width:0}#data-lab .dl-feature-metrics dt{font-size:10px}#data-lab .dl-feature-metrics dd{font-size:12px;font-variant-numeric:tabular-nums;margin-top:3px}
+  #data-lab .dl-feature-distribution{display:flex;align-items:end;gap:3px;height:55px;margin-top:9px}#data-lab .dl-feature-bar{flex:1;min-width:0;background:color-mix(in srgb,var(--pl-accent) 65%,transparent);border-radius:3px 3px 0 0;min-height:2px}#data-lab .dl-feature-scale{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:var(--pl-quiet);margin-top:3px}
+  #data-lab .dl-feature-save{border-top:1px solid var(--pl-line);padding-top:16px;margin-top:16px}#data-lab #dl-feature-state[data-dirty="true"]{color:var(--pl-accent)}#data-lab #dl-feature-error{margin-top:14px;margin-bottom:0}
+  @media(max-width:440px){#data-lab .dl-feature-toolbar{grid-template-columns:1fr}#data-lab .dl-feature-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}#data-lab .dl-feature-list{max-height:520px}#data-lab .dl-feature-save .pl-actions>button{flex:1}}
+</style>
+<main id="data-lab" class="pl-root" data-busy="false">
+  <nav class="pl-steps" aria-label="Benchmark pipeline"><a href="data-lab.html" aria-current="step"><span class="pl-step">1</span> Prepare data</a><a href="trainer.html"><span class="pl-step">2</span> Train models</a><a href="index.html"><span class="pl-step">3</span> Compare results</a></nav>
+  <header class="pl-header"><div><div class="pl-eyebrow">Benchmark workspace / Data</div><h1>Data lab</h1><p class="pl-muted">Build a repeatable dataset or bring an existing benchmark. Inspect its records and settings, then use the stored dataset to train and compare models.</p></div><button id="dl-refresh" type="button">Refresh library</button></header>
+  <p id="dl-status" class="pl-status" role="status" aria-live="polite">Connecting to the dataset library…</p>
+  <div id="dl-error" class="pl-error" role="alert" hidden></div>
+  <div class="pl-grid">
+    <div class="pl-stack">
+      <section class="pl-panel pl-config" aria-labelledby="dl-create-title">
+        <div class="pl-line"><h2 id="dl-create-title">Prepare a dataset</h2><span class="pl-badge">Stored on the server</span></div>
+        <form id="dl-create-form">
+          <fieldset id="dl-create-fields" disabled>
+            <label for="dl-method" class="pl-field pl-space">Data source<select id="dl-method"><option value="generator">Generate a dataset</option><option value="import">Import a fixed CSV dataset</option></select></label>
+            <div id="dl-generator-section">
+              <label for="dl-generator" class="pl-field pl-space">Generator<select id="dl-generator"></select></label>
+              <p id="dl-generator-description" class="pl-muted pl-small pl-gap"></p>
+              <div id="dl-parameters" class="pl-fields"></div>
+            </div>
+            <div id="dl-import-section" hidden>
+              <label for="dl-source" class="pl-field pl-space">CSV format<select id="dl-source"></select></label>
+              <p id="dl-source-description" class="pl-muted pl-small pl-gap"></p>
+              <label for="dl-file" class="pl-field pl-space">Source CSV<input id="dl-file" type="file" accept=".csv,text/csv"><span id="dl-upload-limit" class="pl-help"></span></label>
+              <div class="pl-fields">
+                <label for="dl-release" class="pl-field">Dataset release<input id="dl-release" type="text" maxlength="160" placeholder="Optional version or date"><span class="pl-help">Keep the source version with your benchmark.</span></label>
+                <label id="dl-currency-field" for="dl-currency" class="pl-field">Source unit in EUR<input id="dl-currency" type="number" min="0.000000001" step="any" placeholder="e.g. 1"><span class="pl-help">EUR per source amount unit, used for payment replay.</span></label>
+              </div>
+              <p class="pl-note">The imported copy stays on the server and appears in the library. Other tools can reuse it without uploading the CSV again.</p>
+            </div>
+            <label for="dl-name" class="pl-field pl-space">Dataset name<input id="dl-name" type="text" maxlength="160" placeholder="Optional · a name for this experiment"></label>
+            <div class="pl-actions pl-space"><button id="dl-create" class="pl-primary" type="submit">Generate and store dataset</button></div>
+          </fieldset>
+        </form>
+      </section>
+      <section class="pl-panel" aria-labelledby="dl-library-title"><div class="pl-line"><h2 id="dl-library-title">Dataset library</h2><span id="dl-library-count" class="pl-badge">0 datasets</span></div><p class="pl-muted pl-small pl-gap">Select a stored dataset to inspect it.</p><div class="pl-table-wrap pl-gap"><table aria-label="Stored datasets"><thead><tr><th scope="col">Dataset</th><th scope="col">Rows</th><th scope="col">Origin</th></tr></thead><tbody id="dl-library"></tbody></table></div><p id="dl-library-empty" class="pl-empty pl-space" hidden>No datasets are stored yet. Generate or import your first dataset above.</p></section>
+    </div>
+    <div class="pl-stack">
+      <div id="dl-inspector-empty" class="pl-empty">Select a dataset to inspect its settings and preview records.</div>
+      <section id="dl-inspector" class="pl-panel" aria-labelledby="dl-inspector-title" hidden>
+        <div class="pl-line"><div><div class="pl-eyebrow">Dataset inspector</div><h2 id="dl-inspector-title" class="pl-gap"></h2></div><a id="dl-train" class="pl-button pl-primary" href="trainer.html">Train on this dataset <span aria-hidden="true">↗</span></a></div>
+        <div id="dl-stats" class="pl-stats"></div>
+        <div id="dl-views" class="pl-actions"></div>
+        <dl id="dl-facts" class="pl-facts"></dl>
+        <details open><summary>Dataset settings</summary><dl id="dl-settings" class="pl-facts"></dl><p id="dl-no-settings" class="pl-muted pl-small pl-gap" hidden>This is a fixed dataset. Source records are preserved in the stored copy.</p></details>
+        <details><summary>Source and reproducibility</summary><pre id="dl-provenance"></pre></details>
+      </section>
+      <section id="dl-features" class="pl-panel" aria-labelledby="dl-features-title" hidden>
+        <div class="pl-line"><div><div class="pl-eyebrow">Shared model inputs</div><h2 id="dl-features-title" class="pl-gap">Dataset features</h2></div><span id="dl-feature-count" class="pl-badge"></span></div>
+        <p class="pl-muted pl-small pl-gap">Choose the columns models will receive. Add payment and graph features once, then reuse their stored values across training runs.</p>
+        <p id="dl-feature-update" class="pl-note pl-space" hidden></p>
+        <p id="dl-feature-loading" class="pl-muted pl-small pl-space" role="status">Loading feature definitions and statistics…</p>
+        <div id="dl-feature-error" class="pl-error" role="alert" hidden></div>
+        <button id="dl-feature-retry" class="pl-gap" type="button" hidden>Retry loading features</button>
+        <fieldset id="dl-feature-fields" hidden>
+          <div class="dl-feature-toolbar"><label for="dl-feature-search" class="pl-field">Find a feature<input id="dl-feature-search" type="search" placeholder="Search names, methods or descriptions"></label><label for="dl-feature-filter" class="pl-field">Show<select id="dl-feature-filter"><option value="all">All features</option><option value="source">Source columns</option><option value="derived">Derived features</option><option value="graph">Graph features</option><option value="enabled">Selected features</option></select></label></div>
+          <div class="pl-actions pl-gap"><button id="dl-feature-add" type="button">Add payment features</button><button id="dl-feature-add-graph" type="button">Add graph features</button><button id="dl-feature-all" type="button">Select all available</button><button id="dl-feature-source" type="button">Source only</button></div>
+          <p id="dl-feature-visible" class="pl-help pl-gap"></p>
+          <div id="dl-feature-list" class="dl-feature-list"></div>
+          <p id="dl-feature-empty" class="pl-empty pl-space" hidden>No features match this search.</p>
+          <details><summary>How features are calculated</summary><p class="pl-muted pl-small pl-gap">Each payment's history features use earlier observed transactions. Amount features use the current payment. Outcome labels remain separate and are excluded from feature calculations.</p><p id="dl-feature-replay" class="pl-muted pl-small pl-gap"></p><p id="dl-feature-graph-note" class="pl-muted pl-small pl-gap">Graph topology uses payment attempts at strictly earlier timestamps. It excludes the current payment, other payments at the same timestamp, future identities, deposits and reports. Expand a graph feature to inspect its orientation, readout, method, parameters and approximation. PageRank error bounds and snapshot lag describe the global estimate; PPR error bounds describe each local estimate.</p><p class="pl-muted pl-small pl-gap">Statistics describe the full dataset and are for inspection; they are not fitted model preprocessing.</p></details>
+          <div class="dl-feature-save">
+            <p id="dl-feature-state" class="pl-small" role="status" aria-live="polite"></p>
+            <label for="dl-feature-name" class="pl-field pl-gap">New dataset name<input id="dl-feature-name" type="text" maxlength="160" placeholder="Optional · name this feature selection"></label>
+            <div class="pl-actions pl-gap"><button id="dl-feature-save" class="pl-primary" type="button" disabled>Save feature dataset</button><button id="dl-feature-reset" type="button" disabled>Discard changes</button></div>
+            <p class="pl-help pl-gap">Saving creates a new dataset with the selected columns. The record preview and training link use the saved dataset.</p>
+          </div>
+        </fieldset>
+      </section>
+      <section id="dl-preview" class="pl-panel" aria-labelledby="dl-preview-title" hidden><div class="pl-line"><h2 id="dl-preview-title">Record preview</h2><span id="dl-preview-count" class="pl-muted pl-small"></span></div><p class="pl-muted pl-small pl-gap">Preview of the saved dataset. Rows are ordered by time. Labels describe known outcomes and are kept separate from model input features.</p><div class="pl-table-wrap pl-space"><table class="pl-sample" aria-label="Dataset record preview"><thead id="dl-sample-head"></thead><tbody id="dl-sample-body"></tbody></table></div></section>
+    </div>
+  </div>
+  <footer class="pl-footer">One stored dataset can feed many training runs. The model trainer keeps training, validation, and test records in chronological order.</footer>
+</main>

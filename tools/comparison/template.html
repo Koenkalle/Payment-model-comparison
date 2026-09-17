@@ -1,3 +1,54 @@
+<section id="trained-comparison" class="pl-root" aria-labelledby="tc-title">
+  <style>
+    #trained-comparison {margin:0 auto 40px;padding-bottom:28px;border-bottom:2px solid var(--border);overflow-wrap:anywhere}
+    #trained-comparison [hidden] {display:none!important}
+    #trained-comparison h2 {margin:8px 0}
+    #trained-comparison .tc-heading,#trained-comparison .tc-actions {display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    #trained-comparison .tc-fields {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:20px 0}
+    #trained-comparison .tc-fields label {display:grid;gap:6px}
+    #trained-comparison select {width:100%;min-width:0}
+    #trained-comparison fieldset {border:1px solid var(--border);border-radius:8px;padding:14px;margin:16px 0;min-width:0}
+    #trained-comparison .tc-run {display:flex;align-items:start;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer}
+    #trained-comparison .tc-run:last-child {border:0}
+    #trained-comparison .tc-run input {margin-top:5px;flex-shrink:0}
+    #trained-comparison .tc-run span {display:block}
+    #trained-comparison .tc-run code {font-size:11px}
+    #trained-comparison .tc-run:has(input:checked) {background:var(--pl-wash)}
+    #trained-comparison .tc-status {min-height:1.6em;margin:16px 0}
+    #trained-comparison .tc-bars {display:grid;gap:12px;margin:18px 0}
+    #trained-comparison .tc-bar {display:grid;grid-template-columns:minmax(120px,1fr) 3fr 55px;gap:12px;align-items:center;font-size:13px}
+    #trained-comparison .tc-track {height:12px;background:var(--muted);border-radius:4px;overflow:hidden}
+    #trained-comparison .tc-fill {height:100%;background:var(--pl-accent)}
+    #trained-comparison .table-responsive {max-width:100%;overflow:auto}
+    #trained-comparison th,#trained-comparison td {white-space:nowrap}
+    #trained-comparison .tc-badge {font-size:12px;color:var(--muted-foreground)}
+    #trained-comparison .tc-report {border-top:1px solid var(--border);margin-top:24px;padding-top:16px}
+    @media(max-width:600px){#trained-comparison .tc-fields{grid-template-columns:1fr}#trained-comparison .tc-bar{grid-template-columns:100px 1fr 44px}}
+  </style>
+  <nav class="pl-steps" aria-label="Benchmark pipeline"><a href="data-lab.html"><span class="pl-step">1</span> Prepare data</a><a href="trainer.html"><span class="pl-step">2</span> Train models</a><a href="index.html" aria-current="step"><span class="pl-step">3</span> Compare results</a></nav>
+  <div class="tc-heading pl-space"><div><span class="pl-eyebrow">Benchmark workspace / Evaluation</span><h1 id="tc-title">Trained model comparison</h1></div><div class="tc-actions"><a class="btn" id="tc-data-link" href="data-lab.html">Data lab</a><a class="btn" id="tc-train-link" href="trainer.html">Train a model</a></div></div>
+  <p>Choose saved data and ready training runs. Every model is evaluated on the same transactions with its saved decision threshold.</p>
+  <div id="tc-controls" hidden>
+    <div class="tc-fields">
+      <label class="form-label" for="tc-dataset">Saved dataset<select class="form-select" id="tc-dataset"></select></label>
+      <label class="form-label" for="tc-partition">Evaluation data<select class="form-select" id="tc-partition"><option value="test">Common held-out test data</option><option value="all">All rows of a separate, new dataset</option></select></label>
+    </div>
+    <p class="text-small text-muted" id="tc-dataset-info"></p>
+    <fieldset><legend class="text-small">Ready models</legend><div id="tc-runs"></div></fieldset>
+    <p class="text-small text-muted">Held-out evaluation uses the intersection of the selected runs’ test partitions. Data used for training or validation cannot enter the evaluation. Unknown outcomes are excluded from outcome metrics.</p>
+    <div class="tc-actions"><button class="btn btn-primary" type="button" id="tc-compare" disabled>Compare selected models</button><button class="btn" type="button" id="tc-refresh">Refresh saved models</button></div>
+    <details><summary>Previous comparisons</summary><div class="viz-controls"><label class="form-label" for="tc-history">Saved comparison<select class="form-select" id="tc-history"></select></label><button class="btn" type="button" id="tc-open" disabled>Open result</button></div></details>
+  </div>
+  <p class="tc-status text-small" id="tc-status" role="status" aria-live="polite">Connecting to the local training pipeline…</p>
+  <section class="tc-report" id="tc-result" aria-label="Saved model evaluation" hidden>
+    <div class="tc-heading"><h3>Evaluation results</h3><button class="btn" type="button" id="tc-download">Download JSON report</button></div>
+    <p class="text-small" id="tc-population"></p>
+    <div class="tc-bars" id="tc-bars" aria-label="Model F1 scores"></div>
+    <div class="table-responsive"><table class="table table-sm" id="tc-metrics"><thead><tr><th>Trained model</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC AUC</th><th>Average precision</th><th>False blocks</th><th>Missed fraud</th><th>Block rate</th><th>Probability cutoff</th></tr></thead><tbody></tbody></table></div>
+    <p class="text-small text-muted">Higher probabilities mean greater predicted fraud risk. Cutoffs were selected during training and remain frozen for this comparison. F1 bars use the known outcomes only.</p>
+    <details open><summary>Transaction predictions</summary><div class="table-responsive"><table class="table table-sm" id="tc-predictions"><thead></thead><tbody></tbody></table></div><div class="tc-actions text-small"><button class="btn" type="button" id="tc-prev">Previous</button><span id="tc-page"></span><button class="btn" type="button" id="tc-next">Next</button></div></details>
+  </section>
+</section>
 <div id="fraud-memory-demo">
   <style>
     #fraud-memory-demo {width:100%;color:var(--foreground)}

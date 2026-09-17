@@ -1,0 +1,35 @@
+<main id="model-trainer" class="pl-root" data-busy="false">
+  <nav class="pl-steps" aria-label="Benchmark pipeline"><a href="data-lab.html"><span class="pl-step">1</span> Prepare data</a><a href="trainer.html" aria-current="step"><span class="pl-step">2</span> Train models</a><a href="index.html"><span class="pl-step">3</span> Compare results</a></nav>
+  <header class="pl-header"><div><div class="pl-eyebrow">Benchmark workspace / Training</div><h1>Model trainer</h1><p class="pl-muted">Choose a stored dataset, adjust a model, and reserve data for evaluation. Each completed run becomes a reusable model for the comparison tool.</p></div><button id="mt-refresh" type="button">Refresh workspace</button></header>
+  <p id="mt-status" class="pl-status" role="status" aria-live="polite">Connecting to the training workspace…</p>
+  <div id="mt-error" class="pl-error" role="alert" hidden></div>
+  <div class="pl-grid">
+    <section class="pl-panel pl-config" aria-labelledby="mt-config-title">
+      <h2 id="mt-config-title">Configure training</h2>
+      <form id="mt-form"><fieldset id="mt-fields" disabled>
+        <label for="mt-dataset" class="pl-field pl-space">Stored dataset<select id="mt-dataset" required></select></label>
+        <div class="pl-line pl-gap"><p id="mt-dataset-description" class="pl-muted pl-small"></p><a id="mt-inspect" class="pl-text-link pl-small" href="data-lab.html">Inspect dataset ↗</a></div>
+        <label for="mt-model" class="pl-field pl-space">Model<select id="mt-model" required></select></label>
+        <p id="mt-model-description" class="pl-muted pl-small pl-gap"></p>
+        <p id="mt-model-usage" class="pl-note pl-gap" hidden></p>
+        <p id="mt-model-unavailable" class="pl-error pl-gap" hidden></p>
+        <details open><summary id="mt-parameters-title">Model parameters</summary><div id="mt-parameters" class="pl-fields"></div></details>
+        <h3 class="pl-space">Chronological data split</h3><p id="mt-split-description" class="pl-muted pl-small">Fit on the earliest records, use the next records for validation, and keep the final records for testing. Test outcomes never tune the fitted model.</p>
+        <div class="pl-fields"><label for="mt-train-percent" class="pl-field"><span id="mt-train-label">Training (%)</span><input id="mt-train-percent" type="number" min="1" max="98" step="1" value="60" required></label><label for="mt-validation-percent" class="pl-field">Validation (%)<input id="mt-validation-percent" type="number" min="1" max="98" step="1" value="20" required></label></div>
+        <div id="mt-split-bar" class="pl-split" role="img" aria-label="60% training, 20% validation, 20% test"><span id="mt-train-bar" class="pl-train" style="width:60%"></span><span id="mt-validation-bar" class="pl-validation" style="width:20%"></span><span id="mt-test-bar" class="pl-test" style="width:20%"></span></div>
+        <div class="pl-legend"><span><i class="pl-train"></i><span id="mt-train-count">Training 60%</span></span><span><i class="pl-validation"></i><span id="mt-validation-count">Validation 20%</span></span><span><i class="pl-test"></i><span id="mt-test-count">Test 20%</span></span></div>
+        <p id="mt-split-note" class="pl-muted pl-small pl-gap"></p>
+        <label for="mt-name" class="pl-field pl-space">Run name<input id="mt-name" type="text" maxlength="160" placeholder="Optional · identify this configuration"></label>
+        <div class="pl-actions pl-space"><button id="mt-train" type="submit" class="pl-primary">Train and save model</button></div>
+        <p id="mt-train-help" class="pl-help pl-gap">Training runs on the server. You can leave this page and return to its progress or completed model.</p>
+      </fieldset></form>
+      <p id="mt-no-data" class="pl-empty pl-space" hidden>No datasets are stored yet. <a href="data-lab.html" class="pl-text-link">Prepare a dataset</a> to begin training.</p>
+    </section>
+    <div class="pl-stack">
+      <section id="mt-dataset-panel" class="pl-panel" aria-labelledby="mt-dataset-title" hidden><div class="pl-line"><h2 id="mt-dataset-title"></h2><span id="mt-dataset-kind" class="pl-badge"></span></div><div id="mt-dataset-stats" class="pl-stats"></div><p id="mt-dataset-note" class="pl-note"></p><details><summary>Saved numeric input features</summary><p id="mt-dataset-features" class="pl-muted pl-small pl-gap"></p><p class="pl-help">Edit the dataset's feature selection in Data lab before starting a new run.</p></details></section>
+      <section class="pl-panel" aria-labelledby="mt-jobs-title"><div class="pl-line"><h2 id="mt-jobs-title">Training activity</h2><span id="mt-active-count" class="pl-badge">No active jobs</span></div><p class="pl-muted pl-small pl-gap">Progress and failures are retained across page reloads.</p><div id="mt-jobs"></div><p id="mt-jobs-empty" class="pl-empty pl-space">Your training jobs will appear here.</p></section>
+      <section class="pl-panel" aria-labelledby="mt-ready-title"><div class="pl-line"><h2 id="mt-ready-title">Ready models</h2><span id="mt-ready-count" class="pl-badge">0 models</span></div><p class="pl-muted pl-small pl-gap">Saved runs for the selected dataset. Compare models on the records held out by every selected run, including runs with different training splits.</p><div id="mt-runs"></div><p id="mt-runs-empty" class="pl-empty pl-space">Complete a training run to add a model to this dataset.</p><div class="pl-actions pl-space"><a id="mt-compare" class="pl-button pl-primary" href="index.html" aria-disabled="true">Compare selected models ↗</a><span id="mt-selection-note" class="pl-muted pl-small">Select one or more ready models.</span></div></section>
+    </div>
+  </div>
+  <footer class="pl-footer">Model parameters, dataset identity, chronological split, and test metrics stay with each saved run, so every comparison can be traced back to its training data.</footer>
+</main>

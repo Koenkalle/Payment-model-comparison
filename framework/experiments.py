@@ -94,9 +94,11 @@ def train_experiment(config,output,base_dir=None):
         os.rename(stage,output)
     return metadata,results
 
-def evaluate_artifact(artifact,dataset_config,base_dir=None,partition='all'):
+def evaluate_artifact(artifact,dataset_config,base_dir=None,partition='all',*,evaluation_ids=None):
     artifact=Path(artifact);metadata=json.loads((artifact/'manifest.json').read_text())
     if metadata.get('version')!=1:raise ValueError('Unsupported model artifact version.')
+    if evaluation_ids is not None and metadata.get('task') in ('temporal-fraud-classification','dynamic-link-prediction'):
+        raise ValueError('Selected evaluation IDs are supported only for numeric model artifacts.')
     if metadata.get('task')=='temporal-fraud-classification':
         from .temporal_fraud_experiments import evaluate
         return evaluate(artifact,dataset_config,base_dir,partition)
@@ -117,6 +119,12 @@ def evaluate_artifact(artifact,dataset_config,base_dir=None,partition='all'):
         wanted=set(metadata['split'][partition]);indices=np.asarray([i for i,value in enumerate(dataset.ids) if value in wanted])
         if len(indices)!=len(wanted):raise ValueError('Saved partition IDs are missing from this dataset.')
     else:raise ValueError('Unknown evaluation partition.')
+    if evaluation_ids is not None:
+        if isinstance(evaluation_ids,(str,bytes)):raise ValueError('Selected evaluation IDs must be a collection of row IDs.')
+        wanted=set(evaluation_ids)
+        available={dataset.ids[i] for i in indices}
+        if not wanted or not wanted<=available:raise ValueError('Selected evaluation IDs are missing from the chosen dataset partition.')
+        indices=np.asarray([i for i in indices if dataset.ids[i] in wanted],dtype=int)
     model.load(artifact/'model.json',dataset.feature_names)
     result=report(model,dataset,indices,metadata['threshold'],bool(descriptor['capabilities'].get('explanations')))
     result['partition']=partition

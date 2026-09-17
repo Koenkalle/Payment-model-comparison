@@ -17,15 +17,41 @@
   ],
   "tools": [
     {
+      "id": "data-lab",
+      "label": "Data lab",
+      "template": "tools/data-lab/template.html",
+      "scripts": [
+        "tools/pipeline/client.js",
+        "tools/data-lab/ui.js"
+      ],
+      "model_ids": "all",
+      "model_data_id": "dl-model-data",
+      "output": "data-lab.html"
+    },
+    {
+      "id": "model-trainer",
+      "label": "Model trainer",
+      "template": "tools/model-trainer/template.html",
+      "scripts": [
+        "tools/pipeline/client.js",
+        "tools/model-trainer/ui.js"
+      ],
+      "model_ids": "all",
+      "model_data_id": "mt-model-data",
+      "output": "trainer.html"
+    },
+    {
       "id": "comparison",
       "label": "Model comparison",
       "template": "tools/comparison/template.html",
       "scripts": [
+        "tools/pipeline/client.js",
         "tools/comparison/comparison.js",
         "tools/comparison/native-run.js",
         "tools/comparison/native-client.js",
         "tools/comparison/dataset-controls.js",
-        "tools/comparison/ui.js"
+        "tools/comparison/ui.js",
+        "tools/comparison/pipeline.js"
       ],
       "native_models": [
         "dyg_tami_native"
